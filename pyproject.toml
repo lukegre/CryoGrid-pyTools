@@ -1,0 +1,17 @@
+# not tested, but would like to use toml instead of setup.py + requirements.txt
+[project]
+name = "cryogrid_pytools"
+version = "0.1.0"
+description = "Tools to read in CryoGrid MATLAB data to Python, includes forcing, outputs, DEMs, etc."
+authors = ["Luke Gregor <lukegre@gmail.com>"]
+license = "CC0 1.0 Universal"
+
+[project.dependencies]
+joblib
+xarray
+pandas 
+numpy
+
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
