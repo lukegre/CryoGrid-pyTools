@@ -11,7 +11,13 @@ dependencies = [
     "joblib",
     "xarray",
     "pandas",
-    "numpy"
+    "numpy",
+    "scipy",
+    "dask[diagnostics]",
+    "munch",
+    "loguru",
+    "openpyxl",
+    "matplotlib",
 ]
 
 [build-system]

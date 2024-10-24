@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 
 
-def read_OUT_regridded_FCI2_file(fname, max_depth=5):
+def read_OUT_regridded_FCI2_cluster_file(fname):
     from .matlab_helpers import read_mat_struct_flat_as_dict, matlab2datetime
 
     gridcell = int(fname.split('_')[-2])
@@ -34,7 +34,7 @@ def read_OUT_regridded_FCI2_file(fname, max_depth=5):
     return ds
 
 
-def read_OUT_regridded_FCI2_parallel(glob_fname, depth_minmax=[1.5, -5], **joblib_kwargs):
+def read_OUT_regridded_FCI2_cluster_parallel(glob_fname, depth_minmax=[1.5, -5], **joblib_kwargs):
     from glob import glob
     import joblib
 
@@ -43,8 +43,8 @@ def read_OUT_regridded_FCI2_parallel(glob_fname, depth_minmax=[1.5, -5], **jobli
     joblib_props = dict(n_jobs=-1, backend='threading', verbose=1)
     joblib_props.update(joblib_kwargs)
     
-    func = joblib.delayed(read_OUT_regridded_FCI2_file)
-    tasks = [func(f, max_depth=depth_minmax[1]) for f in flist]
+    func = joblib.delayed(read_OUT_regridded_FCI2_cluster_file)
+    tasks = [func(f) for f in flist]
     worker = joblib.Parallel(**joblib_props)
     
     output = worker(tasks)
@@ -55,5 +55,28 @@ def read_OUT_regridded_FCI2_parallel(glob_fname, depth_minmax=[1.5, -5], **jobli
     
     ds = ds.transpose('gridcell', 'time', 'depth', ...)
     ds = ds.assign(elevation=ds.elevation.mean('time'))
+
+    return ds
+
+
+def read_OUT_regridded_FCI2_point_file(fname, max_depth=5):
+    from .matlab_helpers import read_mat_struct_flat_as_dict, matlab2datetime
+    
+    dat = read_mat_struct_flat_as_dict(fname)
+    for key in dat:
+        dat[key] = dat[key].squeeze()
+
+    elev = dat.pop('depths')
+    depth = elev - elev.min() - max_depth
+    elev = elev[np.argmin(np.abs(depth))]
+    times = matlab2datetime(dat.pop('timestamp'))
+
+    ds = xr.Dataset()
+    for key in dat:
+        ds[key] = xr.DataArray(dat[key], dims=['depth', 'time'], coords={'time': times, 'depth': depth})
+
+    ds.attrs['elevation'] = elev
+    ds.attrs['filename'] = fname
+    ds.transpose('time', 'depth', ...)
 
     return ds
