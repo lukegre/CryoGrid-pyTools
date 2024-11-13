@@ -1,10 +1,19 @@
 [project]
+
 name = "cryogrid_pytools"
 version = "0.1.0"
+
 description = "Tools to read in CryoGrid MATLAB data to Python, includes forcing, outputs, DEMs, etc."
+
 authors = [
-    { name = "Luke Gregor", email = "lukegre@gmail.com" }
+    { name = "Luke Gregor", email = "lukegre@gmail.com" },
 ]
+
+maintainers = [
+  { name = "Luke Gregor", email = "lukegre@gmail.com" },
+  # please add your name here if you contribute to the project
+]
+
 license = { text = "MIT license" }
 
 dependencies = [
@@ -20,6 +29,26 @@ dependencies = [
     "scipy",
     "xarray",
 ]
+
+# see https://pypi.org/classifiers/
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Education",
+    "Topic :: Scientific/Engineering :: Hydrology",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3 :: Only",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/lukegre/CryoGrid-pyTools"
+"CryoGrid" = "https://github.com/CryoGrid"
+
 
 [build-system]
 requires = ["setuptools>=42", "wheel"]
