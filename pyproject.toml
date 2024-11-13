@@ -5,6 +5,7 @@ version = "0.1.0"
 
 description = "Tools to read in CryoGrid MATLAB data to Python, includes forcing, outputs, DEMs, etc."
 readme = "README.md"
+long_description_content_type = "text/markdown"  # Add this line
 
 authors = [
     { name = "Luke Gregor", email = "lukegre@gmail.com" },
