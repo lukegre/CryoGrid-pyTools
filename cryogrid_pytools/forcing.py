@@ -2,6 +2,87 @@
 import xarray as xr
 
 
+def read_mat_ear5(filename: str)->xr.Dataset:
+    """
+    Read the ERA5.mat forcing file for CryoGrid and return a xarray Dataset
+
+    Parameters
+    ----------
+    filename : str
+        Path to the ERA5.mat file
+
+    Returns
+    -------
+    xr.Dataset
+        Dataset with the variables from the ERA5.mat file
+    """
+    import pathlib
+    from .matlab_helpers import read_mat_struct_flat_as_dict
+
+    filename = pathlib.Path(filename).expanduser().absolute().resolve()
+    dat = read_mat_struct_flat_as_dict(filename)
+
+    out = xr.Dataset(
+        coords=dict(
+            lon=dat['lon'],
+            lat=dat['lat'],
+            level=dat['p'],
+            time=dat['t']))
+
+    for key in dat:
+        if key in ['lon', 'lat', 'p', 't', 'dims']:
+            continue
+        
+        arr = dat[key]
+        ndim = len(arr.shape)
+
+        if ndim == 0:
+            dims = []
+        elif ndim == 2:
+            dims = ['lon', 'lat']
+        elif ndim == 3:
+            dims = ['lon', 'lat', 'time']
+        elif ndim == 4:
+            dims = ['lon', 'lat', 'level', 'time']
+        else:
+            raise ValueError(f'Unexpected number of dimensions for `{key}`: {ndim}')
+        
+        out[key] = xr.DataArray(arr, dims=dims)
+
+    out['u10'] = out['u10'] * dat['wind_sf']
+    out['v10'] = out['v10'] * dat['wind_sf']
+    out['u'] = out['u'] * dat['wind_sf']
+    out['v'] = out['v'] * dat['wind_sf']
+
+    out['Td2'] = out['Td2'] * dat['T_sf']
+    out['T2'] = out['T2'] * dat['T_sf']
+    out['T'] = out['T'] * dat['T_sf']
+
+    out['SW'] = out['SW'] * dat['rad_sf']
+    out['LW'] = out['LW'] * dat['rad_sf']
+    out['S_TOA'] = out['S_TOA'] * dat['rad_sf']
+    
+    out['ps'] = out['ps'] * dat['ps_sf']
+    out['P'] = out['P'] * dat['P_sf']
+    out['q'] = out['q'] * dat['q_sf']
+
+    out['Zs'] = out['Zs'].astype(float)
+    out['Z'] = out['Z'].astype(float)
+
+    out = out.transpose('time', 'level', 'lat', 'lon')
+
+    out = out.assign_attrs(
+        info=(
+            'Data read in from CryoGrid ERA5 forcing file. '
+            'Data has been scaled to the original units. '
+            'Data has been transposed from [lon, lat, level, time] --> [time, level, lat, lon]. '
+            'See the ERA5 documentation for more info about the units etc.'),
+        source=filename,
+    )
+
+    return out
+
+
 def era5_to_matlab(ds: xr.Dataset)->dict:
     """
     Converrt a merged netCDF file from the Copernicus CDS to 
@@ -25,6 +106,7 @@ def era5_to_matlab(ds: xr.Dataset)->dict:
         CryoGrid.POST_PROC.read_mat_ERA
     """
     from .matlab_helpers import datetime2matlab
+    import numpy as np
 
     # transpose to lon x lat x time (original is time x lat x lon)
     ds = ds.transpose('longitude', 'latitude', 'level', 'time')
