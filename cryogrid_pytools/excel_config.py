@@ -177,7 +177,7 @@ class CryoGridConfigExcel:
         df = df[df.A != 'CLASS_END']
 
         # if any cell starts with '>', it is a comment
-        df = df.map(lambda x: x if not str(x).startswith('>') else np.NaN)
+        df = df.map(lambda x: x if not str(x).startswith('>') else np.nan)
 
         # drop rows and columns that are all NaN
         df = df.dropna(axis=1, how='all').dropna(axis=0, how='all')

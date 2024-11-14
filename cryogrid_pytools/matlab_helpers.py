@@ -6,8 +6,24 @@ import numpy as np
 
 
 def read_mat_struct_as_dataset(fname, index=None):
-    from .matlab_helpers import read_mat_struct_flat_as_dict
+    """
+    Read a MATLAB struct from a .mat file and return it as an xarray dataset.
+
+    Parameters
+    ----------
+    fname : str
+        Path to the .mat file. All variables in the struct are assumed to have 
+        the same dimensions and shape (except for the index columns).
+    index : str, tuple, optional
+        Name of the index column. If None is passed [default], then no index is set.
+        If a tuple is passed, then the corresponding columns are used as a multiindex.
     
+    Returns
+    -------
+    ds : xr.Dataset
+        Dataset with the struct fields as variables and the corresponding
+        data as values. 
+    """
     out = read_mat_struct_flat_as_dict(fname)
     df = pd.DataFrame.from_dict(out)
     if index is not None:
@@ -17,7 +33,7 @@ def read_mat_struct_as_dataset(fname, index=None):
     return ds
 
 
-def read_mat_struct_flat_as_dict(fname: str) -> dict:
+def read_mat_struct_flat_as_dict(fname: str, key=None) -> dict:
     """
     Read a MATLAB struct from a .mat file and return it as a dictionary.
     
@@ -28,6 +44,10 @@ def read_mat_struct_flat_as_dict(fname: str) -> dict:
     ----------
     fname : str
         Path to the .mat file
+    key : str, optional
+        The name of the matlab key in the .mat file. If None is passed [default],
+        then the first key that does not start with an underscore is used.
+        If a string is passed, then the corresponding key is used.
     
     Returns
     -------
@@ -38,14 +58,56 @@ def read_mat_struct_flat_as_dict(fname: str) -> dict:
     from scipy.io import loadmat
 
     raw = loadmat(fname)
-    key = [k for k in raw.keys() if not k.startswith('_')][0]
-    array_with_names = raw[key][0]
+    
+    keys = [k for k in raw.keys() if not k.startswith('_')]
 
-    names = array_with_names.dtype.names
-    arrays = [a.squeeze() for a in array_with_names[0]]
-    data = {k: v for k, v in zip(names, arrays)}
+    if key is None:
+        logger.log(5, f"No key specified. Using first key that does not start with an underscore: {keys[0]}")
+        key = keys[0]
+    elif key not in keys:
+        raise ValueError(f"Key '{key}' not found in .mat file. Available keys are: {keys}")
+    
+    named_array = unnest_matlab_struct_named_array(raw[key])
+    data = {k: named_array[k].squeeze() for k in named_array.dtype.names}
 
     return data
+    
+
+
+def unnest_matlab_struct_named_array(arr: np.ndarray) -> dict:
+    """
+    Unnest a numpy structured array that was read from a MATLAB .mat file.
+
+    Parameters
+    ----------
+    arr : np.ndarray
+        Structured array read from a .mat file
+    
+    Returns
+    -------
+    arr : np.ndarray
+        Unnested named array where arr.dtype.names has a length > 1 
+        and arr[i] corresponds with arr.dtype.names[i]. Note that 
+    
+    Note
+    ----
+    This function works with two of my examples, but may be a bit buggy. 
+    It is not well tested and may not work in all cases.
+    """
+    def is_ndarray_or_void(x):
+        return isinstance(x, np.ndarray) or isinstance(x, np.void)
+    
+    while is_ndarray_or_void(arr) and arr.size == 1:
+        if (  # stop if a void array with multiple fields
+            isinstance(arr, np.void) 
+            and (arr.dtype.names is not None) 
+            and (len(arr.dtype.names) > 1)):
+            return arr
+        # otherwise continue
+        prev = arr
+        arr = prev[0]
+
+    return prev
 
 
 def datetime2matlab(time: xr.DataArray, reference_datestr:str="1970-01-01") -> np.ndarray:

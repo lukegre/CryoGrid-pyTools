@@ -2,25 +2,24 @@
 import xarray as xr
 
 
-def read_mat_ear5(filename: str)->xr.Dataset:
+def _era5_mat_dict_to_xarray(era5_dict: dict)->xr.Dataset:
     """
-    Read the ERA5.mat forcing file for CryoGrid and return a xarray Dataset
+    Convert a dictionary with the ERA5 forcing variables to a xarray Dataset
 
     Parameters
     ----------
-    filename : str
-        Path to the ERA5.mat file
+    era5_dict : dict
+        Dictionary with the ERA5 forcing variables. Must contain keys: 
+            lon, lat, p, t, dims, 
+            u10, v10, u, v, Td2, T2, T, Z, q, P, ps, SW, LW, S_TOA, Zs,
+            wind_sf, q_sf, ps_sf, rad_sf, T_sf, P_sf
 
     Returns
     -------
     xr.Dataset
-        Dataset with the variables from the ERA5.mat file
+        Dataset with the ERA5 forcing variables and variables are scaled to the original units
     """
-    import pathlib
-    from .matlab_helpers import read_mat_struct_flat_as_dict
-
-    filename = pathlib.Path(filename).expanduser().absolute().resolve()
-    dat = read_mat_struct_flat_as_dict(filename)
+    dat = era5_dict
 
     out = xr.Dataset(
         coords=dict(
@@ -70,6 +69,31 @@ def read_mat_ear5(filename: str)->xr.Dataset:
     out['Z'] = out['Z'].astype(float)
 
     out = out.transpose('time', 'level', 'lat', 'lon')
+
+    return out
+
+
+def read_mat_ear5(filename: str)->xr.Dataset:
+    """
+    Read the ERA5.mat forcing file for CryoGrid and return a xarray Dataset
+
+    Parameters
+    ----------
+    filename : str
+        Path to the ERA5.mat file
+
+    Returns
+    -------
+    xr.Dataset
+        Dataset with the variables from the ERA5.mat file
+    """
+    import pathlib
+    from .matlab_helpers import read_mat_struct_flat_as_dict
+
+    filename = pathlib.Path(filename).expanduser().absolute().resolve()
+
+    dat = read_mat_struct_flat_as_dict(filename)
+    out = _era5_mat_dict_to_xarray(dat)
 
     out = out.assign_attrs(
         info=(
