@@ -45,7 +45,8 @@ class CryoGridConfigExcel:
                 logger.info(f"Found root path: {path}")
                 return self.root
             elif str(path) == '/':
-                raise FileNotFoundError("Could not find root path")
+                logger.warning("Could not find root path. Set to current directory. You can change this manually with excel_config.root = pathlib.Path('/path/to/root')")
+                return pathlib.Path('.')
             else:
                 path = path.parent
 
