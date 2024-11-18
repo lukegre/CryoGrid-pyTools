@@ -5,7 +5,7 @@ import xarray as xr
 import numpy as np
 
 
-def read_mat_struct_as_dataset(fname, index=None):
+def read_mat_struct_as_dataset(fname, index=None, index_is_datenum=False):
     """
     Read a MATLAB struct from a .mat file and return it as an xarray dataset.
 
@@ -14,9 +14,11 @@ def read_mat_struct_as_dataset(fname, index=None):
     fname : str
         Path to the .mat file. All variables in the struct are assumed to have 
         the same dimensions and shape (except for the index columns).
-    index : str, tuple, optional
+    index : str, tuple, optional [default=None]
         Name of the index column. If None is passed [default], then no index is set.
         If a tuple is passed, then the corresponding columns are used as a multiindex.
+    index_is_datenum : bool, optional [default=False]
+        If True, then the index is converted from MATLAB datenum to a pandas.Timestamp.
     
     Returns
     -------
@@ -29,6 +31,11 @@ def read_mat_struct_as_dataset(fname, index=None):
     if index is not None:
         df = df.set_index(index)
     ds = df.to_xarray()
+
+    if index_is_datenum:
+        assert index is not None, "index must be set if index_is_matlab_datenum is True"
+        assert isinstance(index, str), "index must be a single index (dtype string) if index_is_matlab_datenum is True"
+        ds = ds.assign_coords(**{index: matlab2datetime(ds[index].values)})
 
     return ds
 
