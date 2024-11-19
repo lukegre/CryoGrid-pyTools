@@ -62,8 +62,68 @@ def read_OUT_regridded_FCI2_file(fname, deepest_point=None)->xr.Dataset:
         depth = np.arange(shallowest_point, deepest_point, s)
         ds['depth'] = xr.DataArray(depth, dims=['depth'])
         ds = ds.set_coords('depth')
+        ds = ds.transpose('depth', 'time', ...)
+    else:  
+        ds = ds.transpose('elevation', 'time', ...)
 
-    ds = ds.transpose('time', ...).chunk(dict(time=-1))
+    ds = ds.chunk(dict(time=-1))
+
+    return ds
+
+
+def read_OUT_regridded_FCI2_parallel(fname_glob, deepest_point, concat_dim='time', **joblib_kwargs):
+    """
+    Reads multiple files that are put out by the OUT_regridded_FCI2 class
+
+    Parameters
+    ----------
+    fname_glob: str
+        Path of the files that you want to read in. 
+        Use same notation as for glob(). Note that it expects
+        name to follow the format `some_project_name_GRIDCELL_date.mat`
+        where GRIDCELL will be extracted to assign the gridcell dimension. 
+        These GRIDCELLs correspond with the index of the data in the 
+        flattened array. 
+    deepest_point: float
+        When setting the configuration for when the data should be 
+        saved, the maximum depth is set. Give this number as a
+        negative number here.
+    concat_dim: str
+        The dimension that the data should be concatenated along. 
+        Defaults to 'time', but 'gridcell' can also be used if 
+        the files are from different gridcells.
+    joblib_kwargs: dict
+        Uses the joblib library to do parallel reading of the files. 
+        Defaults are: n_jobs=-1, backend='threading', verbose=1
+
+    Returns
+    -------
+    xr.Dataset
+        An array with dimensions gridcell, depth, time. 
+        Variables depend on how the class was configured, but
+        elevation will also be a variable. 
+    """
+    from glob import glob
+    import joblib
+
+    # get the file list
+    flist = sorted(glob(fname_glob))
+    
+    # create the joblib tasks
+    func = joblib.delayed(read_OUT_regridded_FCI2_file)
+    tasks = [func(f, deepest_point) for f in flist]
+    
+    # set up the joblib configuration
+    joblib_props = dict(n_jobs=-1, backend='threading', verbose=1)
+    joblib_props.update(joblib_kwargs)
+    worker = joblib.Parallel(**joblib_props)
+    output = worker(tasks)  # run the tasks
+    
+    # combine the coordinates - note filename attr is lost in this step
+    ds = xr.combine_nested(output, concat_dim=concat_dim)
+    
+    # transpose data so that plotting is quick and easy
+    ds = ds.transpose('depth', 'time', ...)
 
     return ds
 
@@ -97,29 +157,15 @@ def read_OUT_regridded_FCI2_clusters(fname_glob, deepest_point, **joblib_kwargs)
         elevation will also be a variable. 
     """
     from glob import glob
-    import joblib
 
     # get the file list
     flist = sorted(glob(fname_glob))
     # extract the gridcell from the file name
     gridcell = [int(f.split('_')[-2]) for f in flist]
     
-    # create the joblib tasks
-    func = joblib.delayed(read_OUT_regridded_FCI2_file)
-    tasks = [func(f, deepest_point) for f in flist]
-    
-    # set up the joblib configuration
-    joblib_props = dict(n_jobs=-1, backend='threading', verbose=1)
-    joblib_props.update(joblib_kwargs)
-    worker = joblib.Parallel(**joblib_props)
-    output = worker(tasks)  # run the tasks
-    
-    # assign gridcell numbers to each dataset in the list
-    output = [ds.expand_dims(gridcell=[g]) for ds, g in zip(output, gridcell)]
-    
-    # combine the coordinates - note filename attr is lost in this step
-    ds = xr.combine_by_coords(output, combine_attrs='drop_conflicts')
-    
+    ds = read_OUT_regridded_FCI2_parallel(fname_glob, deepest_point, concat_dim='gridcell', **joblib_kwargs)
+    ds['gridcell'] = xr.DataArray(gridcell, dims=['gridcell'])
+
     # transpose data so that plotting is quick and easy
     ds = ds.transpose('gridcell', 'depth', 'time', ...)
 
