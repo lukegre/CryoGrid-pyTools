@@ -5,7 +5,7 @@ import xarray as xr
 import numpy as np
 
 
-def read_mat_struct_as_dataset(fname, index=None, index_is_datenum=False):
+def read_mat_struct_as_dataset(fname, drop_keys=None, index=None, index_is_datenum=False):
     """
     Read a MATLAB struct from a .mat file and return it as an xarray dataset.
 
@@ -14,6 +14,10 @@ def read_mat_struct_as_dataset(fname, index=None, index_is_datenum=False):
     fname : str
         Path to the .mat file. All variables in the struct are assumed to have 
         the same dimensions and shape (except for the index columns).
+    drop_keys : list, optional [default=None]
+        List of keys to drop from the struct. If None is passed [default], then
+        no keys are dropped. This can be used when one of the struct fields is
+        not the same shape as the others.
     index : str, tuple, optional [default=None]
         Name of the index column. If None is passed [default], then no index is set.
         If a tuple is passed, then the corresponding columns are used as a multiindex.
@@ -26,8 +30,39 @@ def read_mat_struct_as_dataset(fname, index=None, index_is_datenum=False):
         Dataset with the struct fields as variables and the corresponding
         data as values. 
     """
-    out = read_mat_struct_flat_as_dict(fname)
-    df = pd.DataFrame.from_dict(out)
+    data = read_mat_struct_flat_as_dict(fname)
+
+    if drop_keys is not None:
+        for key in drop_keys:
+            data.pop(key, None)
+
+    ds = flat_dict_to_xarray(data, index=index, index_is_datenum=index_is_datenum)
+
+    return ds
+
+
+def flat_dict_to_xarray(data: dict, index=None, index_is_datenum=False) -> xr.Dataset:
+    """
+    Convert a flat dictionary to an xarray dataset.
+
+    Parameters
+    ----------
+    data : dict
+        Dictionary with the struct fields as keys and the corresponding
+        data as values.
+    index : str, tuple, optional [default=None]
+        Name of the index column. If None is passed [default], then no index is set.
+        If a tuple is passed, then the corresponding columns are used as a multiindex.
+    index_is_datenum : bool, optional [default=False]
+        If True, then the index is converted from MATLAB datenum to a pandas.Timestamp.
+    
+    Returns
+    -------
+    ds : xr.Dataset
+        Dataset with the struct fields as variables and the corresponding
+        data as values. 
+    """
+    df = pd.DataFrame.from_dict(data)
     if index is not None:
         df = df.set_index(index)
     ds = df.to_xarray()
@@ -79,7 +114,6 @@ def read_mat_struct_flat_as_dict(fname: str, key=None) -> dict:
 
     return data
     
-
 
 def unnest_matlab_struct_named_array(arr: np.ndarray) -> dict:
     """
