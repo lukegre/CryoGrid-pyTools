@@ -184,11 +184,12 @@ class CryoGridConfigExcel:
         df = df.astype(str)
 
         # H_LIST and V_MATRIX are special cases
-        # return df
         contains_matrix = df.map(lambda x: 'MATRIX' in x).values
+        contains_vmatrix = df.map(lambda x: 'V_MATRIX' in x).values
         contains_end = df.map(lambda x: 'END' in x).values
+
+        ends = np.where(contains_end)
         if contains_matrix.any():
-            ends = np.where(contains_end)
             r0, c0 = [a[0] for a in np.where(contains_matrix)]
 
             assert c0 == 1, "Matrix must be in second column"
@@ -200,6 +201,10 @@ class CryoGridConfigExcel:
             c1 = ends[1][0]
             
             arr = df.iloc[r0:r1, c0:c1].values
+            if contains_vmatrix.any():
+                # first column of V_MATRIX is the index but is not in the config file
+                # so we create it. It is one shorter than the num of rows because of header
+                arr[1:, 0] = np.arange(r1 - r0 - 1)
 
             matrix = pd.DataFrame(arr[1:, 1:], index=arr[1:, 0], columns=arr[0, 1:])
             matrix.index.name = matrix.columns.name = df.iloc[r0, 0]
@@ -227,3 +232,55 @@ class CryoGridConfigExcel:
         df.index.name = class_category
 
         return df
+    
+    def check_strat_layers(self):
+        """
+        Check that the stratigraphy layers are physically plausible
+        """
+        strat_layers = self.get_class('STRAT_layers')
+        for layer in strat_layers:
+            try:
+                check_strat_layer_values(strat_layers[layer].iloc[0])
+                logger.success(f"[{layer}]  parameters passed checks")
+            except ValueError as error:
+                logger.warning(f"[{layer}]  {error}")
+
+
+def check_strat_layer_values(tuple_containing_dict):
+    """
+    Checks stratigraphy layer parameters are set to values that make sense
+
+    Definitions: 
+    - porosity = 1 - mineral - organic
+    - airspace = porosity - waterIce
+    - volume = mineral + organic + waterIce
+
+    Checks:
+    - field_capacity < porosity  :  field capacity is a subset of the porosity
+    - airspace >= 0  :  cannot have negative airspace
+    - volume <= 1  :  the sum of mineral, organic, and waterIce cannot exceed 1
+    - waterIce <= porosity  :  waterIce cannot exceed porosity
+
+    Raises:
+    - ValueError: if any of the checks fail
+    """
+    dictionary = tuple_containing_dict[0]
+    df = pd.DataFrame(dictionary).astype(float).round(3)
+
+    df['porosity'] = (1 - df.mineral - df.organic).round(3)
+    df['airspace'] = (df.porosity - df.waterIce).round(3)
+    df['volume'] = (df.mineral + df.organic + df.waterIce).round(3)
+
+    checks = pd.DataFrame()
+    checks['field_capacity_lt_porosity'] = df.field_capacity < df.porosity
+    checks['airspace_ge_0'] = df.airspace >= 0
+    checks['volume_le_1'] = df.volume <= 1
+    checks['waterice_le_porosity'] = df.waterIce <= df.porosity
+    checks.index.name = 'layer'
+
+    if not checks.values.all():
+        raise ValueError(
+            "parameters are not physically plausible. "
+            "below are the violations: \n"
+            + str(checks.T))
+    

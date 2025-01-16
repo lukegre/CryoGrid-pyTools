@@ -1,3 +1,7 @@
+from .utils import change_logger_level as _change_logger_level
+
+_change_logger_level('INFO')
+
 from .matlab_helpers import (
     read_mat_struct_flat_as_dict,
     read_mat_struct_as_dataset)
