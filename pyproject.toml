@@ -1,35 +1,30 @@
 [project]
-
 name = "cryogrid_pytools"
-version = "0.1.6"
-
+version = "0.1.7"
 description = "Tools to read in CryoGrid MATLAB data to Python, includes forcing, outputs, DEMs, etc."
-readme = { file = "README.md", content-type = "text/markdown" }
-
-authors = [
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT license" }
+maintainers = [
+    # please add your name here if you contribute to the project
     { name = "Luke Gregor", email = "lukegre@gmail.com" },
 ]
 
-maintainers = [
-  { name = "Luke Gregor", email = "lukegre@gmail.com" },
-  # please add your name here if you contribute to the project
-]
-
-license = { text = "MIT license" }
-
 dependencies = [
-    "dask[array]",
-    "dask[diagnostics]",
+    "dask[array]>=2024",
+    "dask[diagnostics]>=2024",
     "joblib",
     "loguru",
     "matplotlib",
     "munch",
-    "numpy",
+    "numpy>=2.0",
     "openpyxl",
-    "pandas",
-    "scipy",
-    "xarray",
+    "pandas>=2",
+    "pip>=24",
+    "scipy>=1.13.1",
+    "xarray>=2024",
 ]
+
 
 # see https://pypi.org/classifiers/
 classifiers = [
