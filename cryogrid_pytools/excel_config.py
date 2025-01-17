@@ -13,10 +13,14 @@ class CryoGridConfigExcel:
     """
     def __init__(self, fname_xls: str, checks=True):
         """
-        fname_xls: str
-            Path to the CryoGrid Excel configuration file
-        checks: bool
-            If True, check if the forcing file name matches the given forcing years
+        Initialize the CryoGridConfigExcel object.
+
+        Parameters
+        ----------
+        fname_xls : str
+            Path to the CryoGrid Excel configuration file.
+        checks : bool, optional
+            If True, perform a check that the forcing file name matches the given forcing years.
         """
         self.fname = pathlib.Path(fname_xls).resolve()
         self.root = self._get_root_path()
@@ -37,6 +41,14 @@ class CryoGridConfigExcel:
         logger.info(f"Start and end times: {self.time.time_start:%Y-%m-%d} - {self.time.time_end:%Y-%m-%d}")
 
     def _get_root_path(self):
+        """
+        Find and set the root path by locating the 'run_cryogrid.m' file.
+
+        Returns
+        -------
+        pathlib.Path
+            The discovered root path or the current directory if not found.
+        """
         path = self.fname.parent
         while True:
             flist = path.glob('run_cryogrid.m')
@@ -51,6 +63,14 @@ class CryoGridConfigExcel:
                 path = path.parent
 
     def get_start_end_times(self):
+        """
+        Retrieve the start and end times from the Excel configuration.
+
+        Returns
+        -------
+        pandas.Series
+            A Series with 'time_start' and 'time_end' as Timestamp objects.
+        """
         times = self.get_class('set_start_end_time').T.filter(regex='time')
         times = times.map(lambda x: pd.Timestamp(year=int(x[0]), month=int(x[1]), day=int(x[2])))
 
@@ -61,10 +81,26 @@ class CryoGridConfigExcel:
         return times
 
     def get_coord_path(self):
+        """
+        Get the path to the coordinates file from the Excel configuration.
+
+        Returns
+        -------
+        pathlib.Path
+            The file path for coordinates.
+        """
         fname = self.get_class_filepath('COORDINATES_FROM_FILE', fname_key='file_name', index=1)
         return fname
 
     def get_dataset_paths(self):
+        """
+        Retrieve paths for each dataset from the Excel configuration.
+
+        Returns
+        -------
+        munch.Munch
+            A dictionary-like object mapping dataset variable names to file paths.
+        """
         paths = self.get_class_filepath('READ_DATASET', fname_key='filename').to_frame(name='filepath').T
         
         datasets = self.get_class('READ_DATASET')
@@ -76,16 +112,42 @@ class CryoGridConfigExcel:
         return paths
     
     def get_dem_path(self):
+        """
+        Get the path for the DEM file from the Excel configuration.
+
+        Returns
+        -------
+        pathlib.Path
+            The DEM file path.
+        """
         fname = self.get_class_filepath('DEM', folder_key='folder', fname_key='filename', index=1)
         return fname
     
     def get_forcing_path(self, class_name='read_mat_ERA'):
+        """
+        Obtain the forcing file path from the Excel configuration.
+
+        Parameters
+        ----------
+        class_name : str, optional
+            The class name to search for in the configuration, by default 'read_mat_ERA'.
+
+        Returns
+        -------
+        pathlib.Path
+            The forcing file path.
+        """
         fname = self.get_class_filepath(class_name, folder_key='path', fname_key='filename', index=1)
         return fname
     
     def check_forcing_fname_times(self):
         """
-        a quick check to see if the file name matches the given forcing years
+        Check if the file name matches the forcing years specified in the Excel configuration.
+
+        Raises
+        ------
+        AssertionError
+            If the forcing years in the file name do not match those in the configuration.
         """
         import re
 
@@ -97,6 +159,19 @@ class CryoGridConfigExcel:
         assert times == fname_years, f"File name years do not match the forcing years: forcing {times} != fname {fname_years}"
     
     def _load_xls(self, fname_xls: str) -> pd.DataFrame:
+        """
+        Load the Excel file into a DataFrame.
+
+        Parameters
+        ----------
+        fname_xls : str
+            Path to the Excel file.
+
+        Returns
+        -------
+        pandas.DataFrame
+            The loaded data with proper indexing and column names.
+        """
         import string
 
         alph = list(string.ascii_uppercase)
@@ -109,6 +184,26 @@ class CryoGridConfigExcel:
         return df
 
     def _get_unique_key(self, key: str, col_value='B'):
+        """
+        Retrieve a single unique value for a given key from the Excel data.
+
+        Parameters
+        ----------
+        key : str
+            The key to look for in column 'A'.
+        col_value : str, optional
+            The column to retrieve the value from, by default 'B'.
+
+        Returns
+        -------
+        str or None
+            The found value or None if no value exists.
+
+        Raises
+        ------
+        ValueError
+            If multiple values are found for the given key.
+        """
         df  = self._df
         idx = df.A == key
         value = df.loc[idx, col_value].values
@@ -120,7 +215,32 @@ class CryoGridConfigExcel:
             return value[0]
         
     def get_class_filepath(self, key, folder_key='folder', fname_key='file', index=None):
+        """
+        Construct a file path from folder and file entries in the Excel configuration.
 
+        Parameters
+        ----------
+        key : str
+            The class name to search for.
+        folder_key : str, optional
+            Key to identify the folder in the DataFrame, by default 'folder'.
+        fname_key : str, optional
+            Key to identify the file name in the DataFrame, by default 'file'.
+        index : int or None, optional
+            If int, return a single entry. Otherwise return all matched entries.
+
+        Returns
+        -------
+        pathlib.Path or pandas.Series
+            The path(s) constructed from the Excel class entries.
+
+        Raises
+        ------
+        AssertionError
+            If multiple folder or filename keys are found.
+        TypeError
+            If index is not int or None.
+        """
         df = self.get_class(key)
 
         keys = df.index.values
@@ -141,6 +261,19 @@ class CryoGridConfigExcel:
             raise TypeError(f"index must be None or int, not {type(index)}")
         
     def get_class(self, class_name: str):
+        """
+        Return DataFrame blocks representing the specified class from the Excel data.
+
+        Parameters
+        ----------
+        class_name : str
+            The class name to look up (e.g., 'DEM', 'READ_DATASET').
+
+        Returns
+        -------
+        pandas.DataFrame
+            The concatenated DataFrame of class blocks.
+        """
         df = self._df
         i0s = df.A == class_name
         i0s = i0s[i0s].index.values
@@ -153,6 +286,24 @@ class CryoGridConfigExcel:
         return df
 
     def _find_class_block(self, class_idx0: int):
+        """
+        Identify and extract the block of rows corresponding to a class definition.
+
+        Parameters
+        ----------
+        class_idx0 : int
+            Starting row index for the class in the Excel data.
+
+        Returns
+        -------
+        pandas.DataFrame
+            The processed block as a DataFrame.
+
+        Raises
+        ------
+        AssertionError
+            If the class structure is missing required indicators.
+        """
         df = self._df
 
         class_name = df.A.loc[class_idx0]
@@ -171,7 +322,25 @@ class CryoGridConfigExcel:
 
         return class_block
     
-    def _process_class_block(self, df: pd.DataFrame)->pd.DataFrame:
+    def _process_class_block(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Process a raw class block by removing comments, handling special structures, and shaping data.
+
+        Parameters
+        ----------
+        df : pandas.DataFrame
+            A DataFrame slice representing the raw class block.
+
+        Returns
+        -------
+        pandas.DataFrame
+            The cleaned and structured DataFrame of class data.
+
+        Raises
+        ------
+        AssertionError
+            When matrix structures in the block do not match expected format.
+        """
         """hacky way to process the class block"""
         # drop CLASS_END row
         df = df[df.A != 'CLASS_END']
@@ -235,7 +404,7 @@ class CryoGridConfigExcel:
     
     def check_strat_layers(self):
         """
-        Check that the stratigraphy layers are physically plausible
+        Run checks to ensure stratigraphy layers have physically plausible parameter values.
         """
         strat_layers = self.get_class('STRAT_layers')
         for layer in strat_layers:
@@ -248,21 +417,31 @@ class CryoGridConfigExcel:
 
 def check_strat_layer_values(tuple_containing_dict):
     """
-    Checks stratigraphy layer parameters are set to values that make sense
+    Validate that stratigraphy layer parameters are physically plausible.
 
-    Definitions: 
-    - porosity = 1 - mineral - organic
-    - airspace = porosity - waterIce
-    - volume = mineral + organic + waterIce
+    Parameters
+    ----------
+    tuple_containing_dict : tuple
+        A tuple containing a dictionary whose keys represent layer parameters.
 
-    Checks:
-    - field_capacity < porosity  :  field capacity is a subset of the porosity
-    - airspace >= 0  :  cannot have negative airspace
-    - volume <= 1  :  the sum of mineral, organic, and waterIce cannot exceed 1
-    - waterIce <= porosity  :  waterIce cannot exceed porosity
+    Raises
+    ------
+    ValueError
+        If any parameter check fails for the stratigraphy layers.
 
-    Raises:
-    - ValueError: if any of the checks fail
+    Notes
+    -----
+    #### Definitions
+    - `porosity = 1 - mineral - organic`
+    - `airspace = porosity - waterIce`
+    - `volume = mineral + organic + waterIce`
+
+    #### Checks
+    - `field_capacity < porosity`  :  field capacity is a subset of the porosity
+    - `airspace >= 0`  :  cannot have negative airspace
+    - `volume <= 1`  :  the sum of mineral, organic, and waterIce cannot exceed 1
+    - `waterIce <= porosity`  :  waterIce cannot exceed porosity
+
     """
     dictionary = tuple_containing_dict[0]
     df = pd.DataFrame(dictionary).astype(float).round(3)
@@ -283,4 +462,3 @@ def check_strat_layer_values(tuple_containing_dict):
             "parameters are not physically plausible. "
             "below are the violations: \n"
             + str(checks.T))
-    

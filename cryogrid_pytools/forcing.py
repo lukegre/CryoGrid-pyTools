@@ -2,23 +2,24 @@
 import xarray as xr
 
 
-def _era5_mat_dict_to_xarray(era5_dict: dict)->xr.Dataset:
+def _era5_mat_dict_to_xarray(era5_dict: dict) -> xr.Dataset:
     """
-    Convert a dictionary with the ERA5 forcing variables to a xarray Dataset
+    Convert a dictionary with the ERA5 forcing variables to a xarray Dataset.
 
     Parameters
     ----------
     era5_dict : dict
         Dictionary with the ERA5 forcing variables. Must contain keys: 
-            lon, lat, p, t, dims, 
-            u10, v10, u, v, Td2, T2, T, Z, q, P, ps, SW, LW, S_TOA, Zs,
-            wind_sf, q_sf, ps_sf, rad_sf, T_sf, P_sf
+        u10, v10, u, v, Td2, T2, T, Z, q, P, ps, SW, LW, S_TOA, Zs,
+        wind_sf, q_sf, ps_sf, rad_sf, T_sf, P_sf
 
     Returns
     -------
     xr.Dataset
         Dataset with the ERA5 forcing variables and variables are scaled to the original units
     """
+    from .matlab_helpers import matlab2datetime
+
     dat = era5_dict
 
     out = xr.Dataset(
@@ -48,34 +49,38 @@ def _era5_mat_dict_to_xarray(era5_dict: dict)->xr.Dataset:
         
         out[key] = xr.DataArray(arr, dims=dims)
 
-    out['u10'] = out['u10'] * dat['wind_sf']
-    out['v10'] = out['v10'] * dat['wind_sf']
-    out['u'] = out['u'] * dat['wind_sf']
-    out['v'] = out['v'] * dat['wind_sf']
-
-    out['Td2'] = out['Td2'] * dat['T_sf']
-    out['T2'] = out['T2'] * dat['T_sf']
-    out['T'] = out['T'] * dat['T_sf']
-
-    out['SW'] = out['SW'] * dat['rad_sf']
-    out['LW'] = out['LW'] * dat['rad_sf']
-    out['S_TOA'] = out['S_TOA'] * dat['rad_sf']
+    wind_vars = ['u10', 'v10', 'u', 'v']
+    for key in wind_vars:
+        out[key] = (out[key] * dat['wind_sf']).assign_attrs(units='m s-1')
     
-    out['ps'] = out['ps'] * dat['ps_sf']
-    out['P'] = out['P'] * dat['P_sf']
-    out['q'] = out['q'] * dat['q_sf']
+    temp_vars = ['Td2', 'T2', 'T']
+    for key in temp_vars:
+        out[key] = (out[key] * dat['T_sf']).assign_attrs(units='degC')
+        
+    radiation_vars = ['SW', 'LW', 'S_TOA']
+    for key in radiation_vars:
+        out[key] = (out[key] * dat['rad_sf']).assign_attrs(units='W m-2 hr-1')
+    
+    out['ps'] = (out['ps'] * dat['ps_sf']).assign_attrs(long_name='pressure', units='Pa')
+    out['P'] = (out['P'] * dat['P_sf']).assign_attrs(long_name='precipitation', units='mm hr-1')
+    out['q'] = (out['q'] * dat['q_sf']).assign_attrs(long_name='specific humidity', units='kg kg-1')
 
     out['Zs'] = out['Zs'].astype(float)
     out['Z'] = out['Z'].astype(float)
 
-    out = out.transpose('time', 'level', 'lat', 'lon')
+    out = (
+        out
+        .transpose('time', 'level', 'lat', 'lon')
+        .assign_coords(time=lambda x: matlab2datetime(x.time.values)))
+    
+    out['level'] = (out['level'] / 100).astype(int).assign_attrs(long_name='pressure', units='hPa')
 
     return out
 
 
-def read_mat_ear5(filename: str)->xr.Dataset:
+def read_mat_ear5(filename: str) -> xr.Dataset:
     """
-    Read the ERA5.mat forcing file for CryoGrid and return a xarray Dataset
+    Read the ERA5.mat forcing file for CryoGrid and return a xarray Dataset.
 
     Parameters
     ----------
@@ -98,7 +103,7 @@ def read_mat_ear5(filename: str)->xr.Dataset:
     out = out.assign_attrs(
         info=(
             'Data read in from CryoGrid ERA5 forcing file. '
-            'Data has been scaled to the original units. '
+            'Data has been scaled to the original units with some modifications - units are given. '
             'Data has been transposed from [lon, lat, level, time] --> [time, level, lat, lon]. '
             'See the ERA5 documentation for more info about the units etc.'),
         source=filename,
@@ -107,11 +112,11 @@ def read_mat_ear5(filename: str)->xr.Dataset:
     return out
 
 
-def era5_to_matlab(ds: xr.Dataset)->dict:
+def era5_to_matlab(ds: xr.Dataset, save_path: str = None) -> dict:
     """
-    Converrt a merged netCDF file from the Copernicus CDS to 
+    Convert a merged netCDF file from the Copernicus CDS to 
     a dictionary that matches the expected format of 
-    the CryoGrid.POST_PROC.read_mat_ERA class (in MATLAB)
+    the CryoGrid.POST_PROC.read_mat_ERA class (in MATLAB).
 
     Parameters
     ----------
@@ -122,6 +127,9 @@ def era5_to_matlab(ds: xr.Dataset)->dict:
         pressure_levels = [t, z, q, u, v]
         Note that Zs in the single levels is a special case since it is only 
         downloaded for a single date at the surface (doesn't change over time)
+    save_path : str, optional
+        Path to save the dictionary as a .mat file, by default None, meaning 
+        no file is saved and only the dictionary is returned
 
     Returns
     -------
@@ -200,4 +208,10 @@ def era5_to_matlab(ds: xr.Dataset)->dict:
     # no scaling for geoportential height
     era['Z']     = era['Z'].astype(np.int16)
 
-    return {'era': era}
+    out = {'era': era}
+
+    if save_path is not None and isinstance(save_path, str):
+        from scipy.io import savemat
+        savemat(save_path, out, appendmat=True, do_compression=True)
+        
+    return out
