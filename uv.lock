@@ -837,7 +837,7 @@ wheels = [
 
 [[package]]
 name = "cryogrid-pytools"
-version = "0.1.7"
+version = "0.2.0"
 source = { editable = "." }
 dependencies = [
     { name = "dask", version = "2024.8.0", source = { registry = "https://pypi.org/simple" }, extra = ["array", "diagnostics"], marker = "python_full_version < '3.10'" },
@@ -860,6 +860,7 @@ dependencies = [
 
 [package.optional-dependencies]
 data = [
+    { name = "bottleneck" },
     { name = "earthaccess", version = "0.11.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
     { name = "earthaccess", version = "0.12.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
     { name = "era5-downloader" },
@@ -878,11 +879,13 @@ data = [
 
 [package.dev-dependencies]
 data = [
-    { name = "bottleneck" },
+    { name = "rioxarray", version = "0.15.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "rioxarray", version = "0.18.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
 ]
 
 [package.metadata]
 requires-dist = [
+    { name = "bottleneck", marker = "extra == 'data'", specifier = ">=1.4.2" },
     { name = "dask", extras = ["array"], specifier = ">=2024" },
     { name = "dask", extras = ["diagnostics"], specifier = ">=2024" },
     { name = "earthaccess", marker = "extra == 'data'", specifier = ">=0.11.0" },
@@ -909,7 +912,7 @@ requires-dist = [
 ]
 
 [package.metadata.requires-dev]
-data = [{ name = "bottleneck", specifier = ">=1.4.2" }]
+data = [{ name = "rioxarray", specifier = ">=0.15.0" }]
 
 [[package]]
 name = "cycler"
