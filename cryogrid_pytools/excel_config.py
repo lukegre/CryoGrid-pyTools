@@ -11,24 +11,28 @@ class CryoGridConfigExcel:
     A class to read CryoGrid Excel configuration files and extract file paths
     and maybe in the future do some checks etc
     """
-    def __init__(self, fname_xls: str, checks=True):
+    def __init__(self, fname_xls: str, check_file_paths=True, check_strat_layers=True):
         """
         Initialize the CryoGridConfigExcel object.
 
+        Reads in the Excel configuration file and parse the different classes
+        using a pandas DataFrame approach. 
+
         Parameters
         ----------
-        fname_xls : str
+        fname_xls : path-like
             Path to the CryoGrid Excel configuration file.
-        checks : bool, optional
-            If True, perform a check that the forcing file name matches the given forcing years.
+        check_file_paths : bool, default=True, optional
+            If True, perform a check that all files linked in the configuration 
+            can be found (path exists)
+        check_strat_layers : bool, default=True, optional
+            If True, perform a check that stratigraphy layer parameters are 
+            physically plausible
         """
         self.fname = pathlib.Path(fname_xls).resolve()
         self.root = self._get_root_path()
         self._df = self._load_xls(fname_xls)
         logger.success(f"Loaded CryoGrid Excel configuration file: {self.fname}")
-
-        if checks:
-            self.check_forcing_fname_times()
 
         self.fname = Munch()
         self.fname.dem = self.get_dem_path()
@@ -37,6 +41,11 @@ class CryoGridConfigExcel:
         self.fname.datasets = self.get_dataset_paths()
         
         self.time = self.get_start_end_times()
+
+        if check_file_paths:
+            self.check_files_exist()
+        if check_strat_layers:
+            self.check_strat_layers()
 
         logger.info(f"Start and end times: {self.time.time_start:%Y-%m-%d} - {self.time.time_end:%Y-%m-%d}")
 
@@ -407,12 +416,31 @@ class CryoGridConfigExcel:
         Run checks to ensure stratigraphy layers have physically plausible parameter values.
         """
         strat_layers = self.get_class('STRAT_layers')
+        logger.info("Checking stratigraphy layers...")
         for layer in strat_layers:
             try:
                 check_strat_layer_values(strat_layers[layer].iloc[0])
                 logger.success(f"[{layer}]  parameters passed checks")
             except ValueError as error:
                 logger.warning(f"[{layer}]  {error}")
+
+    def check_files_exist(self):
+        """
+        Check if all the files in the configuration exist.
+        """
+
+        flist = set([
+            self.get_forcing_path(), 
+            self.get_dem_path(), 
+            self.get_coord_path()] 
+            + list(self.get_dataset_paths().values()))
+        
+        logger.info("Checking file locations...")
+        for f in flist:
+            if not f.exists():
+                logger.warning(f"Cannot find file: {f}")
+            else:
+                logger.success(f"Located file: {f}")
 
 
 def check_strat_layer_values(tuple_containing_dict):
