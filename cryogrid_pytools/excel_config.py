@@ -222,7 +222,30 @@ class CryoGridConfigExcel:
             raise ValueError(f"Multiple values found for key: {key}")
         else:
             return value[0]
-        
+    
+    def get_classes(self):
+        """
+        Returns a dictionary of class names and their corresponding row indices
+        from the Excel file. To use as a reference for get_class(<class_name>).
+
+        Returns
+        -------
+        dict of int: str
+            A dictionary mapping class names to row indices
+        """
+        df = self._df
+
+        class_idx = []
+        for i in range(len(df)):
+            try: 
+                self._find_class_block(i)
+                class_idx.append(i)
+            except:
+                pass
+
+        classes = df.loc[class_idx, 'A'].to_dict()
+        return classes
+
     def get_class_filepath(self, key, folder_key='folder', fname_key='file', index=None):
         """
         Construct a file path from folder and file entries in the Excel configuration.
