@@ -1,0 +1,10 @@
+/* Center content on wide screens */
+.wy-nav-content {
+    max-width: 1200px !important;
+    margin: auto;
+}
+
+/* Make sure code blocks don't overflow */
+.rst-content .highlight {
+    overflow-x: auto;
+}
