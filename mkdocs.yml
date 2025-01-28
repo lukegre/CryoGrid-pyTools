@@ -2,6 +2,9 @@ site_name: CryoGrid-pyTools
 theme:
   name: readthedocs
 
+repo_url: https://github.com/lukegre/CryoGrid-pyTools
+repo_name: GitHub
+
 extra_css:
   - stylesheets/extra.css
 
