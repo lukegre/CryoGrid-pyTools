@@ -44,7 +44,8 @@ classifiers = [  # see https://pypi.org/classifiers/
 
 [project.optional-dependencies]
 docs = [
-    "mkdocs-material>=9.0.0",
+    "mkdocs>=1.5.0",
+    "mkdocs-rtd-dropdown>=1.0.2",
     "mkdocstrings>=0.24.0",
     "mkdocstrings-python>=1.7.0"
 ]
