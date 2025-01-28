@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Spatial Data and Forcing - CryoGrid-pyTools</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../assets/_mkdocstrings.css" rel="stylesheet" />
+        <link href="../../stylesheets/extra.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Spatial Data and Forcing";
+        var mkdocs_page_input_path = "usage/spatial-data.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> CryoGrid-pyTools
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../installation/">Installation</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Usage</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../getting-started/">Getting Started</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../reading-output/">Reading CryoGrid Output</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../reading-matlab/">Reading MATLAB Structs</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Spatial Data and Forcing</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#digital-elevation-model-dem">Digital Elevation Model (DEM)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#land-cover-data">Land Cover Data</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#snow-melt-timing">Snow Melt Timing</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#glacier-data">Glacier Data</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#era5-forcing-data">ERA5 Forcing Data</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#advanced-usage">Advanced Usage</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#smoothing-data">Smoothing Data</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#working-with-sentinel-2-data">Working with Sentinel-2 Data</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#notes">Notes</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../api-reference/">API Reference</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">CryoGrid-pyTools</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Usage</li>
+      <li class="breadcrumb-item active">Spatial Data and Forcing</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="spatial-data-and-forcing">Spatial Data and Forcing</h1>
+<p>The <code>data</code> module provides tools for creating forcing data and spatial data for CryoGrid spatial cluster runs. This module requires additional dependencies which can be installed using:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;cryogrid_pytools[data]&quot;</span>
+</code></pre></div>
+<h2 id="digital-elevation-model-dem">Digital Elevation Model (DEM)</h2>
+<p>You can download DEM data from the Copernicus 30m dataset:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">cryogrid_pytools</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cgt</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># Define your area of interest (West, South, East, North)</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">bbox</span> <span class="o">=</span> <span class="p">[</span><span class="mf">70.0</span><span class="p">,</span> <span class="mf">35.0</span><span class="p">,</span> <span class="mf">71.0</span><span class="p">,</span> <span class="mf">36.0</span><span class="p">]</span>  <span class="c1"># Example for a region in the Pamirs</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1"># Get DEM data at 30m resolution</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">dem</span> <span class="o">=</span> <span class="n">cgt</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get_dem_copernicus30</span><span class="p">(</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="n">bbox_WSEN</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="n">res_m</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    <span class="n">epsg</span><span class="o">=</span><span class="mi">32643</span><span class="p">,</span>  <span class="c1"># UTM 43N (default for Pamir region)</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    <span class="n">smoothing_iters</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  <span class="c1"># Apply smoothing to reduce noise</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    <span class="n">smoothing_size</span><span class="o">=</span><span class="mi">3</span>    <span class="c1"># Kernel size for smoothing</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="p">)</span>
+</code></pre></div>
+<h2 id="land-cover-data">Land Cover Data</h2>
+<p>Get ESA World Cover data for your region:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">landcover</span> <span class="o">=</span> <span class="n">cgt</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get_esa_land_cover</span><span class="p">(</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="n">bbox_WSEN</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    <span class="n">res_m</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>    <span class="n">epsg</span><span class="o">=</span><span class="mi">32643</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="p">)</span>
+</code></pre></div>
+<p>The returned DataArray includes attributes for class values, descriptions, and colors that can be used for plotting.</p>
+<h2 id="snow-melt-timing">Snow Melt Timing</h2>
+<p>Calculate snow melt timing using Sentinel-2 data:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Get snow melt day of year for multiple years</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">snow_melt</span> <span class="o">=</span> <span class="n">cgt</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get_snow_melt_doy</span><span class="p">(</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>    <span class="n">bbox_WSEN</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>    <span class="n">years</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">2018</span><span class="p">,</span> <span class="mi">2025</span><span class="p">),</span>  <span class="c1"># Analysis period</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="n">res_m</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="n">epsg</span><span class="o">=</span><span class="mi">32643</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="p">)</span>
+</code></pre></div>
+<h2 id="glacier-data">Glacier Data</h2>
+<p>Get Randolph Glacier Inventory (RGI) data for your region:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Get glacier data as a raster matching your DEM</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">glacier_data</span> <span class="o">=</span> <span class="n">cgt</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get_randolph_glacier_inventory</span><span class="p">(</span><span class="n">target_dem</span><span class="o">=</span><span class="n">dem</span><span class="p">)</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Or get raw vector data</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">glacier_vector</span> <span class="o">=</span> <span class="n">cgt</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get_randolph_glacier_inventory</span><span class="p">()</span>
+</code></pre></div>
+<h2 id="era5-forcing-data">ERA5 Forcing Data</h2>
+<p>The module provides access to ERA5 climate forcing data through the <code>era5_downloader</code> package:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">cryogrid_pytools.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_era5_downloader</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="c1"># Create an ERA5 downloader instance</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="n">era5</span> <span class="o">=</span> <span class="n">make_era5_downloader</span><span class="p">()</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="c1"># Download ERA5 data for your region and time period</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="n">forcing</span> <span class="o">=</span> <span class="n">era5</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>    <span class="n">bbox_WSEN</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>    <span class="n">start_date</span><span class="o">=</span><span class="s2">&quot;2018-01-01&quot;</span><span class="p">,</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>    <span class="n">end_date</span><span class="o">=</span><span class="s2">&quot;2024-12-31&quot;</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="p">)</span>
+</code></pre></div>
+<h2 id="advanced-usage">Advanced Usage</h2>
+<h3 id="smoothing-data">Smoothing Data</h3>
+<p>You can smooth any spatial data using a rolling mean filter:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">smoothed_dem</span> <span class="o">=</span> <span class="n">cgt</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">smooth_data</span><span class="p">(</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>    <span class="n">dem</span><span class="p">,</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="n">n_iters</span><span class="o">=</span><span class="mi">2</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="p">)</span>
+</code></pre></div>
+<h3 id="working-with-sentinel-2-data">Working with Sentinel-2 Data</h3>
+<p>Get raw Sentinel-2 data for custom analysis:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">sentinel_data</span> <span class="o">=</span> <span class="n">cgt</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get_sentinel2_data</span><span class="p">(</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    <span class="n">bbox_WSEN</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    <span class="n">years</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">2018</span><span class="p">,</span> <span class="mi">2025</span><span class="p">),</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="n">assets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;SCL&#39;</span><span class="p">],</span>  <span class="c1"># Scene Classification Layer</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="n">res_m</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    <span class="n">epsg</span><span class="o">=</span><span class="mi">32643</span><span class="p">,</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>    <span class="n">max_cloud_cover</span><span class="o">=</span><span class="mi">5</span>  <span class="c1"># Maximum cloud cover percentage</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="p">)</span>
+</code></pre></div>
+<h2 id="notes">Notes</h2>
+<ol>
+<li>All spatial functions support consistent coordinate reference systems through the <code>epsg</code> parameter</li>
+<li>Resolution can be specified in meters using the <code>res_m</code> parameter</li>
+<li>The module handles data downloads and caching automatically</li>
+<li>Most functions support both vector (GeoDataFrame) and raster (xarray.DataArray) outputs</li>
+<li>Functions are decorated to handle both bounding box inputs and existing DataArrays for reprojection</li>
+</ol>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../reading-matlab/" class="btn btn-neutral float-left" title="Reading MATLAB Structs"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../api-reference/" class="btn btn-neutral float-right" title="API Reference">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../reading-matlab/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../../api-reference/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
