@@ -6,7 +6,7 @@ import numpy as np
 from loguru import logger
 
 
-def read_OUT_regridded_FCI2_file(fname, deepest_point=None)->xr.Dataset:
+def read_OUT_regridded_FCI2_file(fname:str, deepest_point=None)->xr.Dataset:
     """
     Read a CryoGrid OUT_regridded_FCI2 file and return it as an xarray dataset.
 
@@ -56,10 +56,11 @@ def read_OUT_regridded_FCI2_file(fname, deepest_point=None)->xr.Dataset:
         n = elevation.size - 1
         s = (elevation[-1] - elevation[0]) / n
         
+        significant_number = np.abs(np.floor(np.log10((np.abs(s))))).astype(int)
         # calculate shallowest point based on step size and n
         shallowest_point = deepest_point - (s * n)
         deepest_point += s / 2  # adding half step for arange
-        depth = np.arange(shallowest_point, deepest_point, s)
+        depth = np.arange(shallowest_point, deepest_point, s, dtype='float32').round(significant_number)
         ds['depth'] = xr.DataArray(depth, dims=['depth'])
         ds = ds.set_coords('depth')
         ds = ds.transpose('depth', 'time', ...)
@@ -71,7 +72,7 @@ def read_OUT_regridded_FCI2_file(fname, deepest_point=None)->xr.Dataset:
     return ds
 
 
-def read_OUT_regridded_FCI2_parallel(fname_glob, deepest_point, concat_dim='time', **joblib_kwargs):
+def _read_OUT_regridded_FCI2_parallel(fname_glob:str, deepest_point:float, **joblib_kwargs)->list:
     """
     Reads multiple files that are put out by the OUT_regridded_FCI2 class
 
@@ -116,19 +117,13 @@ def read_OUT_regridded_FCI2_parallel(fname_glob, deepest_point, concat_dim='time
     # set up the joblib configuration
     joblib_props = dict(n_jobs=-1, backend='threading', verbose=1)
     joblib_props.update(joblib_kwargs)
-    worker = joblib.Parallel(**joblib_props)
-    output = worker(tasks)  # run the tasks
-    
-    # combine the coordinates - note filename attr is lost in this step
-    ds = xr.combine_nested(output, concat_dim=concat_dim)
-    
-    # transpose data so that plotting is quick and easy
-    ds = ds.transpose('depth', 'time', ...)
+    worker = joblib.Parallel(**joblib_props)  # type: ignore
+    list_of_ds = list(worker(tasks))  # run the tasks
 
-    return ds
+    return list_of_ds
 
 
-def read_OUT_regridded_FCI2_clusters(fname_glob, deepest_point, **joblib_kwargs):
+def read_OUT_regridded_FCI2_clusters(fname_glob:str, deepest_point:float, **joblib_kwargs)->xr.Dataset:
     """
     Reads multiple files that are put out by the OUT_regridded_FCI2 class
 
@@ -163,8 +158,11 @@ def read_OUT_regridded_FCI2_clusters(fname_glob, deepest_point, **joblib_kwargs)
     # extract the gridcell from the file name
     gridcell = [int(f.split('_')[-2]) for f in flist]
     
-    ds = read_OUT_regridded_FCI2_parallel(fname_glob, deepest_point, concat_dim='gridcell', **joblib_kwargs)
-    ds['gridcell'] = xr.DataArray(gridcell, dims=['gridcell'])
+    list_of_ds = _read_OUT_regridded_FCI2_parallel(fname_glob, deepest_point, **joblib_kwargs)
+    
+    # assign the gridcell dimension so that we can combine the data by coordinates and time 
+    list_of_ds = [ds.assign_coords(gridcell=[c]) for ds, c in zip(list_of_ds, gridcell)]
+    ds = xr.combine_by_coords(list_of_ds, combine_attrs='drop_conflicts')
 
     # transpose data so that plotting is quick and easy
     ds = ds.transpose('gridcell', 'depth', 'time', ...)

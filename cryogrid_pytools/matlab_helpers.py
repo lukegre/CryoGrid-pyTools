@@ -5,7 +5,7 @@ import xarray as xr
 import numpy as np
 
 
-def read_mat_struct_as_dataset(fname, drop_keys=None, index=None, index_is_datenum=False):
+def read_mat_struct_as_dataset(fname, drop_keys=None, index=None, index_is_datenum=False)->xr.Dataset:
     """
     Read a MATLAB struct from a .mat file and return it as an xarray dataset.
 
@@ -115,7 +115,7 @@ def read_mat_struct_flat_as_dict(fname: str, key=None) -> dict:
     return data
     
 
-def unnest_matlab_struct_named_array(arr: np.ndarray) -> dict:
+def unnest_matlab_struct_named_array(arr: np.ndarray) -> np.ndarray:
     """
     Unnest a numpy structured array that was read from a MATLAB .mat file.
 
@@ -137,6 +137,8 @@ def unnest_matlab_struct_named_array(arr: np.ndarray) -> dict:
     """
     def is_ndarray_or_void(x):
         return isinstance(x, np.ndarray) or isinstance(x, np.void)
+    
+    prev = arr  # to ensure that prev is defined
     
     while is_ndarray_or_void(arr) and arr.size == 1:
         if (  # stop if a void array with multiple fields
