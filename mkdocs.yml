@@ -36,5 +36,6 @@ nav:
     - Getting Started: usage/getting-started.md
     - Reading CryoGrid Output: usage/reading-output.md
     - Reading MATLAB Structs: usage/reading-matlab.md
+    - Working with Forcing Data: usage/forcing.md
     - Spatial Data and Forcing: usage/spatial-data.md
   - API Reference: api-reference.md

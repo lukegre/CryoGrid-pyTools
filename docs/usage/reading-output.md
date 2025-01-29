@@ -1,36 +1,68 @@
 # Reading CryoGrid Output
 
-CryoGrid-pyTools currently supports reading output files from the `OUT_regridded_FCI2` class. Here's how to work with these files.
+CryoGrid-pyTools provides functionality to read CryoGrid output files into Python. Currently, it supports reading regridded FCI2 output files.
 
-## Reading Single Files
+## Reading FCI2 Output Files
 
-To read a single CryoGrid output file:
+Use the `read_OUT_regridded_FCI2_file` function to read a regridded FCI2 output file:
 
 ```python
 import cryogrid_pytools as cgt
 
-# Path to your output file
-fname = "results_from_RUN_SIMPLE/<project_name>_<YYYYMMDD>.mat"
-
-# Read the file
-dataset = cgt.read_OUT_regridded_FCI2_file(fname)
+# Read a single output file
+ds = cgt.read_OUT_regridded_FCI2_file(
+    'path/to/your/output_file.mat',
+    deepest_point=-5  # Set the deepest point in meters
+)
 ```
+
+The function returns an xarray Dataset with the following variables:
+- `time`: Time coordinate (datetime64)
+- `depth`: Depth coordinate in meters
+- `T`: Temperature
+- `water`: Water content
+- `ice`: Ice content
+- `class_number`: Class number
+- `FCI`: Frozen/Thawed state
+- `elevation`: Surface elevation
 
 ## Reading Multiple Files
 
-For projects using RUN_SPATIAL_SPINUP_CLUSTERING, you can read multiple files at once:
+For spatial runs with multiple output files, use `read_OUT_regridded_FCI2_clusters`:
 
 ```python
-# Path with wildcards for cluster ID and date
-fname = "results_from_RUN_SPATIAL_SPINUP_CLUSTERING/project_name_*_*.mat"
-
-# Read multiple files, specifying the deepest point
-dataset = cgt.read_OUT_regridded_FCI2_clusters(fname, deepest_point=-5)
+# Read multiple output files
+ds = cgt.read_OUT_regridded_FCI2_clusters(
+    'path/to/output/directory/*.mat',  # Glob pattern for output files
+    deepest_point=-5
+)
 ```
 
-The resulting dataset is an `xarray.Dataset` with dimensions:
-- `gridcell`
-- `depth`
-- `time`
+The resulting Dataset will have an additional `gridcell` dimension for the spatial component.
 
-This makes it easy to perform analysis and visualization using xarray's powerful features.
+## Data Structure
+
+The output is an xarray Dataset with:
+
+- Dimensions:
+  - `time`: Timesteps in the simulation
+  - `depth`: Vertical grid points
+  - `gridcell`: (Only for cluster runs) Spatial grid points
+
+- Variables:
+  - All variables are stored as dask arrays for efficient memory usage
+  - Temperature and other fields are stored with dimensions (time, depth) or (gridcell, depth, time)
+
+## Working with the Data
+
+Being an xarray Dataset, you can use all standard xarray operations:
+
+```python
+# Select a specific time
+ds.sel(time='2000-01-01')
+
+# Get mean temperature over time
+ds.T.mean(dim='time')
+
+# Plot temperature profile
+ds.T.plot()
