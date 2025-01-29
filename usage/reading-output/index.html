@@ -105,14 +105,13 @@
 <p>CryoGrid-pyTools provides functionality to read CryoGrid output files into Python. Currently, it supports reading regridded FCI2 output files.</p>
 <h2 id="reading-fci2-output-files">Reading FCI2 Output Files</h2>
 <p>Use the <code>read_OUT_regridded_FCI2_file</code> function to read a regridded FCI2 output file:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">cryogrid_pytools</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cgt</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># Read a single output file</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">ds</span> <span class="o">=</span> <span class="n">cgt</span><span class="o">.</span><span class="n">read_OUT_regridded_FCI2_file</span><span class="p">(</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="s1">&#39;path/to/your/output_file.mat&#39;</span><span class="p">,</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">deepest_point</span><span class="o">=-</span><span class="mi">5</span>  <span class="c1"># Set the deepest point in meters</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">)</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-python">import cryogrid_pytools as cgt
+
+# Read a single output file
+ds = cgt.read_OUT_regridded_FCI2_file(
+    'path/to/your/output_file.mat',
+    deepest_point=-5  # Set the deepest point in meters
+)</code></pre>
 <p>The function returns an xarray Dataset with the following variables:
 - <code>time</code>: Time coordinate (datetime64)
 - <code>depth</code>: Depth coordinate in meters
@@ -124,12 +123,11 @@
 - <code>elevation</code>: Surface elevation</p>
 <h2 id="reading-multiple-files">Reading Multiple Files</h2>
 <p>For spatial runs with multiple output files, use <code>read_OUT_regridded_FCI2_clusters</code>:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Read multiple output files</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">ds</span> <span class="o">=</span> <span class="n">cgt</span><span class="o">.</span><span class="n">read_OUT_regridded_FCI2_clusters</span><span class="p">(</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="s1">&#39;path/to/output/directory/*.mat&#39;</span><span class="p">,</span>  <span class="c1"># Glob pattern for output files</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="n">deepest_point</span><span class="o">=-</span><span class="mi">5</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">)</span>
-</code></pre></div>
+<pre class="highlight"><code class="language-python"># Read multiple output files
+ds = cgt.read_OUT_regridded_FCI2_clusters(
+    'path/to/output/directory/*.mat',  # Glob pattern for output files
+    deepest_point=-5
+)</code></pre>
 <p>The resulting Dataset will have an additional <code>gridcell</code> dimension for the spatial component.</p>
 <h2 id="data-structure">Data Structure</h2>
 <p>The output is an xarray Dataset with:</p>
