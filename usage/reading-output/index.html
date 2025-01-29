@@ -55,13 +55,19 @@
                   </li>
                   <li class="toctree-l1 current"><a class="reference internal current" href="#">Reading CryoGrid Output</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#reading-single-files">Reading Single Files</a>
+    <li class="toctree-l2"><a class="reference internal" href="#reading-fci2-output-files">Reading FCI2 Output Files</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#reading-multiple-files">Reading Multiple Files</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#data-structure">Data Structure</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#working-with-the-data">Working with the Data</a>
     </li>
     </ul>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../reading-matlab/">Reading MATLAB Structs</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../forcing/">Working with Forcing Data</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../spatial-data/">Spatial Data and Forcing</a>
                   </li>
@@ -96,28 +102,59 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="reading-cryogrid-output">Reading CryoGrid Output</h1>
-<p>CryoGrid-pyTools currently supports reading output files from the <code>OUT_regridded_FCI2</code> class. Here's how to work with these files.</p>
-<h2 id="reading-single-files">Reading Single Files</h2>
-<p>To read a single CryoGrid output file:</p>
-<pre class="highlight"><code class="language-python">import cryogrid_pytools as cgt
-
-# Path to your output file
-fname = "results_from_RUN_SIMPLE/&lt;project_name&gt;_&lt;YYYYMMDD&gt;.mat"
-
-# Read the file
-dataset = cgt.read_OUT_regridded_FCI2_file(fname)</code></pre>
+<p>CryoGrid-pyTools provides functionality to read CryoGrid output files into Python. Currently, it supports reading regridded FCI2 output files.</p>
+<h2 id="reading-fci2-output-files">Reading FCI2 Output Files</h2>
+<p>Use the <code>read_OUT_regridded_FCI2_file</code> function to read a regridded FCI2 output file:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">cryogrid_pytools</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cgt</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># Read a single output file</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">ds</span> <span class="o">=</span> <span class="n">cgt</span><span class="o">.</span><span class="n">read_OUT_regridded_FCI2_file</span><span class="p">(</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="s1">&#39;path/to/your/output_file.mat&#39;</span><span class="p">,</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">deepest_point</span><span class="o">=-</span><span class="mi">5</span>  <span class="c1"># Set the deepest point in meters</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">)</span>
+</code></pre></div>
+<p>The function returns an xarray Dataset with the following variables:
+- <code>time</code>: Time coordinate (datetime64)
+- <code>depth</code>: Depth coordinate in meters
+- <code>T</code>: Temperature
+- <code>water</code>: Water content
+- <code>ice</code>: Ice content
+- <code>class_number</code>: Class number
+- <code>FCI</code>: Frozen/Thawed state
+- <code>elevation</code>: Surface elevation</p>
 <h2 id="reading-multiple-files">Reading Multiple Files</h2>
-<p>For projects using RUN_SPATIAL_SPINUP_CLUSTERING, you can read multiple files at once:</p>
-<pre class="highlight"><code class="language-python"># Path with wildcards for cluster ID and date
-fname = "results_from_RUN_SPATIAL_SPINUP_CLUSTERING/project_name_*_*.mat"
-
-# Read multiple files, specifying the deepest point
-dataset = cgt.read_OUT_regridded_FCI2_clusters(fname, deepest_point=-5)</code></pre>
-<p>The resulting dataset is an <code>xarray.Dataset</code> with dimensions:
-- <code>gridcell</code>
-- <code>depth</code>
-- <code>time</code></p>
-<p>This makes it easy to perform analysis and visualization using xarray's powerful features.</p>
+<p>For spatial runs with multiple output files, use <code>read_OUT_regridded_FCI2_clusters</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Read multiple output files</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">ds</span> <span class="o">=</span> <span class="n">cgt</span><span class="o">.</span><span class="n">read_OUT_regridded_FCI2_clusters</span><span class="p">(</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="s1">&#39;path/to/output/directory/*.mat&#39;</span><span class="p">,</span>  <span class="c1"># Glob pattern for output files</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="n">deepest_point</span><span class="o">=-</span><span class="mi">5</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">)</span>
+</code></pre></div>
+<p>The resulting Dataset will have an additional <code>gridcell</code> dimension for the spatial component.</p>
+<h2 id="data-structure">Data Structure</h2>
+<p>The output is an xarray Dataset with:</p>
+<ul>
+<li>Dimensions:</li>
+<li><code>time</code>: Timesteps in the simulation</li>
+<li><code>depth</code>: Vertical grid points</li>
+<li>
+<p><code>gridcell</code>: (Only for cluster runs) Spatial grid points</p>
+</li>
+<li>
+<p>Variables:</p>
+</li>
+<li>All variables are stored as dask arrays for efficient memory usage</li>
+<li>Temperature and other fields are stored with dimensions (time, depth) or (gridcell, depth, time)</li>
+</ul>
+<h2 id="working-with-the-data">Working with the Data</h2>
+<p>Being an xarray Dataset, you can use all standard xarray operations:</p>
+<p>```python</p>
+<h1 id="select-a-specific-time">Select a specific time</h1>
+<p>ds.sel(time='2000-01-01')</p>
+<h1 id="get-mean-temperature-over-time">Get mean temperature over time</h1>
+<p>ds.T.mean(dim='time')</p>
+<h1 id="plot-temperature-profile">Plot temperature profile</h1>
+<p>ds.T.plot()</p>
               
             </div>
           </div><footer>

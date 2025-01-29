@@ -71,6 +71,8 @@
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../usage/reading-matlab/">Reading MATLAB Structs</a>
                   </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../usage/forcing/">Working with Forcing Data</a>
+                  </li>
                   <li class="toctree-l1"><a class="reference internal" href="../usage/spatial-data/">Spatial Data and Forcing</a>
                   </li>
               </ul>
@@ -104,20 +106,24 @@
               
                 <h1 id="installation">Installation</h1>
 <p>CryoGrid-pyTools can be easily installed using pip:</p>
-<pre class="highlight"><code class="language-bash">pip install cryogrid_pytools</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>cryogrid_pytools
+</code></pre></div>
 <h2 id="optional-dependencies">Optional Dependencies</h2>
 <p>CryoGrid-pyTools has several optional dependency groups that can be installed based on your needs:</p>
 <h3 id="documentation-dependencies">Documentation Dependencies</h3>
 <p>To build the documentation locally, install with the <code>docs</code> extra:</p>
-<pre class="highlight"><code class="language-bash">pip install "cryogrid_pytools[docs]"</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;cryogrid_pytools[docs]&quot;</span>
+</code></pre></div>
 <h3 id="data-processing-dependencies">Data Processing Dependencies</h3>
 <p>For additional data processing capabilities, install with the <code>data</code> extra:</p>
-<pre class="highlight"><code class="language-bash">pip install "cryogrid_pytools[data]"</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;cryogrid_pytools[data]&quot;</span>
+</code></pre></div>
 <h2 id="development-installation">Development Installation</h2>
 <p>If you want to contribute to the development of CryoGrid-pyTools, you can install from source:</p>
-<pre class="highlight"><code class="language-bash">git clone https://github.com/lukegre/CryoGrid-pyTools.git
-cd CryoGrid-pyTools
-pip install -e ".[docs,data]"  # install with all optional dependencies</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/lukegre/CryoGrid-pyTools.git
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">cd</span><span class="w"> </span>CryoGrid-pyTools
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[docs,data]&quot;</span><span class="w">  </span><span class="c1"># install with all optional dependencies</span>
+</code></pre></div>
 <h2 id="requirements">Requirements</h2>
 <p>CryoGrid-pyTools requires Python 3.9 or later. The main dependencies are:</p>
 <ul>

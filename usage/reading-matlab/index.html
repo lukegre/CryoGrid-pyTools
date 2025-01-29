@@ -65,6 +65,8 @@
     </li>
     </ul>
                   </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../forcing/">Working with Forcing Data</a>
+                  </li>
                   <li class="toctree-l1"><a class="reference internal" href="../spatial-data/">Spatial Data and Forcing</a>
                   </li>
               </ul>
@@ -111,21 +113,23 @@
 <li>Save data in a compatible format</li>
 </ol>
 <p>For example, to save parts of <code>run_info</code>, use this MATLAB code:</p>
-<pre class="highlight"><code class="language-matlab">% Save specific variables from run_info
-save('my_data.mat', 'variable1', 'variable2', '-v7.3')</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c">% Save specific variables from run_info</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">save</span><span class="p">(</span><span class="s">&#39;my_data.mat&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;variable1&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;variable2&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;-v7.3&#39;</span><span class="p">)</span>
+</code></pre></div>
 <h2 id="reading-matlab-files-in-python">Reading MATLAB Files in Python</h2>
 <p>Once you have your MATLAB data in a compatible format:</p>
-<pre class="highlight"><code class="language-python">import cryogrid_pytools as cgt
-
-# Read the MATLAB file
-data = cgt.read_matlab_file('my_data.mat')</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">cryogrid_pytools</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cgt</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># Read the MATLAB file</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">data</span> <span class="o">=</span> <span class="n">cgt</span><span class="o">.</span><span class="n">read_matlab_file</span><span class="p">(</span><span class="s1">&#39;my_data.mat&#39;</span><span class="p">)</span>
+</code></pre></div>
 <p>The data will be converted to appropriate Python data structures, making it easy to work with in your Python environment.</p>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
         <a href="../reading-output/" class="btn btn-neutral float-left" title="Reading CryoGrid Output"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../spatial-data/" class="btn btn-neutral float-right" title="Spatial Data and Forcing">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../forcing/" class="btn btn-neutral float-right" title="Working with Forcing Data">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -155,7 +159,7 @@ data = cgt.read_matlab_file('my_data.mat')</code></pre>
       <span><a href="../reading-output/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../spatial-data/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../forcing/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
