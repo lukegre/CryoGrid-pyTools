@@ -149,6 +149,27 @@ class CryoGridConfigExcel:
         fname = self.get_class_filepath(class_name, folder_key='path', fname_key='filename', index=1)
         return fname
     
+    def get_output_max_depth(self, output_class="OUT_regridded_FCI2", depth_key='depth_below_ground')->int:
+        """
+        Get the maximum depth of the output file from the Excel configuration.
+
+        Parameters
+        ----------
+        output_class : str, optional
+            The class name to search for in the configuration, by default 'OUT_regridded_FCI2'.
+
+        Returns
+        -------
+        float
+            The maximum depth value.
+        """
+        df = self.get_class(output_class)
+        
+        depth = str(df.loc[depth_key].iloc[0])
+        depth = int(depth)
+
+        return depth
+
     def check_forcing_fname_times(self):
         """
         Check if the file name matches the forcing years specified in the Excel configuration.
@@ -292,7 +313,7 @@ class CryoGridConfigExcel:
         else:
             raise TypeError(f"index must be None or int, not {type(index)}")
         
-    def get_class(self, class_name: str):
+    def get_class(self, class_name: str)->pd.DataFrame:
         """
         Return DataFrame blocks representing the specified class from the Excel data.
 
@@ -314,7 +335,10 @@ class CryoGridConfigExcel:
         try:
             df = pd.concat(blocks, axis=1)
         except:
-            df = blocks
+            # only intended for debugging
+            df = blocks  
+            logger.warning(f"Could not concatenate blocks for class: {class_name}")
+        
         return df
 
     def _find_class_block(self, class_idx0: int):
@@ -502,7 +526,7 @@ def check_strat_layer_values(tuple_containing_dict):
     df['volume'] = (df.mineral + df.organic + df.waterIce).round(3)
 
     checks = pd.DataFrame()
-    checks['field_capacity_lt_porosity'] = df.field_capacity < df.porosity
+    checks['field_capacity_lt_porosity'] = df.field_capacity <= df.porosity
     checks['airspace_ge_0'] = df.airspace >= 0
     checks['volume_le_1'] = df.volume <= 1
     checks['waterice_le_porosity'] = df.waterIce <= df.porosity

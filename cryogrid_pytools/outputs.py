@@ -161,7 +161,7 @@ def read_OUT_regridded_FCI2_clusters(fname_glob:str, deepest_point:float, **jobl
     list_of_ds = _read_OUT_regridded_FCI2_parallel(fname_glob, deepest_point, **joblib_kwargs)
     
     # assign the gridcell dimension so that we can combine the data by coordinates and time 
-    list_of_ds = [ds.assign_coords(gridcell=[c]) for ds, c in zip(list_of_ds, gridcell)]
+    list_of_ds = [ds.expand_dims(gridcell=[c]) for ds, c in zip(list_of_ds, gridcell)]
     ds = xr.combine_by_coords(list_of_ds, combine_attrs='drop_conflicts')
 
     # transpose data so that plotting is quick and easy
