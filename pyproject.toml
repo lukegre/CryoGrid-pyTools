@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "cryogrid_pytools"
-version = "0.2.3"
+version = "0.2.4"
 description = "Tools to read in CryoGrid MATLAB data to Python and create forcing data"
 readme = "README.md"
 license = "MIT"
@@ -62,6 +62,11 @@ data = [
     "rioxarray>=0.15.0",
     "stackstac>=0.5.1",
     "xarray-raster-vector",
+]
+viz = [
+    "folium>=0.19.5",
+    "mapclassify>=2.8.1",
+    "geopandas>=1.0.1",
 ]
 
 [project.urls]
