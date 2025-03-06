@@ -9,7 +9,7 @@ from .folium_helpers import (
 
 from .profiles import (
     plot_profile,
-    plot_profile_variables,
+    plot_profiles,
 )
 
 import rioxarray as _xrx
