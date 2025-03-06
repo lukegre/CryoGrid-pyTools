@@ -11,6 +11,7 @@ from typing import Union
 TILES = [
     dict(name='Google Terrain', tiles='http://mt0.google.com/vt/lyrs=p&hl=en&x={x}&y={y}&z={z}', attr='Google'),
     dict(name='Google Satellite', tiles='http://mt0.google.com/vt/lyrs=s&hl=en&x={x}&y={y}&z={z}', attr='Google'),
+    dict(name='Esri Satellite', tiles='http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', attr='Esri'),
     dict(name='CartoDB Dark', tiles='cartodbdark_matter'),
     dict(name='CartoDB Light', tiles='cartodbpositron'),
     dict(name='OpenStreetMap', tiles='openstreetmap'),
