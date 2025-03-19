@@ -20,3 +20,24 @@ def change_logger_level(level):
     
     logger.remove()
     logger.add(sys.stdout, level=level, format=format)
+
+
+
+def drop_coords_without_dim(da):
+    """
+    Drop coordinates that do not have a corresponding dimension.
+
+    Parameters
+    ----------
+    da : xarray.DataArray
+        The input data array.
+
+    Returns
+    -------
+    xarray.DataArray
+        The data array with dropped coordinates.
+    """
+    for c in da.coords:
+        if c not in da.dims:
+            da = da.drop_vars(c)
+    return da

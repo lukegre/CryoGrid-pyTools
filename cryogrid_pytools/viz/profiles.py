@@ -4,7 +4,7 @@ from matplotlib.axes import Axes as _Axes
 import xarray as xr
 
 
-def plot_profiles(ds_profile:xr.Dataset)->tuple[_Figure, list[_Axes], list]:
+def plot_profiles(ds_profile:xr.Dataset, figsize=(12, 9))->tuple[_Figure, list[_Axes], list]:
     """
     Plots the profiles of the variables in the dataset that is read in with 
     read_OUT_regridded_FCI2_clusters. 
@@ -26,20 +26,20 @@ def plot_profiles(ds_profile:xr.Dataset)->tuple[_Figure, list[_Axes], list]:
     assert 'T' in ds_profile, "Temperature profile not found in dataset."
     assert 'water' in ds_profile, "Water content profile not found in dataset."
     assert 'ice' in ds_profile, "Ice content profile not found in dataset."
-    assert 'class_number' in ds_profile, "Stratigraphy profile not found in dataset."
+    assert 'class_number' in ds_profile, "Class number profile not found in dataset."
     
     index = ds_profile.gridcell.item()
 
     ds_profile = ds_profile.compute()
     # for now, the plot is static in its L x W
-    fig, axs = plt.subplots(4, 1, figsize=(12, 9), sharex=True, sharey=True, dpi=120, subplot_kw=dict(facecolor='0.8'))
+    fig, axs = plt.subplots(4, 1, figsize=figsize, sharex=True, sharey=True, dpi=120, subplot_kw=dict(facecolor='0.8'))
     axs = list(axs.ravel())
 
     imgs = []
     imgs += plot_profile(ds_profile.T.assign_attrs({'long_name': 'temperature', 'units': '°C'}), ax=axs[0], center=0, cmap='RdBu_r'),
     imgs += plot_profile(ds_profile.water.assign_attrs({'long_name': 'Water content', 'units': '%'}), ax=axs[1], cmap='Greens'),
     imgs += plot_profile(ds_profile.ice.assign_attrs({'long_name': 'Ice content', 'units': '%'}), ax=axs[2], cmap='Blues'),
-    imgs += plot_profile(ds_profile.class_number.assign_attrs({'long_name': 'Stratigraphy'}), ax=axs[3], cmap='Spectral'),
+    imgs += plot_profile(ds_profile.class_number.assign_attrs({'long_name': 'Class number'}), ax=axs[3], cmap='Spectral'),
 
     [ax.set_title('') for ax in axs]
     axs[0].set_title(f"Profiles at gridcell #{index}", loc='left')

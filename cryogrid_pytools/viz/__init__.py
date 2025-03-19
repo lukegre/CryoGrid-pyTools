@@ -1,8 +1,8 @@
-from .folium_helpers import (
+from .maps import (
     gridpoints_to_geodataframe,
-    plot_map,
-    make_tiles,
-    finalize_map,
+    plot_map as plot_folium_map,
+    make_tiles as make_folium_tiles,
+    finalize_map as finalize_folium_map,
     TILES,
     MARKER_STYLES,
 )

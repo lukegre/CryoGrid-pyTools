@@ -12,3 +12,5 @@ from .outputs import (
 
 from .forcing import era5_to_matlab
 from .excel_config import CryoGridConfigExcel
+
+from .analyze import calc_profile_props as analyze_profile

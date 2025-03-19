@@ -90,6 +90,7 @@ def get_dem_copernicus30(bbox_WSEN:list, res_m:int=30, epsg=32643, smoothing_ite
     xarray.DataArray
         The DEM data as an xarray DataArray with attributes.
     """
+    from .utils import drop_coords_without_dim
 
     check_epsg(epsg)
 
@@ -217,6 +218,7 @@ def get_sentinel2_data(bbox_WSEN:tuple, years=range(2018, 2025), assets=['SCL'],
     xr.DataArray
         DataArray containing the fetched Sentinel-2 data.
     """
+    from .utils import drop_coords_without_dim
     
     check_epsg(epsg)
     res = get_res_in_proj_units(res_m, epsg, min_res=10)
@@ -620,23 +622,3 @@ def get_res_in_proj_units(res_m, epsg, min_res=30):
     res = res_m / 111111 if epsg == 4326 else res_m
 
     return res
-
-
-def drop_coords_without_dim(da):
-    """
-    Drop coordinates that do not have a corresponding dimension.
-
-    Parameters
-    ----------
-    da : xarray.DataArray
-        The input data array.
-
-    Returns
-    -------
-    xarray.DataArray
-        The data array with dropped coordinates.
-    """
-    for c in da.coords:
-        if c not in da.dims:
-            da = da.drop_vars(c)
-    return da
