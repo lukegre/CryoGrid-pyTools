@@ -119,50 +119,6 @@
     </li>
         </ul>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel._find_class_block">_find_class_block</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel._find_class_block--parameters">Parameters</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel._find_class_block--returns">Returns</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel._find_class_block--raises">Raises</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel._get_root_path">_get_root_path</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel._get_root_path--returns">Returns</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel._get_unique_key">_get_unique_key</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel._get_unique_key--parameters">Parameters</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel._get_unique_key--returns">Returns</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel._get_unique_key--raises">Raises</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel._load_xls">_load_xls</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel._load_xls--parameters">Parameters</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel._load_xls--returns">Returns</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel._process_class_block">_process_class_block</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel._process_class_block--parameters">Parameters</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel._process_class_block--returns">Returns</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel._process_class_block--raises">Raises</a>
-    </li>
-        </ul>
-    </li>
     <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.check_files_exist">check_files_exist</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.check_forcing_fname_times">check_forcing_fname_times</a>
@@ -349,6 +305,7 @@ deepest_point : float, optional
     <code>depth</code> will represent the depth below the surface (negative below
     surface).</p>
 
+
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/outputs.py</code></summary>
               <pre class="highlight"><code class="language-python">def read_OUT_regridded_FCI2_file(fname:str, deepest_point=None)-&gt;xr.Dataset:
@@ -453,6 +410,7 @@ joblib_kwargs: dict
     Variables depend on how the class was configured, but
     elevation will also be a variable.</p>
 
+
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/outputs.py</code></summary>
               <pre class="highlight"><code class="language-python">def read_OUT_regridded_FCI2_clusters(fname_glob:str, deepest_point:float, **joblib_kwargs)-&gt;xr.Dataset:
@@ -531,6 +489,7 @@ key : str, optional
     Dictionary with the struct fields as keys and the corresponding
     data as values.</p>
 
+
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/matlab_helpers.py</code></summary>
               <pre class="highlight"><code class="language-python">def read_mat_struct_flat_as_dict(fname: str, key=None) -&gt; dict:
@@ -595,6 +554,7 @@ key : str, optional
 <h4 id="cryogrid_pytools.forcing.read_mat_ear5--returns">Returns</h4>
 <p>xr.Dataset
     Dataset with the variables from the ERA5.mat file</p>
+
 
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/forcing.py</code></summary>
@@ -664,6 +624,7 @@ save_path : str, optional
 <p>dict
     Dictionary with the variables mapped to names that are expected by 
     CryoGrid.POST_PROC.read_mat_ERA</p>
+
 
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/forcing.py</code></summary>
@@ -792,6 +753,7 @@ save_path : str, optional
 
         <p>A class to read CryoGrid Excel configuration files and extract file paths
 and maybe in the future do some checks etc</p>
+
 
 
 
@@ -1320,6 +1282,7 @@ check_strat_layers : bool, default=True, optional
     If True, perform a check that stratigraphy layer parameters are 
     physically plausible</p>
 
+
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
               <pre class="highlight"><code class="language-python">def __init__(self, fname_xls: str, check_file_paths=True, check_strat_layers=True):
@@ -1367,334 +1330,6 @@ check_strat_layers : bool, default=True, optional
 <div class="doc doc-object doc-function">
 
 
-<h3 id="cryogrid_pytools.excel_config.CryoGridConfigExcel._find_class_block" class="doc doc-heading">
-            <code class="highlight language-python">_find_class_block(class_idx0)</code>
-
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Identify and extract the block of rows corresponding to a class definition.</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel._find_class_block--parameters">Parameters</h5>
-<p>class_idx0 : int
-    Starting row index for the class in the Excel data.</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel._find_class_block--returns">Returns</h5>
-<p>pandas.DataFrame
-    The processed block as a DataFrame.</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel._find_class_block--raises">Raises</h5>
-<p>AssertionError
-    If the class structure is missing required indicators.</p>
-
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
-              <pre class="highlight"><code class="language-python">def _find_class_block(self, class_idx0: int):
-    """
-    Identify and extract the block of rows corresponding to a class definition.
-
-    Parameters
-    ----------
-    class_idx0 : int
-        Starting row index for the class in the Excel data.
-
-    Returns
-    -------
-    pandas.DataFrame
-        The processed block as a DataFrame.
-
-    Raises
-    ------
-    AssertionError
-        If the class structure is missing required indicators.
-    """
-    df = self._df
-
-    class_name = df.A.loc[class_idx0]
-    msg = f"Given class_idx0 ({class_name}) is not a class. Must have 'index' adjacent or on cell up and right."
-    is_index = df.B.loc[class_idx0 - 1: class_idx0].str.contains('index')
-    assert is_index.any(), msg
-
-    index_idx = is_index.idxmax()
-    class_idx0 = index_idx
-
-    class_idx1 = df.A.loc[class_idx0:] == 'CLASS_END'
-    # get first True occurrence
-    class_idx1 = class_idx1.idxmax()
-    class_block = df.loc[class_idx0:class_idx1]
-    class_block = self._process_class_block(class_block)
-
-    return class_block</code></pre>
-            </details>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="cryogrid_pytools.excel_config.CryoGridConfigExcel._get_root_path" class="doc doc-heading">
-            <code class="highlight language-python">_get_root_path()</code>
-
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Find and set the root path by locating the 'run_cryogrid.m' file.</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel._get_root_path--returns">Returns</h5>
-<p>pathlib.Path
-    The discovered root path or the current directory if not found.</p>
-
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
-              <pre class="highlight"><code class="language-python">def _get_root_path(self):
-    """
-    Find and set the root path by locating the 'run_cryogrid.m' file.
-
-    Returns
-    -------
-    pathlib.Path
-        The discovered root path or the current directory if not found.
-    """
-    path = self.fname.parent
-    while True:
-        flist = path.glob('run_cryogrid.m')
-        if len(list(flist)) &gt; 0:
-            self.root = path
-            logger.info(f"Found root path: {path}")
-            return self.root
-        elif str(path) == '/':
-            logger.warning("Could not find root path. Set to current directory. You can change this manually with excel_config.root = pathlib.Path('/path/to/root')")
-            return pathlib.Path('.')
-        else:
-            path = path.parent</code></pre>
-            </details>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="cryogrid_pytools.excel_config.CryoGridConfigExcel._get_unique_key" class="doc doc-heading">
-            <code class="highlight language-python">_get_unique_key(key, col_value='B')</code>
-
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Retrieve a single unique value for a given key from the Excel data.</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel._get_unique_key--parameters">Parameters</h5>
-<p>key : str
-    The key to look for in column 'A'.
-col_value : str, optional
-    The column to retrieve the value from, by default 'B'.</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel._get_unique_key--returns">Returns</h5>
-<p>str or None
-    The found value or None if no value exists.</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel._get_unique_key--raises">Raises</h5>
-<p>ValueError
-    If multiple values are found for the given key.</p>
-
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
-              <pre class="highlight"><code class="language-python">def _get_unique_key(self, key: str, col_value='B'):
-    """
-    Retrieve a single unique value for a given key from the Excel data.
-
-    Parameters
-    ----------
-    key : str
-        The key to look for in column 'A'.
-    col_value : str, optional
-        The column to retrieve the value from, by default 'B'.
-
-    Returns
-    -------
-    str or None
-        The found value or None if no value exists.
-
-    Raises
-    ------
-    ValueError
-        If multiple values are found for the given key.
-    """
-    df  = self._df
-    idx = df.A == key
-    value = df.loc[idx, col_value].values
-    if len(value) == 0:
-        return None
-    elif len(value) &gt; 1:
-        raise ValueError(f"Multiple values found for key: {key}")
-    else:
-        return value[0]</code></pre>
-            </details>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="cryogrid_pytools.excel_config.CryoGridConfigExcel._load_xls" class="doc doc-heading">
-            <code class="highlight language-python">_load_xls(fname_xls)</code>
-
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Load the Excel file into a DataFrame.</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel._load_xls--parameters">Parameters</h5>
-<p>fname_xls : str
-    Path to the Excel file.</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel._load_xls--returns">Returns</h5>
-<p>pandas.DataFrame
-    The loaded data with proper indexing and column names.</p>
-
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
-              <pre class="highlight"><code class="language-python">def _load_xls(self, fname_xls: str) -&gt; pd.DataFrame:
-    """
-    Load the Excel file into a DataFrame.
-
-    Parameters
-    ----------
-    fname_xls : str
-        Path to the Excel file.
-
-    Returns
-    -------
-    pandas.DataFrame
-        The loaded data with proper indexing and column names.
-    """
-    import string
-
-    alph = list(string.ascii_uppercase)
-    alphabet_extra = alph + [a+b for a in alph for b in alph]
-
-    df = pd.read_excel(fname_xls, header=None, dtype=str)
-    df.columns = [c for c in alphabet_extra[:df.columns.size]]
-    df.index = df.index + 1
-
-    return df</code></pre>
-            </details>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="cryogrid_pytools.excel_config.CryoGridConfigExcel._process_class_block" class="doc doc-heading">
-            <code class="highlight language-python">_process_class_block(df)</code>
-
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Process a raw class block by removing comments, handling special structures, and shaping data.</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel._process_class_block--parameters">Parameters</h5>
-<p>df : pandas.DataFrame
-    A DataFrame slice representing the raw class block.</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel._process_class_block--returns">Returns</h5>
-<p>pandas.DataFrame
-    The cleaned and structured DataFrame of class data.</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel._process_class_block--raises">Raises</h5>
-<p>AssertionError
-    When matrix structures in the block do not match expected format.</p>
-
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
-              <pre class="highlight"><code class="language-python">def _process_class_block(self, df: pd.DataFrame) -&gt; pd.DataFrame:
-    """
-    Process a raw class block by removing comments, handling special structures, and shaping data.
-
-    Parameters
-    ----------
-    df : pandas.DataFrame
-        A DataFrame slice representing the raw class block.
-
-    Returns
-    -------
-    pandas.DataFrame
-        The cleaned and structured DataFrame of class data.
-
-    Raises
-    ------
-    AssertionError
-        When matrix structures in the block do not match expected format.
-    """
-    """hacky way to process the class block"""
-    # drop CLASS_END row
-    df = df[df.A != 'CLASS_END']
-
-    # if any cell starts with '&gt;', it is a comment
-    df = df.map(lambda x: x if not str(x).startswith('&gt;') else np.nan)
-
-    # drop rows and columns that are all NaN
-    df = df.dropna(axis=1, how='all').dropna(axis=0, how='all')
-    df = df.astype(str)
-
-    # H_LIST and V_MATRIX are special cases
-    contains_matrix = df.map(lambda x: 'MATRIX' in x).values
-    contains_vmatrix = df.map(lambda x: 'V_MATRIX' in x).values
-    contains_end = df.map(lambda x: 'END' in x).values
-
-    ends = np.where(contains_end)
-    if contains_matrix.any():
-        r0, c0 = [a[0] for a in np.where(contains_matrix)]
-
-        assert c0 == 1, "Matrix must be in second column"
-        assert len(ends) == 2, "Only two ENDs are allowed"
-        assert r0 == ends[0][0]
-        assert c0 == ends[1][1]
-
-        r1 = ends[0][1]
-        c1 = ends[1][0]
-
-        arr = df.iloc[r0:r1, c0:c1].values
-        if contains_vmatrix.any():
-            # first column of V_MATRIX is the index but is not in the config file
-            # so we create it. It is one shorter than the num of rows because of header
-            arr[1:, 0] = np.arange(r1 - r0 - 1)
-
-        matrix = pd.DataFrame(arr[1:, 1:], index=arr[1:, 0], columns=arr[0, 1:])
-        matrix.index.name = matrix.columns.name = df.iloc[r0, 0]
-        df = df.drop(index=df.index[r0:r1+1])
-        df.loc[r0, 'A'] = matrix.index.name
-        df.loc[r0, 'B'] = matrix.to_dict(),
-
-    for i, row in df.iterrows():
-        # H_LIST first
-        if row.str.contains('H_LIST').any():
-            r0 = 2
-            r1 = row.str.contains('END').argmax()
-            df.loc[i, 'B'] = row.iloc[r0:r1].values.tolist()
-
-    class_category = df.A.iloc[0]
-    class_type = df.A.iloc[1]
-    class_index = df.B.iloc[1]
-    col_name = f'{class_type}_{class_index}'
-
-    df = (
-        df
-        .iloc[2:, :2]
-        .rename(columns=dict(B=col_name))
-        .set_index('A'))
-    df.index.name = class_category
-
-    return df</code></pre>
-            </details>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
 <h3 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.check_files_exist" class="doc doc-heading">
             <code class="highlight language-python">check_files_exist()</code>
 
@@ -1704,6 +1339,7 @@ col_value : str, optional
     <div class="doc doc-contents ">
 
         <p>Check if all the files in the configuration exist.</p>
+
 
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
@@ -1745,6 +1381,7 @@ col_value : str, optional
 <p>AssertionError
     If the forcing years in the file name do not match those in the configuration.</p>
 
+
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
               <pre class="highlight"><code class="language-python">def check_forcing_fname_times(self):
@@ -1781,6 +1418,7 @@ col_value : str, optional
     <div class="doc doc-contents ">
 
         <p>Run checks to ensure stratigraphy layers have physically plausible parameter values.</p>
+
 
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
@@ -1819,6 +1457,7 @@ col_value : str, optional
 <h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.get_class--returns">Returns</h5>
 <p>pandas.DataFrame
     The concatenated DataFrame of class blocks.</p>
+
 
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
@@ -1883,6 +1522,7 @@ index : int or None, optional
     If multiple folder or filename keys are found.
 TypeError
     If index is not int or None.</p>
+
 
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
@@ -1953,6 +1593,7 @@ from the Excel file. To use as a reference for get_class(<class_name>).</p>
 <p>dict of int: str
     A dictionary mapping class names to row indices</p>
 
+
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
               <pre class="highlight"><code class="language-python">def get_classes(self):
@@ -1998,6 +1639,7 @@ from the Excel file. To use as a reference for get_class(<class_name>).</p>
 <p>pathlib.Path
     The file path for coordinates.</p>
 
+
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
               <pre class="highlight"><code class="language-python">def get_coord_path(self):
@@ -2031,6 +1673,7 @@ from the Excel file. To use as a reference for get_class(<class_name>).</p>
 <h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.get_dataset_paths--returns">Returns</h5>
 <p>munch.Munch
     A dictionary-like object mapping dataset variable names to file paths.</p>
+
 
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
@@ -2073,6 +1716,7 @@ from the Excel file. To use as a reference for get_class(<class_name>).</p>
 <p>pathlib.Path
     The DEM file path.</p>
 
+
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
               <pre class="highlight"><code class="language-python">def get_dem_path(self):
@@ -2109,6 +1753,7 @@ from the Excel file. To use as a reference for get_class(<class_name>).</p>
 <h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.get_forcing_path--returns">Returns</h5>
 <p>pathlib.Path
     The forcing file path.</p>
+
 
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
@@ -2152,6 +1797,7 @@ from the Excel file. To use as a reference for get_class(<class_name>).</p>
 <p>float
     The maximum depth value.</p>
 
+
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
               <pre class="highlight"><code class="language-python">def get_output_max_depth(self, output_class="OUT_regridded_FCI2", depth_key='depth_below_ground')-&gt;int:
@@ -2194,6 +1840,7 @@ from the Excel file. To use as a reference for get_class(<class_name>).</p>
 <h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.get_start_end_times--returns">Returns</h5>
 <p>pandas.Series
     A Series with 'time_start' and 'time_end' as Timestamp objects.</p>
+
 
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
@@ -2259,6 +1906,7 @@ from the Excel file. To use as a reference for get_class(<class_name>).</p>
 <li><code>volume &lt;= 1</code>  :  the sum of mineral, organic, and waterIce cannot exceed 1</li>
 <li><code>waterIce &lt;= porosity</code>  :  waterIce cannot exceed porosity</li>
 </ul>
+
 
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
@@ -2344,6 +1992,7 @@ smoothing_size : int, optional
 <p>xarray.DataArray
     The DEM data as an xarray DataArray with attributes.</p>
 
+
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/data.py</code></summary>
               <pre class="highlight"><code class="language-python">@_decorator_dataarray_to_bbox
@@ -2371,6 +2020,7 @@ def get_dem_copernicus30(bbox_WSEN:list, res_m:int=30, epsg=32643, smoothing_ite
     xarray.DataArray
         The DEM data as an xarray DataArray with attributes.
     """
+    from .utils import drop_coords_without_dim
 
     check_epsg(epsg)
 
@@ -2425,6 +2075,7 @@ epsg : int, optional
 <p>xr.DataArray
     A DataArray with the land cover data on the target grid. Contains
     attributes 'class_values', 'class_descriptions', 'class_colors' for plotting.</p>
+
 
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/data.py</code></summary>
@@ -2530,6 +2181,7 @@ epsg : int, optional
 <p>_xr.DataArray
     DataArray containing the snow melt DOY for each year.</p>
 
+
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/data.py</code></summary>
               <pre class="highlight"><code class="language-python">@_decorator_dataarray_to_bbox
@@ -2588,6 +2240,7 @@ dest_dir : str, optional
 <p>GeoDataFrame or raster dataset
     If target_dem is None, returns a GeoDataFrame containing the RGI data.
     If target_dem is provided, returns a raster dataset clipped and reprojected to the DEM.</p>
+
 
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/data.py</code></summary>
