@@ -60,6 +60,14 @@ def _decorator_dataarray_to_bbox(func):
             bbox =  bbox_or_target
             out = func(bbox_or_target, *args, **kwargs)
 
+        else:
+            message = (
+                f"The first argument must be a bounding box tuple or an xarray DataArray, "
+                f"but got {type(bbox_or_target)} instead."
+            )
+            
+            raise ValueError(message)
+
         return out
     
     return wrapper
@@ -153,14 +161,18 @@ def get_esa_land_cover(bbox_WSEN:tuple, res_m:int=30, epsg=32643)->_xr.DataArray
         import pandas as pd
 
         classes = item.assets['map'].extra_fields['classification:classes']
-        df = pd.DataFrame(classes).set_index('value')
+        df = (
+            pd.DataFrame(classes)
+            .set_index('value')
+            .rename(columns=lambda s: s.replace('-', '_'))  # bug fix for version 2.7.8 (stacstack back compatibility)
+        )
 
-        df['color-hint'] = '#' + df['color-hint']
+        df['color_hint'] = '#' + df['color_hint']
 
         out = dict(
             class_values = df.index.values,
             class_descriptions = df['description'].values,
-            class_colors = df['color-hint'].values)
+            class_colors = df['color_hint'].values)
 
         return out
 
