@@ -295,7 +295,7 @@
 <p>fname : str
     Path to the .mat file
 deepest_point : float, optional
-    Represents the deepest depth of the profile. If not provided, 
+    Represents the deepest depth of the profile. If not provided,
     then elevation is returned. Negative values represent depths below
     the surface.</p>
 <h4 id="cryogrid_pytools.read_OUT_regridded_FCI2_file--returns">Returns</h4>
@@ -308,7 +308,7 @@ deepest_point : float, optional
 
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/outputs.py</code></summary>
-              <pre class="highlight"><code class="language-python">def read_OUT_regridded_FCI2_file(fname:str, deepest_point=None)-&gt;xr.Dataset:
+              <pre class="highlight"><code class="language-python">def read_OUT_regridded_FCI2_file(fname: str, deepest_point=None) -&gt; xr.Dataset:
     """
     Read a CryoGrid OUT_regridded_FCI2 file and return it as an xarray dataset.
 
@@ -317,7 +317,7 @@ deepest_point : float, optional
     fname : str
         Path to the .mat file
     deepest_point : float, optional
-        Represents the deepest depth of the profile. If not provided, 
+        Represents the deepest depth of the profile. If not provided,
         then elevation is returned. Negative values represent depths below
         the surface.
 
@@ -329,30 +329,31 @@ deepest_point : float, optional
         `depth` will represent the depth below the surface (negative below
         surface).
     """
-    from .matlab_helpers import read_mat_struct_flat_as_dict, matlab2datetime
+    from .matlab_helpers import matlab2datetime, read_mat_struct_flat_as_dict
 
     dat = read_mat_struct_flat_as_dict(fname)
     for key in dat:
         dat[key] = dat[key].squeeze()
 
     ds = xr.Dataset()
-    ds.attrs['filename'] = fname
+    ds.attrs["filename"] = fname
 
-    times = matlab2datetime(dat.pop('timestamp'))
-    elevation = dat.pop('depths')
+    times = matlab2datetime(dat.pop("timestamp"))
+    elevation = dat.pop("depths")
 
     for key in dat:
         ds[key] = xr.DataArray(
-            data = dat[key].astype('float32'), 
-            dims=['level', 'time'], 
-            coords={'time': times})
+            data=dat[key].astype("float32"),
+            dims=["level", "time"],
+            coords={"time": times},
+        )
 
-    ds['elevation'] = xr.DataArray(elevation, dims=['level'])
+    ds["elevation"] = xr.DataArray(elevation, dims=["level"])
 
     if deepest_point is not None:
         assert deepest_point &lt; 0, "deepest_point must be negative (below surface)"
 
-        ds = ds.rename(level='depth')
+        ds = ds.rename(level="depth")
 
         # calculate depth step size
         n = elevation.size - 1
@@ -362,12 +363,14 @@ deepest_point : float, optional
         # calculate shallowest point based on step size and n
         shallowest_point = deepest_point - (s * n)
         deepest_point += s / 2  # adding half step for arange
-        depth = np.arange(shallowest_point, deepest_point, s, dtype='float32').round(significant_number)
-        ds['depth'] = xr.DataArray(depth, dims=['depth'])
-        ds = ds.set_coords('depth')
-        ds = ds.transpose('depth', 'time', ...)
-    else:  
-        ds = ds.transpose('elevation', 'time', ...)
+        depth = np.arange(shallowest_point, deepest_point, s, dtype="float32").round(
+            significant_number
+        )
+        ds["depth"] = xr.DataArray(depth, dims=["depth"])
+        ds = ds.set_coords("depth")
+        ds = ds.transpose("depth", "time", ...)
+    else:
+        ds = ds.transpose("elevation", "time", ...)
 
     ds = ds.chunk(dict(time=-1))
 
@@ -391,71 +394,75 @@ deepest_point : float, optional
         <p>Reads multiple files that are put out by the OUT_regridded_FCI2 class</p>
 <h4 id="cryogrid_pytools.read_OUT_regridded_FCI2_clusters--parameters">Parameters</h4>
 <p>fname_glob: str
-    Path of the files that you want to read in. 
+    Path of the files that you want to read in.
     Use same notation as for glob(). Note that it expects
     name to follow the format <code>some_project_name_GRIDCELL_date.mat</code>
-    where GRIDCELL will be extracted to assign the gridcell dimension. 
-    These GRIDCELLs correspond with the index of the data in the 
-    flattened array. 
+    where GRIDCELL will be extracted to assign the gridcell dimension.
+    These GRIDCELLs correspond with the index of the data in the
+    flattened array.
 deepest_point: float
-    When setting the configuration for when the data should be 
+    When setting the configuration for when the data should be
     saved, the maximum depth is set. Give this number as a
     negative number here.
 joblib_kwargs: dict
-    Uses the joblib library to do parallel reading of the files. 
+    Uses the joblib library to do parallel reading of the files.
     Defaults are: n_jobs=-1, backend='threading', verbose=1</p>
 <h4 id="cryogrid_pytools.read_OUT_regridded_FCI2_clusters--returns">Returns</h4>
 <p>xr.Dataset
-    An array with dimensions gridcell, depth, time. 
+    An array with dimensions gridcell, depth, time.
     Variables depend on how the class was configured, but
     elevation will also be a variable.</p>
 
 
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/outputs.py</code></summary>
-              <pre class="highlight"><code class="language-python">def read_OUT_regridded_FCI2_clusters(fname_glob:str, deepest_point:float, **joblib_kwargs)-&gt;xr.Dataset:
+              <pre class="highlight"><code class="language-python">def read_OUT_regridded_FCI2_clusters(
+    fname_glob: str, deepest_point: float, **joblib_kwargs
+) -&gt; xr.Dataset:
     """
     Reads multiple files that are put out by the OUT_regridded_FCI2 class
 
     Parameters
     ----------
     fname_glob: str
-        Path of the files that you want to read in. 
+        Path of the files that you want to read in.
         Use same notation as for glob(). Note that it expects
         name to follow the format `some_project_name_GRIDCELL_date.mat`
-        where GRIDCELL will be extracted to assign the gridcell dimension. 
-        These GRIDCELLs correspond with the index of the data in the 
-        flattened array. 
+        where GRIDCELL will be extracted to assign the gridcell dimension.
+        These GRIDCELLs correspond with the index of the data in the
+        flattened array.
     deepest_point: float
-        When setting the configuration for when the data should be 
+        When setting the configuration for when the data should be
         saved, the maximum depth is set. Give this number as a
         negative number here.
     joblib_kwargs: dict
-        Uses the joblib library to do parallel reading of the files. 
+        Uses the joblib library to do parallel reading of the files.
         Defaults are: n_jobs=-1, backend='threading', verbose=1
 
     Returns
     -------
     xr.Dataset
-        An array with dimensions gridcell, depth, time. 
+        An array with dimensions gridcell, depth, time.
         Variables depend on how the class was configured, but
-        elevation will also be a variable. 
+        elevation will also be a variable.
     """
     from glob import glob
 
     # get the file list
     flist = sorted(glob(fname_glob))
     # extract the gridcell from the file name
-    gridcell = [int(f.split('_')[-2]) for f in flist]
+    gridcell = [int(f.split("_")[-2]) for f in flist]
 
-    list_of_ds = _read_OUT_regridded_FCI2_parallel(fname_glob, deepest_point, **joblib_kwargs)
+    list_of_ds = _read_OUT_regridded_FCI2_parallel(
+        fname_glob, deepest_point, **joblib_kwargs
+    )
 
-    # assign the gridcell dimension so that we can combine the data by coordinates and time 
+    # assign the gridcell dimension so that we can combine the data by coordinates and time
     list_of_ds = [ds.expand_dims(gridcell=[c]) for ds, c in zip(list_of_ds, gridcell)]
-    ds = xr.combine_by_coords(list_of_ds, combine_attrs='drop_conflicts')
+    ds = xr.combine_by_coords(list_of_ds, combine_attrs="drop_conflicts")
 
     # transpose data so that plotting is quick and easy
-    ds = ds.transpose('gridcell', 'depth', 'time', ...)
+    ds = ds.transpose("gridcell", "depth", "time", ...)
 
     return ds</code></pre>
             </details>
@@ -518,13 +525,18 @@ key : str, optional
 
     raw = loadmat(fname)
 
-    keys = [k for k in raw.keys() if not k.startswith('_')]
+    keys = [k for k in raw.keys() if not k.startswith("_")]
 
     if key is None:
-        logger.log(5, f"No key specified. Using first key that does not start with an underscore: {keys[0]}")
+        logger.log(
+            5,
+            f"No key specified. Using first key that does not start with an underscore: {keys[0]}",
+        )
         key = keys[0]
     elif key not in keys:
-        raise ValueError(f"Key '{key}' not found in .mat file. Available keys are: {keys}")
+        raise ValueError(
+            f"Key '{key}' not found in .mat file. Available keys are: {keys}"
+        )
 
     named_array = unnest_matlab_struct_named_array(raw[key])
     data = {k: named_array[k].squeeze() for k in named_array.dtype.names}
@@ -573,6 +585,7 @@ key : str, optional
         Dataset with the variables from the ERA5.mat file
     """
     import pathlib
+
     from .matlab_helpers import read_mat_struct_flat_as_dict
 
     filename = pathlib.Path(filename).expanduser().absolute().resolve()
@@ -582,10 +595,11 @@ key : str, optional
 
     out = out.assign_attrs(
         info=(
-            'Data read in from CryoGrid ERA5 forcing file. '
-            'Data has been scaled to the original units with some modifications - units are given. '
-            'Data has been transposed from [lon, lat, level, time] --&gt; [time, level, lat, lon]. '
-            'See the ERA5 documentation for more info about the units etc.'),
+            "Data read in from CryoGrid ERA5 forcing file. "
+            "Data has been scaled to the original units with some modifications - units are given. "
+            "Data has been transposed from [lon, lat, level, time] --&gt; [time, level, lat, lon]. "
+            "See the ERA5 documentation for more info about the units etc."
+        ),
         source=filename,
     )
 
@@ -606,23 +620,23 @@ key : str, optional
 
     <div class="doc doc-contents first">
 
-        <p>Convert a merged netCDF file from the Copernicus CDS to 
-a dictionary that matches the expected format of 
+        <p>Convert a merged netCDF file from the Copernicus CDS to
+a dictionary that matches the expected format of
 the CryoGrid.POST_PROC.read_mat_ERA class (in MATLAB).</p>
 <h4 id="cryogrid_pytools.forcing.era5_to_matlab--parameters">Parameters</h4>
 <p>ds : xr.Dataset
-    Dataset from the ERA5 Copernicus CDS with variables required for 
-    the CryoGrid.POST_PROC.read_mat_ERA class 
+    Dataset from the ERA5 Copernicus CDS with variables required for
+    the CryoGrid.POST_PROC.read_mat_ERA class
     single_levels   = [u10, v10, sp, d2m, t2m, ssrd, strd, tisr, tp, Zs]
     pressure_levels = [t, z, q, u, v]
-    Note that Zs in the single levels is a special case since it is only 
+    Note that Zs in the single levels is a special case since it is only
     downloaded for a single date at the surface (doesn't change over time)
 save_path : str, optional
-    Path to save the dictionary as a .mat file, by default None, meaning 
+    Path to save the dictionary as a .mat file, by default None, meaning
     no file is saved and only the dictionary is returned</p>
 <h4 id="cryogrid_pytools.forcing.era5_to_matlab--returns">Returns</h4>
 <p>dict
-    Dictionary with the variables mapped to names that are expected by 
+    Dictionary with the variables mapped to names that are expected by
     CryoGrid.POST_PROC.read_mat_ERA</p>
 
 
@@ -630,104 +644,106 @@ save_path : str, optional
               <summary>Source code in <code>cryogrid_pytools/forcing.py</code></summary>
               <pre class="highlight"><code class="language-python">def era5_to_matlab(ds: xr.Dataset, save_path: str = None) -&gt; dict:
     """
-    Convert a merged netCDF file from the Copernicus CDS to 
-    a dictionary that matches the expected format of 
+    Convert a merged netCDF file from the Copernicus CDS to
+    a dictionary that matches the expected format of
     the CryoGrid.POST_PROC.read_mat_ERA class (in MATLAB).
 
     Parameters
     ----------
     ds : xr.Dataset
-        Dataset from the ERA5 Copernicus CDS with variables required for 
-        the CryoGrid.POST_PROC.read_mat_ERA class 
+        Dataset from the ERA5 Copernicus CDS with variables required for
+        the CryoGrid.POST_PROC.read_mat_ERA class
         single_levels   = [u10, v10, sp, d2m, t2m, ssrd, strd, tisr, tp, Zs]
         pressure_levels = [t, z, q, u, v]
-        Note that Zs in the single levels is a special case since it is only 
+        Note that Zs in the single levels is a special case since it is only
         downloaded for a single date at the surface (doesn't change over time)
     save_path : str, optional
-        Path to save the dictionary as a .mat file, by default None, meaning 
+        Path to save the dictionary as a .mat file, by default None, meaning
         no file is saved and only the dictionary is returned
 
     Returns
     -------
     dict
-        Dictionary with the variables mapped to names that are expected by 
+        Dictionary with the variables mapped to names that are expected by
         CryoGrid.POST_PROC.read_mat_ERA
     """
-    from .matlab_helpers import datetime2matlab
     import numpy as np
 
+    from .matlab_helpers import datetime2matlab
+
     # transpose to lon x lat x time (original is time x lat x lon)
-    ds = ds.transpose('longitude', 'latitude', 'level', 'time')
+    ds = ds.transpose("longitude", "latitude", "level", "time")
 
     era = dict()
-    era['dims'] = 'lon x lat (x pressure_levels) x time'
+    era["dims"] = "lon x lat (x pressure_levels) x time"
     # while lat and lon have to be [coord x 1]
-    era['lat'] = ds['latitude'].values[:, None]
-    era['lon'] = ds['longitude'].values[:, None]
+    era["lat"] = ds["latitude"].values[:, None]
+    era["lon"] = ds["longitude"].values[:, None]
     # pressure levels have to be [1 x coord] - only when pressure_levels present
-    era['p'] = ds['level'].values[None] * 100 
+    era["p"] = ds["level"].values[None] * 100
     # time for some reason has to be [1 x coord]
-    era['t'] = datetime2matlab(ds.time)[None] 
+    era["t"] = datetime2matlab(ds.time)[None]
     # geopotential height at surface
-    era['Zs'] = ds.Zs.values / 9.81  # gravity m/s2
+    era["Zs"] = ds.Zs.values / 9.81  # gravity m/s2
 
     # single_level variables
     # wind and pressure (no transformations)
-    era['u10'] = ds['u10'].values
-    era['v10'] = ds['v10'].values
-    era['ps'] = ds['sp'].values
+    era["u10"] = ds["u10"].values
+    era["v10"] = ds["v10"].values
+    era["ps"] = ds["sp"].values
     # temperature variables (degK -&gt; degC)
-    era['Td2'] = ds['d2m'].values - 273.15
-    era['T2'] = ds['t2m'].values - 273.15
+    era["Td2"] = ds["d2m"].values - 273.15
+    era["T2"] = ds["t2m"].values - 273.15
     # radiation variables (/sec -&gt; /hour)
-    era['SW'] = ds['ssrd'].values / 3600
-    era['LW'] = ds['strd'].values / 3600
-    era['S_TOA'] = ds['tisr'].values / 3600
+    era["SW"] = ds["ssrd"].values / 3600
+    era["LW"] = ds["strd"].values / 3600
+    era["S_TOA"] = ds["tisr"].values / 3600
     # precipitation (m -&gt; mm)
-    era['P'] = ds['tp'].values * 1000
+    era["P"] = ds["tp"].values * 1000
 
     # pressure levels
-    era['T'] = ds['t'].values - 273.15  # K to C
-    era['Z'] = ds['z'].values / 9.81  # gravity m/s2
-    era['q'] = ds['q'].values
-    era['u'] = ds['u'].values
-    era['v'] = ds['v'].values
+    era["T"] = ds["t"].values - 273.15  # K to C
+    era["Z"] = ds["z"].values / 9.81  # gravity m/s2
+    era["q"] = ds["q"].values
+    era["u"] = ds["u"].values
+    era["v"] = ds["v"].values
 
     # scaling factors
-    era['wind_sf'] = 1e-2
-    era['q_sf'] = 1e-6
-    era['ps_sf'] = 1e2
-    era['rad_sf'] = 1e-1
-    era['T_sf'] = 1e-2
-    era['P_sf'] = 1e-2
+    era["wind_sf"] = 1e-2
+    era["q_sf"] = 1e-6
+    era["ps_sf"] = 1e2
+    era["rad_sf"] = 1e-1
+    era["T_sf"] = 1e-2
+    era["P_sf"] = 1e-2
 
     # apply scaling factors (done in the original, so we do it here)
     # wind scaling
-    era['u']     = (era['u']     / era['wind_sf']).astype(np.int16)
-    era['v']     = (era['v']     / era['wind_sf']).astype(np.int16)
-    era['u10']   = (era['u10']   / era['wind_sf']).astype(np.int16)
-    era['v10']   = (era['v10']   / era['wind_sf']).astype(np.int16)
+    era["u"] = (era["u"] / era["wind_sf"]).astype(np.int16)
+    era["v"] = (era["v"] / era["wind_sf"]).astype(np.int16)
+    era["u10"] = (era["u10"] / era["wind_sf"]).astype(np.int16)
+    era["v10"] = (era["v10"] / era["wind_sf"]).astype(np.int16)
     # temperature scaling
-    era['T']     = (era['T']     / era['T_sf']   ).astype(np.int16)
-    era['Td2']   = (era['Td2']   / era['T_sf']   ).astype(np.int16)
-    era['T2']    = (era['T2']    / era['T_sf']   ).astype(np.int16)
+    era["T"] = (era["T"] / era["T_sf"]).astype(np.int16)
+    era["Td2"] = (era["Td2"] / era["T_sf"]).astype(np.int16)
+    era["T2"] = (era["T2"] / era["T_sf"]).astype(np.int16)
     # humidity scaling
-    era['q']     = (era['q']     / era['q_sf']   ).astype(np.uint16)
+    era["q"] = (era["q"] / era["q_sf"]).astype(np.uint16)
     # pressure scaling
-    era['ps']    = (era['ps']    / era['ps_sf']  ).astype(np.uint16)
+    era["ps"] = (era["ps"] / era["ps_sf"]).astype(np.uint16)
     # radiation scaling
-    era['SW']    = (era['SW']    / era['rad_sf'] ).astype(np.uint16)
-    era['LW']    = (era['LW']    / era['rad_sf'] ).astype(np.uint16)
-    era['S_TOA'] = (era['S_TOA'] / era['rad_sf'] ).astype(np.uint16)
+    era["SW"] = (era["SW"] / era["rad_sf"]).astype(np.uint16)
+    era["LW"] = (era["LW"] / era["rad_sf"]).astype(np.uint16)
+    era["S_TOA"] = (era["S_TOA"] / era["rad_sf"]).astype(np.uint16)
     # precipitation scaling
-    era['P']     = (era['P']     / era['P_sf']   ).astype(np.uint16)
+    era["P"] = (era["P"] / era["P_sf"]).astype(np.uint16)
     # no scaling for geoportential height
-    era['Z']     = era['Z'].astype(np.int16)
+    era["Z"] = era["Z"].astype(np.int16)
 
-    out = {'era': era}
+    out = {"era": era}
 
     if save_path is not None and isinstance(save_path, str):
         from scipy.io import savemat
+
         savemat(save_path, out, appendmat=True, do_compression=True)
 
     return out</code></pre>
@@ -767,22 +783,23 @@ and maybe in the future do some checks etc</p>
     A class to read CryoGrid Excel configuration files and extract file paths
     and maybe in the future do some checks etc
     """
+
     def __init__(self, fname_xls: str, check_file_paths=True, check_strat_layers=True):
         """
         Initialize the CryoGridConfigExcel object.
 
         Reads in the Excel configuration file and parse the different classes
-        using a pandas DataFrame approach. 
+        using a pandas DataFrame approach.
 
         Parameters
         ----------
         fname_xls : path-like
             Path to the CryoGrid Excel configuration file.
         check_file_paths : bool, default=True, optional
-            If True, perform a check that all files linked in the configuration 
+            If True, perform a check that all files linked in the configuration
             can be found (path exists)
         check_strat_layers : bool, default=True, optional
-            If True, perform a check that stratigraphy layer parameters are 
+            If True, perform a check that stratigraphy layer parameters are
             physically plausible
         """
         self.fname = pathlib.Path(fname_xls).resolve()
@@ -803,7 +820,9 @@ and maybe in the future do some checks etc</p>
         if check_strat_layers:
             self.check_strat_layers()
 
-        logger.info(f"Start and end times: {self.time.time_start:%Y-%m-%d} - {self.time.time_end:%Y-%m-%d}")
+        logger.info(
+            f"Start and end times: {self.time.time_start:%Y-%m-%d} - {self.time.time_end:%Y-%m-%d}"
+        )
 
     def _get_root_path(self):
         """
@@ -816,14 +835,16 @@ and maybe in the future do some checks etc</p>
         """
         path = self.fname.parent
         while True:
-            flist = path.glob('run_cryogrid.m')
+            flist = path.glob("run_cryogrid.m")
             if len(list(flist)) &gt; 0:
                 self.root = path
                 logger.info(f"Found root path: {path}")
                 return self.root
-            elif str(path) == '/':
-                logger.warning("Could not find root path. Set to current directory. You can change this manually with excel_config.root = pathlib.Path('/path/to/root')")
-                return pathlib.Path('.')
+            elif str(path) == "/":
+                logger.warning(
+                    "Could not find root path. Set to current directory. You can change this manually with excel_config.root = pathlib.Path('/path/to/root')"
+                )
+                return pathlib.Path(".")
             else:
                 path = path.parent
 
@@ -836,12 +857,14 @@ and maybe in the future do some checks etc</p>
         pandas.Series
             A Series with 'time_start' and 'time_end' as Timestamp objects.
         """
-        times = self.get_class('set_start_end_time').T.filter(regex='time')
-        times = times.map(lambda x: pd.Timestamp(year=int(x[0]), month=int(x[1]), day=int(x[2])))
+        times = self.get_class("set_start_end_time").T.filter(regex="time")
+        times = times.map(
+            lambda x: pd.Timestamp(year=int(x[0]), month=int(x[1]), day=int(x[2]))
+        )
 
         start = times.start_time.min()
         end = times.end_time.max()
-        times = pd.Series([start, end], index=['time_start', 'time_end'])
+        times = pd.Series([start, end], index=["time_start", "time_end"])
 
         return times
 
@@ -854,7 +877,9 @@ and maybe in the future do some checks etc</p>
         pathlib.Path
             The file path for coordinates.
         """
-        fname = self.get_class_filepath('COORDINATES_FROM_FILE', fname_key='file_name', index=1)
+        fname = self.get_class_filepath(
+            "COORDINATES_FROM_FILE", fname_key="file_name", index=1
+        )
         return fname
 
     def get_dataset_paths(self):
@@ -866,13 +891,17 @@ and maybe in the future do some checks etc</p>
         munch.Munch
             A dictionary-like object mapping dataset variable names to file paths.
         """
-        paths = self.get_class_filepath('READ_DATASET', fname_key='filename').to_frame(name='filepath').T
+        paths = (
+            self.get_class_filepath("READ_DATASET", fname_key="filename")
+            .to_frame(name="filepath")
+            .T
+        )
 
-        datasets = self.get_class('READ_DATASET')
+        datasets = self.get_class("READ_DATASET")
         variable = datasets.T.variable_name
-        paths.loc['variable'] = variable
+        paths.loc["variable"] = variable
 
-        paths = Munch(**paths.T.set_index('variable').filepath.to_dict())
+        paths = Munch(**paths.T.set_index("variable").filepath.to_dict())
 
         return paths
 
@@ -885,10 +914,12 @@ and maybe in the future do some checks etc</p>
         pathlib.Path
             The DEM file path.
         """
-        fname = self.get_class_filepath('DEM', folder_key='folder', fname_key='filename', index=1)
+        fname = self.get_class_filepath(
+            "DEM", folder_key="folder", fname_key="filename", index=1
+        )
         return fname
 
-    def get_forcing_path(self, class_name='read_mat_ERA'):
+    def get_forcing_path(self, class_name="read_mat_ERA"):
         """
         Obtain the forcing file path from the Excel configuration.
 
@@ -902,10 +933,14 @@ and maybe in the future do some checks etc</p>
         pathlib.Path
             The forcing file path.
         """
-        fname = self.get_class_filepath(class_name, folder_key='path', fname_key='filename', index=1)
+        fname = self.get_class_filepath(
+            class_name, folder_key="path", fname_key="filename", index=1
+        )
         return fname
 
-    def get_output_max_depth(self, output_class="OUT_regridded_FCI2", depth_key='depth_below_ground')-&gt;int:
+    def get_output_max_depth(
+        self, output_class="OUT_regridded_FCI2", depth_key="depth_below_ground"
+    ) -&gt; int:
         """
         Get the maximum depth of the output file from the Excel configuration.
 
@@ -940,9 +975,11 @@ and maybe in the future do some checks etc</p>
         fname = self.get_forcing_path()
         times = self.get_start_end_times().dt.year.astype(str).values.tolist()
 
-        fname_years = re.findall(r'[-_]([12][1089][0-9][0-9])', fname.stem)
+        fname_years = re.findall(r"[-_]([12][1089][0-9][0-9])", fname.stem)
 
-        assert times == fname_years, f"File name years do not match the forcing years: forcing {times} != fname {fname_years}"
+        assert times == fname_years, (
+            f"File name years do not match the forcing years: forcing {times} != fname {fname_years}"
+        )
 
     def _load_xls(self, fname_xls: str) -&gt; pd.DataFrame:
         """
@@ -961,15 +998,15 @@ and maybe in the future do some checks etc</p>
         import string
 
         alph = list(string.ascii_uppercase)
-        alphabet_extra = alph + [a+b for a in alph for b in alph]
+        alphabet_extra = alph + [a + b for a in alph for b in alph]
 
         df = pd.read_excel(fname_xls, header=None, dtype=str)
-        df.columns = [c for c in alphabet_extra[:df.columns.size]]
+        df.columns = [c for c in alphabet_extra[: df.columns.size]]
         df.index = df.index + 1
 
         return df
 
-    def _get_unique_key(self, key: str, col_value='B'):
+    def _get_unique_key(self, key: str, col_value="B"):
         """
         Retrieve a single unique value for a given key from the Excel data.
 
@@ -990,7 +1027,7 @@ and maybe in the future do some checks etc</p>
         ValueError
             If multiple values are found for the given key.
         """
-        df  = self._df
+        df = self._df
         idx = df.A == key
         value = df.loc[idx, col_value].values
         if len(value) == 0:
@@ -1014,16 +1051,18 @@ and maybe in the future do some checks etc</p>
 
         class_idx = []
         for i in range(len(df)):
-            try: 
+            try:
                 self._find_class_block(i)
                 class_idx.append(i)
-            except:
+            except Exception:
                 pass
 
-        classes = df.loc[class_idx, 'A'].to_dict()
+        classes = df.loc[class_idx, "A"].to_dict()
         return classes
 
-    def get_class_filepath(self, key, folder_key='folder', fname_key='file', index=None):
+    def get_class_filepath(
+        self, key, folder_key="folder", fname_key="file", index=None
+    ):
         """
         Construct a file path from folder and file entries in the Excel configuration.
 
@@ -1069,7 +1108,7 @@ and maybe in the future do some checks etc</p>
         else:
             raise TypeError(f"index must be None or int, not {type(index)}")
 
-    def get_class(self, class_name: str)-&gt;pd.DataFrame:
+    def get_class(self, class_name: str) -&gt; pd.DataFrame:
         """
         Return DataFrame blocks representing the specified class from the Excel data.
 
@@ -1090,9 +1129,9 @@ and maybe in the future do some checks etc</p>
         blocks = [self._find_class_block(i0) for i0 in i0s]
         try:
             df = pd.concat(blocks, axis=1)
-        except:
+        except Exception:
             # only intended for debugging
-            df = blocks  
+            df = blocks
             logger.warning(f"Could not concatenate blocks for class: {class_name}")
 
         return df
@@ -1120,13 +1159,13 @@ and maybe in the future do some checks etc</p>
 
         class_name = df.A.loc[class_idx0]
         msg = f"Given class_idx0 ({class_name}) is not a class. Must have 'index' adjacent or on cell up and right."
-        is_index = df.B.loc[class_idx0 - 1: class_idx0].str.contains('index')
+        is_index = df.B.loc[class_idx0 - 1 : class_idx0].str.contains("index")
         assert is_index.any(), msg
 
         index_idx = is_index.idxmax()
         class_idx0 = index_idx
 
-        class_idx1 = df.A.loc[class_idx0:] == 'CLASS_END'
+        class_idx1 = df.A.loc[class_idx0:] == "CLASS_END"
         # get first True occurrence
         class_idx1 = class_idx1.idxmax()
         class_block = df.loc[class_idx0:class_idx1]
@@ -1155,19 +1194,19 @@ and maybe in the future do some checks etc</p>
         """
         """hacky way to process the class block"""
         # drop CLASS_END row
-        df = df[df.A != 'CLASS_END']
+        df = df[df.A != "CLASS_END"]
 
         # if any cell starts with '&gt;', it is a comment
-        df = df.map(lambda x: x if not str(x).startswith('&gt;') else np.nan)
+        df = df.map(lambda x: x if not str(x).startswith("&gt;") else np.nan)
 
         # drop rows and columns that are all NaN
-        df = df.dropna(axis=1, how='all').dropna(axis=0, how='all')
+        df = df.dropna(axis=1, how="all").dropna(axis=0, how="all")
         df = df.astype(str)
 
         # H_LIST and V_MATRIX are special cases
-        contains_matrix = df.map(lambda x: 'MATRIX' in x).values
-        contains_vmatrix = df.map(lambda x: 'V_MATRIX' in x).values
-        contains_end = df.map(lambda x: 'END' in x).values
+        contains_matrix = df.map(lambda x: "MATRIX" in x).values
+        contains_vmatrix = df.map(lambda x: "V_MATRIX" in x).values
+        contains_end = df.map(lambda x: "END" in x).values
 
         ends = np.where(contains_end)
         if contains_matrix.any():
@@ -1189,27 +1228,23 @@ and maybe in the future do some checks etc</p>
 
             matrix = pd.DataFrame(arr[1:, 1:], index=arr[1:, 0], columns=arr[0, 1:])
             matrix.index.name = matrix.columns.name = df.iloc[r0, 0]
-            df = df.drop(index=df.index[r0:r1+1])
-            df.loc[r0, 'A'] = matrix.index.name
-            df.loc[r0, 'B'] = matrix.to_dict(),
+            df = df.drop(index=df.index[r0 : r1 + 1])
+            df.loc[r0, "A"] = matrix.index.name
+            df.loc[r0, "B"] = (matrix.to_dict(),)
 
         for i, row in df.iterrows():
             # H_LIST first
-            if row.str.contains('H_LIST').any():
+            if row.str.contains("H_LIST").any():
                 r0 = 2
-                r1 = row.str.contains('END').argmax()
-                df.loc[i, 'B'] = row.iloc[r0:r1].values.tolist()
+                r1 = row.str.contains("END").argmax()
+                df.loc[i, "B"] = row.iloc[r0:r1].values.tolist()
 
         class_category = df.A.iloc[0]
         class_type = df.A.iloc[1]
         class_index = df.B.iloc[1]
-        col_name = f'{class_type}_{class_index}'
+        col_name = f"{class_type}_{class_index}"
 
-        df = (
-            df
-            .iloc[2:, :2]
-            .rename(columns=dict(B=col_name))
-            .set_index('A'))
+        df = df.iloc[2:, :2].rename(columns=dict(B=col_name)).set_index("A")
         df.index.name = class_category
 
         return df
@@ -1218,7 +1253,7 @@ and maybe in the future do some checks etc</p>
         """
         Run checks to ensure stratigraphy layers have physically plausible parameter values.
         """
-        strat_layers = self.get_class('STRAT_layers')
+        strat_layers = self.get_class("STRAT_layers")
         logger.info("Checking stratigraphy layers...")
         for layer in strat_layers:
             try:
@@ -1232,11 +1267,10 @@ and maybe in the future do some checks etc</p>
         Check if all the files in the configuration exist.
         """
 
-        flist = set([
-            self.get_forcing_path(), 
-            self.get_dem_path(), 
-            self.get_coord_path()] 
-            + list(self.get_dataset_paths().values()))
+        flist = set(
+            [self.get_forcing_path(), self.get_dem_path(), self.get_coord_path()]
+            + list(self.get_dataset_paths().values())
+        )
 
         logger.info("Checking file locations...")
         for f in flist:
@@ -1271,15 +1305,15 @@ and maybe in the future do some checks etc</p>
 
         <p>Initialize the CryoGridConfigExcel object.</p>
 <p>Reads in the Excel configuration file and parse the different classes
-using a pandas DataFrame approach. </p>
+using a pandas DataFrame approach.</p>
 <h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.__init__--parameters">Parameters</h5>
 <p>fname_xls : path-like
     Path to the CryoGrid Excel configuration file.
 check_file_paths : bool, default=True, optional
-    If True, perform a check that all files linked in the configuration 
+    If True, perform a check that all files linked in the configuration
     can be found (path exists)
 check_strat_layers : bool, default=True, optional
-    If True, perform a check that stratigraphy layer parameters are 
+    If True, perform a check that stratigraphy layer parameters are
     physically plausible</p>
 
 
@@ -1290,17 +1324,17 @@ check_strat_layers : bool, default=True, optional
     Initialize the CryoGridConfigExcel object.
 
     Reads in the Excel configuration file and parse the different classes
-    using a pandas DataFrame approach. 
+    using a pandas DataFrame approach.
 
     Parameters
     ----------
     fname_xls : path-like
         Path to the CryoGrid Excel configuration file.
     check_file_paths : bool, default=True, optional
-        If True, perform a check that all files linked in the configuration 
+        If True, perform a check that all files linked in the configuration
         can be found (path exists)
     check_strat_layers : bool, default=True, optional
-        If True, perform a check that stratigraphy layer parameters are 
+        If True, perform a check that stratigraphy layer parameters are
         physically plausible
     """
     self.fname = pathlib.Path(fname_xls).resolve()
@@ -1321,7 +1355,9 @@ check_strat_layers : bool, default=True, optional
     if check_strat_layers:
         self.check_strat_layers()
 
-    logger.info(f"Start and end times: {self.time.time_start:%Y-%m-%d} - {self.time.time_end:%Y-%m-%d}")</code></pre>
+    logger.info(
+        f"Start and end times: {self.time.time_start:%Y-%m-%d} - {self.time.time_end:%Y-%m-%d}"
+    )</code></pre>
             </details>
     </div>
 
@@ -1348,11 +1384,10 @@ check_strat_layers : bool, default=True, optional
     Check if all the files in the configuration exist.
     """
 
-    flist = set([
-        self.get_forcing_path(), 
-        self.get_dem_path(), 
-        self.get_coord_path()] 
-        + list(self.get_dataset_paths().values()))
+    flist = set(
+        [self.get_forcing_path(), self.get_dem_path(), self.get_coord_path()]
+        + list(self.get_dataset_paths().values())
+    )
 
     logger.info("Checking file locations...")
     for f in flist:
@@ -1398,9 +1433,11 @@ check_strat_layers : bool, default=True, optional
     fname = self.get_forcing_path()
     times = self.get_start_end_times().dt.year.astype(str).values.tolist()
 
-    fname_years = re.findall(r'[-_]([12][1089][0-9][0-9])', fname.stem)
+    fname_years = re.findall(r"[-_]([12][1089][0-9][0-9])", fname.stem)
 
-    assert times == fname_years, f"File name years do not match the forcing years: forcing {times} != fname {fname_years}"</code></pre>
+    assert times == fname_years, (
+        f"File name years do not match the forcing years: forcing {times} != fname {fname_years}"
+    )</code></pre>
             </details>
     </div>
 
@@ -1426,7 +1463,7 @@ check_strat_layers : bool, default=True, optional
     """
     Run checks to ensure stratigraphy layers have physically plausible parameter values.
     """
-    strat_layers = self.get_class('STRAT_layers')
+    strat_layers = self.get_class("STRAT_layers")
     logger.info("Checking stratigraphy layers...")
     for layer in strat_layers:
         try:
@@ -1461,7 +1498,7 @@ check_strat_layers : bool, default=True, optional
 
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
-              <pre class="highlight"><code class="language-python">def get_class(self, class_name: str)-&gt;pd.DataFrame:
+              <pre class="highlight"><code class="language-python">def get_class(self, class_name: str) -&gt; pd.DataFrame:
     """
     Return DataFrame blocks representing the specified class from the Excel data.
 
@@ -1482,9 +1519,9 @@ check_strat_layers : bool, default=True, optional
     blocks = [self._find_class_block(i0) for i0 in i0s]
     try:
         df = pd.concat(blocks, axis=1)
-    except:
+    except Exception:
         # only intended for debugging
-        df = blocks  
+        df = blocks
         logger.warning(f"Could not concatenate blocks for class: {class_name}")
 
     return df</code></pre>
@@ -1526,7 +1563,9 @@ TypeError
 
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
-              <pre class="highlight"><code class="language-python">def get_class_filepath(self, key, folder_key='folder', fname_key='file', index=None):
+              <pre class="highlight"><code class="language-python">def get_class_filepath(
+    self, key, folder_key="folder", fname_key="file", index=None
+):
     """
     Construct a file path from folder and file entries in the Excel configuration.
 
@@ -1610,13 +1649,13 @@ from the Excel file. To use as a reference for get_class(<class_name>).</p>
 
     class_idx = []
     for i in range(len(df)):
-        try: 
+        try:
             self._find_class_block(i)
             class_idx.append(i)
-        except:
+        except Exception:
             pass
 
-    classes = df.loc[class_idx, 'A'].to_dict()
+    classes = df.loc[class_idx, "A"].to_dict()
     return classes</code></pre>
             </details>
     </div>
@@ -1651,7 +1690,9 @@ from the Excel file. To use as a reference for get_class(<class_name>).</p>
     pathlib.Path
         The file path for coordinates.
     """
-    fname = self.get_class_filepath('COORDINATES_FROM_FILE', fname_key='file_name', index=1)
+    fname = self.get_class_filepath(
+        "COORDINATES_FROM_FILE", fname_key="file_name", index=1
+    )
     return fname</code></pre>
             </details>
     </div>
@@ -1686,13 +1727,17 @@ from the Excel file. To use as a reference for get_class(<class_name>).</p>
     munch.Munch
         A dictionary-like object mapping dataset variable names to file paths.
     """
-    paths = self.get_class_filepath('READ_DATASET', fname_key='filename').to_frame(name='filepath').T
+    paths = (
+        self.get_class_filepath("READ_DATASET", fname_key="filename")
+        .to_frame(name="filepath")
+        .T
+    )
 
-    datasets = self.get_class('READ_DATASET')
+    datasets = self.get_class("READ_DATASET")
     variable = datasets.T.variable_name
-    paths.loc['variable'] = variable
+    paths.loc["variable"] = variable
 
-    paths = Munch(**paths.T.set_index('variable').filepath.to_dict())
+    paths = Munch(**paths.T.set_index("variable").filepath.to_dict())
 
     return paths</code></pre>
             </details>
@@ -1728,7 +1773,9 @@ from the Excel file. To use as a reference for get_class(<class_name>).</p>
     pathlib.Path
         The DEM file path.
     """
-    fname = self.get_class_filepath('DEM', folder_key='folder', fname_key='filename', index=1)
+    fname = self.get_class_filepath(
+        "DEM", folder_key="folder", fname_key="filename", index=1
+    )
     return fname</code></pre>
             </details>
     </div>
@@ -1757,7 +1804,7 @@ from the Excel file. To use as a reference for get_class(<class_name>).</p>
 
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
-              <pre class="highlight"><code class="language-python">def get_forcing_path(self, class_name='read_mat_ERA'):
+              <pre class="highlight"><code class="language-python">def get_forcing_path(self, class_name="read_mat_ERA"):
     """
     Obtain the forcing file path from the Excel configuration.
 
@@ -1771,7 +1818,9 @@ from the Excel file. To use as a reference for get_class(<class_name>).</p>
     pathlib.Path
         The forcing file path.
     """
-    fname = self.get_class_filepath(class_name, folder_key='path', fname_key='filename', index=1)
+    fname = self.get_class_filepath(
+        class_name, folder_key="path", fname_key="filename", index=1
+    )
     return fname</code></pre>
             </details>
     </div>
@@ -1800,7 +1849,9 @@ from the Excel file. To use as a reference for get_class(<class_name>).</p>
 
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
-              <pre class="highlight"><code class="language-python">def get_output_max_depth(self, output_class="OUT_regridded_FCI2", depth_key='depth_below_ground')-&gt;int:
+              <pre class="highlight"><code class="language-python">def get_output_max_depth(
+    self, output_class="OUT_regridded_FCI2", depth_key="depth_below_ground"
+) -&gt; int:
     """
     Get the maximum depth of the output file from the Excel configuration.
 
@@ -1853,12 +1904,14 @@ from the Excel file. To use as a reference for get_class(<class_name>).</p>
     pandas.Series
         A Series with 'time_start' and 'time_end' as Timestamp objects.
     """
-    times = self.get_class('set_start_end_time').T.filter(regex='time')
-    times = times.map(lambda x: pd.Timestamp(year=int(x[0]), month=int(x[1]), day=int(x[2])))
+    times = self.get_class("set_start_end_time").T.filter(regex="time")
+    times = times.map(
+        lambda x: pd.Timestamp(year=int(x[0]), month=int(x[1]), day=int(x[2]))
+    )
 
     start = times.start_time.min()
     end = times.end_time.max()
-    times = pd.Series([start, end], index=['time_start', 'time_end'])
+    times = pd.Series([start, end], index=["time_start", "time_end"])
 
     return times</code></pre>
             </details>
@@ -1941,22 +1994,22 @@ from the Excel file. To use as a reference for get_class(<class_name>).</p>
     dictionary = tuple_containing_dict[0]
     df = pd.DataFrame(dictionary).astype(float).round(3)
 
-    df['porosity'] = (1 - df.mineral - df.organic).round(3)
-    df['airspace'] = (df.porosity - df.waterIce).round(3)
-    df['volume'] = (df.mineral + df.organic + df.waterIce).round(3)
+    df["porosity"] = (1 - df.mineral - df.organic).round(3)
+    df["airspace"] = (df.porosity - df.waterIce).round(3)
+    df["volume"] = (df.mineral + df.organic + df.waterIce).round(3)
 
     checks = pd.DataFrame()
-    checks['field_capacity_lt_porosity'] = df.field_capacity &lt;= df.porosity
-    checks['airspace_ge_0'] = df.airspace &gt;= 0
-    checks['volume_le_1'] = df.volume &lt;= 1
-    checks['waterice_le_porosity'] = df.waterIce &lt;= df.porosity
-    checks.index.name = 'layer'
+    checks["field_capacity_lt_porosity"] = df.field_capacity &lt;= df.porosity
+    checks["airspace_ge_0"] = df.airspace &gt;= 0
+    checks["volume_le_1"] = df.volume &lt;= 1
+    checks["waterice_le_porosity"] = df.waterIce &lt;= df.porosity
+    checks.index.name = "layer"
 
     if not checks.values.all():
         raise ValueError(
             "parameters are not physically plausible. "
-            "below are the violations: \n"
-            + str(checks.T))</code></pre>
+            "below are the violations: \n" + str(checks.T)
+        )</code></pre>
             </details>
     </div>
 
@@ -1981,8 +2034,8 @@ from the Excel file. To use as a reference for get_class(<class_name>).</p>
 res_m : int
     The resolution of the DEM data in meters.
 epsg : int, optional
-    The EPSG code of the projection of the DEM data. Default is 
-    EPSG:32643 (UTM 43N) for the Pamir region. 
+    The EPSG code of the projection of the DEM data. Default is
+    EPSG:32643 (UTM 43N) for the Pamir region.
 smoothing_iters : int, optional
     The number of iterations to apply the smoothing filter. Default is 2.
     Set to 0 to disable smoothing.
@@ -1996,7 +2049,9 @@ smoothing_size : int, optional
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/data.py</code></summary>
               <pre class="highlight"><code class="language-python">@_decorator_dataarray_to_bbox
-def get_dem_copernicus30(bbox_WSEN:list, res_m:int=30, epsg=32643, smoothing_iters=2, smoothing_size=3)-&gt;_xr.DataArray:
+def get_dem_copernicus30(
+    bbox_WSEN: list, res_m: int = 30, epsg=32643, smoothing_iters=2, smoothing_size=3
+) -&gt; _xr.DataArray:
     """
     Download DEM data from the STAC catalog (default is COP DEM Global 30m).
 
@@ -2007,8 +2062,8 @@ def get_dem_copernicus30(bbox_WSEN:list, res_m:int=30, epsg=32643, smoothing_ite
     res_m : int
         The resolution of the DEM data in meters.
     epsg : int, optional
-        The EPSG code of the projection of the DEM data. Default is 
-        EPSG:32643 (UTM 43N) for the Pamir region. 
+        The EPSG code of the projection of the DEM data. Default is
+        EPSG:32643 (UTM 43N) for the Pamir region.
     smoothing_iters : int, optional
         The number of iterations to apply the smoothing filter. Default is 2.
         Set to 0 to disable smoothing.
@@ -2024,27 +2079,28 @@ def get_dem_copernicus30(bbox_WSEN:list, res_m:int=30, epsg=32643, smoothing_ite
 
     check_epsg(epsg)
 
-    assert res_m &gt;= 30, "The resolution must be greater than 30m for the COP DEM Global 30m dataset."
+    assert res_m &gt;= 30, (
+        "The resolution must be greater than 30m for the COP DEM Global 30m dataset."
+    )
     res = res_m / 111111 if epsg == 4326 else res_m
 
     _logger.info("Fetching COP DEM Global 30m data from Planetary Computer")
-    items = search_stac_items_planetary_computer('cop-dem-glo-30', bbox_WSEN)
+    items = search_stac_items_planetary_computer("cop-dem-glo-30", bbox_WSEN)
     da_dem = _stackstac.stack(
-        items=items, 
-        bounds_latlon=bbox_WSEN,
-        resolution=res,
-        epsg=epsg)
+        items=items, bounds_latlon=bbox_WSEN, resolution=res, epsg=epsg
+    )
 
     da_dem = (
-        da_dem
-        .mean('time')
+        da_dem.mean("time")
         .squeeze()
         .pipe(drop_coords_without_dim)
         .pipe(smooth_data, n_iters=smoothing_iters, kernel_size=smoothing_size)
         .rio.write_crs(f"EPSG:{epsg}")
         .assign_attrs(
             source=items[0].links[0].href,  # collection URL
-            bbox_request=bbox_WSEN))
+            bbox_request=bbox_WSEN,
+        )
+    )
 
     return da_dem</code></pre>
             </details>
@@ -2080,7 +2136,7 @@ epsg : int, optional
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/data.py</code></summary>
               <pre class="highlight"><code class="language-python">@_decorator_dataarray_to_bbox
-def get_esa_land_cover(bbox_WSEN:tuple, res_m:int=30, epsg=32643)-&gt;_xr.DataArray:
+def get_esa_land_cover(bbox_WSEN: tuple, res_m: int = 30, epsg=32643) -&gt; _xr.DataArray:
     """
     Get the ESA World Cover dataset on the target grid and resolution.
 
@@ -2101,7 +2157,7 @@ def get_esa_land_cover(bbox_WSEN:tuple, res_m:int=30, epsg=32643)-&gt;_xr.DataAr
     """
 
     def get_land_cover_classes(item):
-        """ 
+        """
         Get the land cover class names, and colors from the ESA World Cover dataset
 
         Args:
@@ -2112,19 +2168,22 @@ def get_esa_land_cover(bbox_WSEN:tuple, res_m:int=30, epsg=32643)-&gt;_xr.DataAr
         """
         import pandas as pd
 
-        classes = item.assets['map'].extra_fields['classification:classes']
+        classes = item.assets["map"].extra_fields["classification:classes"]
         df = (
             pd.DataFrame(classes)
-            .set_index('value')
-            .rename(columns=lambda s: s.replace('-', '_'))  # bug fix for version 2.7.8 (stacstack back compatibility)
+            .set_index("value")
+            .rename(
+                columns=lambda s: s.replace("-", "_")
+            )  # bug fix for version 2.7.8 (stacstack back compatibility)
         )
 
-        df['color_hint'] = '#' + df['color_hint']
+        df["color_hint"] = "#" + df["color_hint"]
 
         out = dict(
-            class_values = df.index.values,
-            class_descriptions = df['description'].values,
-            class_colors = df['color_hint'].values)
+            class_values=df.index.values,
+            class_descriptions=df["description"].values,
+            class_colors=df["color_hint"].values,
+        )
 
         return out
 
@@ -2136,21 +2195,19 @@ def get_esa_land_cover(bbox_WSEN:tuple, res_m:int=30, epsg=32643)-&gt;_xr.DataAr
 
     _logger.info("Fetching ESA World Cover (v2.0) data from Planetary Computer")
     items = search_stac_items_planetary_computer(
-        collection='esa-worldcover', 
-        bbox=bbox_WSEN, 
-        query={'esa_worldcover:product_version': {'eq': '2.0.0'}})
+        collection="esa-worldcover",
+        bbox=bbox_WSEN,
+        query={"esa_worldcover:product_version": {"eq": "2.0.0"}},
+    )
 
     stac_props = dict(
-        items=items, 
-        assets=['map'],
-        epsg=epsg,
-        bounds_latlon=bbox_WSEN,
-        resolution=res)
+        items=items, assets=["map"], epsg=epsg, bounds_latlon=bbox_WSEN, resolution=res
+    )
 
     da = (
         _stackstac.stack(**stac_props)
-        .max(['band', 'time'], keep_attrs=True)  # removing the single band dimension
-        .rename('land_cover')
+        .max(["band", "time"], keep_attrs=True)  # removing the single band dimension
+        .rename("land_cover")
         .assign_attrs(**get_land_cover_classes(items[0]))
     )
 
@@ -2189,7 +2246,9 @@ epsg : int, optional
             <details class="quote">
               <summary>Source code in <code>cryogrid_pytools/data.py</code></summary>
               <pre class="highlight"><code class="language-python">@_decorator_dataarray_to_bbox
-def get_snow_melt_doy(bbox_WSEN:tuple, years=range(2018, 2025), res_m:int=30, epsg=32643)-&gt;_xr.DataArray:
+def get_snow_melt_doy(
+    bbox_WSEN: tuple, years=range(2018, 2025), res_m: int = 30, epsg=32643
+) -&gt; _xr.DataArray:
     """
     Calculate the snow melt day of year (DOY) from Sentinel-2 SCL data for a given bounding box and years.
 
@@ -2210,10 +2269,12 @@ def get_snow_melt_doy(bbox_WSEN:tuple, years=range(2018, 2025), res_m:int=30, ep
         DataArray containing the snow melt DOY for each year.
     """
 
-    da = get_sentinel2_data(bbox_WSEN, years=years, res_m=res_m, epsg=epsg, max_cloud_cover=10)
+    da = get_sentinel2_data(
+        bbox_WSEN, years=years, res_m=res_m, epsg=epsg, max_cloud_cover=10
+    )
 
     _logger.info("Calculating snow melt day of year (DOY) from Sentinel-2 SCL data")
-    doy = da.groupby('time.year').apply(calc_sentinel2_snow_melt_doy)
+    doy = da.groupby("time.year").apply(calc_sentinel2_snow_melt_doy)
 
     return doy</code></pre>
             </details>
@@ -2235,7 +2296,7 @@ def get_snow_melt_doy(bbox_WSEN:tuple, years=range(2018, 2025), res_m:int=30, ep
         <p>Fetches the Randolph Glacier Inventory (RGI) data and returns it as a GeoDataFrame or raster dataset.</p>
 <h4 id="cryogrid_pytools.data.get_randolph_glacier_inventory--parameters">Parameters</h4>
 <p>target_dem : optional
-    A digital elevation model (DEM) object. If provided, the function will return 
+    A digital elevation model (DEM) object. If provided, the function will return
     the RGI data clipped to the bounding box of the DEM and reprojected to the DEM's CRS.
 dest_dir : str, optional
     The directory where the downloaded RGI data will be stored. If None, the data will
@@ -2256,7 +2317,7 @@ def get_randolph_glacier_inventory(target_dem=None, dest_dir=None):
     Parameters
     ----------
     target_dem : optional
-        A digital elevation model (DEM) object. If provided, the function will return 
+        A digital elevation model (DEM) object. If provided, the function will return
         the RGI data clipped to the bounding box of the DEM and reprojected to the DEM's CRS.
     dest_dir : str, optional
         The directory where the downloaded RGI data will be stored. If None, the data will
@@ -2269,14 +2330,19 @@ def get_randolph_glacier_inventory(target_dem=None, dest_dir=None):
         If target_dem is provided, returns a raster dataset clipped and reprojected to the DEM.
     """
 
-    url = 'https://daacdata.apps.nsidc.org/pub/DATASETS/nsidc0770_rgi_v7/regional_files/RGI2000-v7.0-G/RGI2000-v7.0-G-13_central_asia.zip'
+    url = "https://daacdata.apps.nsidc.org/pub/DATASETS/nsidc0770_rgi_v7/regional_files/RGI2000-v7.0-G/RGI2000-v7.0-G-13_central_asia.zip"
 
-    downloader = _pooch.HTTPDownloader(progressbar=True, headers=get_earthaccess_session().headers)
+    downloader = _pooch.HTTPDownloader(
+        progressbar=True, headers=get_earthaccess_session().headers
+    )
     flist = download_url(url, path=dest_dir, downloader=downloader)
 
-    fname_shp = [f for f in flist if f.endswith('.shp')][0]
+    fname_shp = [f for f in flist if f.endswith(".shp")][0]
 
-    _logger.log("INFO", f"RGI: Fetching Randolph Glacier Inventory - see https://www.glims.org/rgi_user_guide/welcome.html")
+    _logger.log(
+        "INFO",
+        "RGI: Fetching Randolph Glacier Inventory - see https://www.glims.org/rgi_user_guide/welcome.html",
+    )
     _logger.log("DEBUG", f"RGI: URL = {url}")
     _logger.log("DEBUG", f"RGI: FILE = {fname_shp}")
 
