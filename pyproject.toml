@@ -26,7 +26,7 @@ dependencies = [
     "pandas>=2",
     "pip>=24",
     "scipy>=1.13.1",
-    "xarray>=2024"
+    "xarray>=2024",
 ]
 classifiers = [  # see https://pypi.org/classifiers/
     "Development Status :: 3 - Alpha",
@@ -47,7 +47,8 @@ docs = [
     "mkdocs>=1.5.0",
     "mkdocs-rtd-dropdown>=1.0.2",
     "mkdocstrings>=0.24.0",
-    "mkdocstrings-python>=1.7.0"
+    "mkdocstrings-python>=1.7.0",
+    "pymdown-extensions>=10.14.1",
 ]
 data = [
     "bottleneck>=1.4.2",

@@ -893,6 +893,7 @@ docs = [
     { name = "mkdocs-rtd-dropdown" },
     { name = "mkdocstrings" },
     { name = "mkdocstrings-python" },
+    { name = "pymdown-extensions" },
 ]
 viz = [
     { name = "folium" },
@@ -927,6 +928,7 @@ requires-dist = [
     { name = "pip", specifier = ">=24" },
     { name = "planetary-computer", marker = "extra == 'data'", specifier = ">=1.0.0" },
     { name = "pooch", marker = "extra == 'data'", specifier = ">=1.8.2" },
+    { name = "pymdown-extensions", marker = "extra == 'docs'", specifier = ">=10.14.1" },
     { name = "pystac-client", marker = "extra == 'data'", specifier = ">=0.8.3" },
     { name = "rioxarray", marker = "extra == 'data'", specifier = ">=0.15.0" },
     { name = "scipy", specifier = ">=1.13.1" },
