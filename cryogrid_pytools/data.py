@@ -4,11 +4,13 @@ try:
     import planetary_computer as _planetary_computer
     import pooch as _pooch
     import pystac_client as _pystac_client
-    import stackstac as _stackstac
-    import rioxarray as _rxr
-    import xarray_raster_vector as _xrv
+    import rioxarray as _rxr  # noqa
+    import stackstac as _stackstac  # noqa
+    import xarray_raster_vector as _xrv  # noqa
+    from era5_downloader.defaults import (
+        create_cryogrid_forcing_fetcher as make_era5_downloader,  # noqa
+    )
     from memoization import cached as _cached
-    from era5_downloader.defaults import create_cryogrid_forcing_fetcher as make_era5_downloader
 except ImportError as e:
     missing_package = str(e).split("'")[1]
     raise ImportError(
@@ -16,40 +18,40 @@ except ImportError as e:
         "Please install it using: pip install 'cryogrid_pytools[data]'"
     )
 
-# if cryogrid_pytools[data] dependencies are not installed, 
+# if cryogrid_pytools[data] dependencies are not installed,
 # then warn the user that this package cannot be imported
-from loguru import logger as _logger
 import xarray as _xr
+from loguru import logger as _logger
 
 
 def _decorator_dataarray_to_bbox(func):
     """
-    A decorator that processes the first argument of the decorated function to handle 
-    either an xarray DataArray or a bounding box tuple. If the first argument is a 
-    DataArray, it extracts the bounding box from the DataArray and reprojects the 
+    A decorator that processes the first argument of the decorated function to handle
+    either an xarray DataArray or a bounding box tuple. If the first argument is a
+    DataArray, it extracts the bounding box from the DataArray and reprojects the
     output to match the DataArray's projection.
-    
+
     Parameters
     ----------
     func : callable
-        The function to be decorated. The function should accept a 
+        The function to be decorated. The function should accept a
         bounding box as its first argument.
-    
+
     Returns
     -------
     callable
-        The wrapped function with the additional functionality of handling 
+        The wrapped function with the additional functionality of handling
         DataArray and reprojecting the output.
     """
+
     @_cached
     def wrapper(*args, **kwargs):
-        
         if len(args) >= 1:
             bbox_or_target = args[0]
             args = args[1:]
         else:
-            bbox_or_target = kwargs.pop('bbox', None) or kwargs.pop('bbox_WSEN', None)
-    
+            bbox_or_target = kwargs.pop("bbox", None) or kwargs.pop("bbox_WSEN", None)
+
         if isinstance(bbox_or_target, _xr.DataArray):
             da = bbox_or_target
             bbox = da.rv.get_bbox_latlon()
@@ -57,7 +59,7 @@ def _decorator_dataarray_to_bbox(func):
             out = out.rio.reproject_match(da)
 
         elif isinstance(bbox_or_target, tuple):
-            bbox =  bbox_or_target
+            bbox = bbox_or_target
             out = func(bbox_or_target, *args, **kwargs)
 
         else:
@@ -65,16 +67,18 @@ def _decorator_dataarray_to_bbox(func):
                 f"The first argument must be a bounding box tuple or an xarray DataArray, "
                 f"but got {type(bbox_or_target)} instead."
             )
-            
+
             raise ValueError(message)
 
         return out
-    
+
     return wrapper
 
 
 @_decorator_dataarray_to_bbox
-def get_dem_copernicus30(bbox_WSEN:list, res_m:int=30, epsg=32643, smoothing_iters=2, smoothing_size=3)->_xr.DataArray:
+def get_dem_copernicus30(
+    bbox_WSEN: list, res_m: int = 30, epsg=32643, smoothing_iters=2, smoothing_size=3
+) -> _xr.DataArray:
     """
     Download DEM data from the STAC catalog (default is COP DEM Global 30m).
 
@@ -85,8 +89,8 @@ def get_dem_copernicus30(bbox_WSEN:list, res_m:int=30, epsg=32643, smoothing_ite
     res_m : int
         The resolution of the DEM data in meters.
     epsg : int, optional
-        The EPSG code of the projection of the DEM data. Default is 
-        EPSG:32643 (UTM 43N) for the Pamir region. 
+        The EPSG code of the projection of the DEM data. Default is
+        EPSG:32643 (UTM 43N) for the Pamir region.
     smoothing_iters : int, optional
         The number of iterations to apply the smoothing filter. Default is 2.
         Set to 0 to disable smoothing.
@@ -102,33 +106,34 @@ def get_dem_copernicus30(bbox_WSEN:list, res_m:int=30, epsg=32643, smoothing_ite
 
     check_epsg(epsg)
 
-    assert res_m >= 30, "The resolution must be greater than 30m for the COP DEM Global 30m dataset."
+    assert res_m >= 30, (
+        "The resolution must be greater than 30m for the COP DEM Global 30m dataset."
+    )
     res = res_m / 111111 if epsg == 4326 else res_m
 
     _logger.info("Fetching COP DEM Global 30m data from Planetary Computer")
-    items = search_stac_items_planetary_computer('cop-dem-glo-30', bbox_WSEN)
+    items = search_stac_items_planetary_computer("cop-dem-glo-30", bbox_WSEN)
     da_dem = _stackstac.stack(
-        items=items, 
-        bounds_latlon=bbox_WSEN,
-        resolution=res,
-        epsg=epsg)
-    
+        items=items, bounds_latlon=bbox_WSEN, resolution=res, epsg=epsg
+    )
+
     da_dem = (
-        da_dem
-        .mean('time')
+        da_dem.mean("time")
         .squeeze()
         .pipe(drop_coords_without_dim)
         .pipe(smooth_data, n_iters=smoothing_iters, kernel_size=smoothing_size)
         .rio.write_crs(f"EPSG:{epsg}")
         .assign_attrs(
             source=items[0].links[0].href,  # collection URL
-            bbox_request=bbox_WSEN))
+            bbox_request=bbox_WSEN,
+        )
+    )
 
     return da_dem
 
 
 @_decorator_dataarray_to_bbox
-def get_esa_land_cover(bbox_WSEN:tuple, res_m:int=30, epsg=32643)->_xr.DataArray:
+def get_esa_land_cover(bbox_WSEN: tuple, res_m: int = 30, epsg=32643) -> _xr.DataArray:
     """
     Get the ESA World Cover dataset on the target grid and resolution.
 
@@ -149,7 +154,7 @@ def get_esa_land_cover(bbox_WSEN:tuple, res_m:int=30, epsg=32643)->_xr.DataArray
     """
 
     def get_land_cover_classes(item):
-        """ 
+        """
         Get the land cover class names, and colors from the ESA World Cover dataset
 
         Args:
@@ -160,19 +165,22 @@ def get_esa_land_cover(bbox_WSEN:tuple, res_m:int=30, epsg=32643)->_xr.DataArray
         """
         import pandas as pd
 
-        classes = item.assets['map'].extra_fields['classification:classes']
+        classes = item.assets["map"].extra_fields["classification:classes"]
         df = (
             pd.DataFrame(classes)
-            .set_index('value')
-            .rename(columns=lambda s: s.replace('-', '_'))  # bug fix for version 2.7.8 (stacstack back compatibility)
+            .set_index("value")
+            .rename(
+                columns=lambda s: s.replace("-", "_")
+            )  # bug fix for version 2.7.8 (stacstack back compatibility)
         )
 
-        df['color_hint'] = '#' + df['color_hint']
+        df["color_hint"] = "#" + df["color_hint"]
 
         out = dict(
-            class_values = df.index.values,
-            class_descriptions = df['description'].values,
-            class_colors = df['color_hint'].values)
+            class_values=df.index.values,
+            class_descriptions=df["description"].values,
+            class_colors=df["color_hint"].values,
+        )
 
         return out
 
@@ -184,32 +192,37 @@ def get_esa_land_cover(bbox_WSEN:tuple, res_m:int=30, epsg=32643)->_xr.DataArray
 
     _logger.info("Fetching ESA World Cover (v2.0) data from Planetary Computer")
     items = search_stac_items_planetary_computer(
-        collection='esa-worldcover', 
-        bbox=bbox_WSEN, 
-        query={'esa_worldcover:product_version': {'eq': '2.0.0'}})
+        collection="esa-worldcover",
+        bbox=bbox_WSEN,
+        query={"esa_worldcover:product_version": {"eq": "2.0.0"}},
+    )
 
     stac_props = dict(
-        items=items, 
-        assets=['map'],
-        epsg=epsg,
-        bounds_latlon=bbox_WSEN,
-        resolution=res)
+        items=items, assets=["map"], epsg=epsg, bounds_latlon=bbox_WSEN, resolution=res
+    )
 
     da = (
         _stackstac.stack(**stac_props)
-        .max(['band', 'time'], keep_attrs=True)  # removing the single band dimension
-        .rename('land_cover')
+        .max(["band", "time"], keep_attrs=True)  # removing the single band dimension
+        .rename("land_cover")
         .assign_attrs(**get_land_cover_classes(items[0]))
     )
-    
+
     return da
 
 
 @_decorator_dataarray_to_bbox
-def get_sentinel2_data(bbox_WSEN:tuple, years=range(2018, 2025), assets=['SCL'], res_m:int=30, epsg=32643, max_cloud_cover=5)->_xr.DataArray:
+def get_sentinel2_data(
+    bbox_WSEN: tuple,
+    years=range(2018, 2025),
+    assets=["SCL"],
+    res_m: int = 30,
+    epsg=32643,
+    max_cloud_cover=5,
+) -> _xr.DataArray:
     """
     Fetches Sentinel-2 data for a given bounding box and time range.
-    
+
     Parameters
     ----------
     bbox_WSEN : tuple
@@ -224,42 +237,52 @@ def get_sentinel2_data(bbox_WSEN:tuple, years=range(2018, 2025), assets=['SCL'],
         EPSG code for the coordinate reference system. Defaults to 32643.
     max_cloud_cover : int, optional
         Maximum cloud cover percentage. Defaults to 5.
-    
+
     Returns
     -------
     xr.DataArray
         DataArray containing the fetched Sentinel-2 data.
     """
     from .utils import drop_coords_without_dim
-    
+
     check_epsg(epsg)
     res = get_res_in_proj_units(res_m, epsg, min_res=10)
 
     da_list = []
     for year in years:
-        _logger.info(f"Getting Sentinel-2 SCL granules @{res}m for {year} with max cloud cover = {max_cloud_cover}%")
-    
-        t0, t1 = f"{year}-01-01", f"{year}-11-15"  # assuming that snow melt is done by mid-November
+        _logger.info(
+            f"Getting Sentinel-2 SCL granules @{res}m for {year} with max cloud cover = {max_cloud_cover}%"
+        )
+
+        t0, t1 = (
+            f"{year}-01-01",
+            f"{year}-11-15",
+        )  # assuming that snow melt is done by mid-November
         items = search_stac_items_planetary_computer(
-            collection='sentinel-2-l2a',
+            collection="sentinel-2-l2a",
             bbox=bbox_WSEN,
             datetime=(t0, t1),
-            query={'eo:cloud_cover': {'lt': max_cloud_cover}})
-        
-        da_list += _stackstac.stack(
-            items=items, 
-            assets=assets,
-            bounds_latlon=bbox_WSEN,
-            resolution=res,
-            epsg=epsg),
-    
-    da_granules = _xr.concat(da_list, dim='time')
+            query={"eo:cloud_cover": {"lt": max_cloud_cover}},
+        )
+
+        da_list += (
+            _stackstac.stack(
+                items=items,
+                assets=assets,
+                bounds_latlon=bbox_WSEN,
+                resolution=res,
+                epsg=epsg,
+            ),
+        )
+
+    da_granules = _xr.concat(da_list, dim="time")
     da = (
-        da_granules  # granules are not grouped by time
-        .groupby('time').max()  # take max value to avoid mixing ints
+        da_granules.groupby("time")  # granules are not grouped by time
+        .max()  # take max value to avoid mixing ints
         .squeeze()  # remove the band dimension
-        .where(lambda x: x > 0))  # mask null_values so that pixel coverage can be counted
-    
+        .where(lambda x: x > 0)
+    )  # mask null_values so that pixel coverage can be counted
+
     da.attrs = {}
     da = da.pipe(drop_coords_without_dim).rio.write_crs(f"EPSG:{epsg}")
 
@@ -267,7 +290,9 @@ def get_sentinel2_data(bbox_WSEN:tuple, years=range(2018, 2025), assets=['SCL'],
 
 
 @_decorator_dataarray_to_bbox
-def get_snow_melt_doy(bbox_WSEN:tuple, years=range(2018, 2025), res_m:int=30, epsg=32643)->_xr.DataArray:
+def get_snow_melt_doy(
+    bbox_WSEN: tuple, years=range(2018, 2025), res_m: int = 30, epsg=32643
+) -> _xr.DataArray:
     """
     Calculate the snow melt day of year (DOY) from Sentinel-2 SCL data for a given bounding box and years.
 
@@ -287,14 +312,16 @@ def get_snow_melt_doy(bbox_WSEN:tuple, years=range(2018, 2025), res_m:int=30, ep
     _xr.DataArray
         DataArray containing the snow melt DOY for each year.
     """
-    
-    da = get_sentinel2_data(bbox_WSEN, years=years, res_m=res_m, epsg=epsg, max_cloud_cover=10)
+
+    da = get_sentinel2_data(
+        bbox_WSEN, years=years, res_m=res_m, epsg=epsg, max_cloud_cover=10
+    )
 
     _logger.info("Calculating snow melt day of year (DOY) from Sentinel-2 SCL data")
-    doy = da.groupby('time.year').apply(calc_sentinel2_snow_melt_doy)
+    doy = da.groupby("time.year").apply(calc_sentinel2_snow_melt_doy)
 
     return doy
-    
+
 
 @_cached
 def get_randolph_glacier_inventory(target_dem=None, dest_dir=None):
@@ -304,7 +331,7 @@ def get_randolph_glacier_inventory(target_dem=None, dest_dir=None):
     Parameters
     ----------
     target_dem : optional
-        A digital elevation model (DEM) object. If provided, the function will return 
+        A digital elevation model (DEM) object. If provided, the function will return
         the RGI data clipped to the bounding box of the DEM and reprojected to the DEM's CRS.
     dest_dir : str, optional
         The directory where the downloaded RGI data will be stored. If None, the data will
@@ -317,14 +344,19 @@ def get_randolph_glacier_inventory(target_dem=None, dest_dir=None):
         If target_dem is provided, returns a raster dataset clipped and reprojected to the DEM.
     """
 
-    url = 'https://daacdata.apps.nsidc.org/pub/DATASETS/nsidc0770_rgi_v7/regional_files/RGI2000-v7.0-G/RGI2000-v7.0-G-13_central_asia.zip'
+    url = "https://daacdata.apps.nsidc.org/pub/DATASETS/nsidc0770_rgi_v7/regional_files/RGI2000-v7.0-G/RGI2000-v7.0-G-13_central_asia.zip"
 
-    downloader = _pooch.HTTPDownloader(progressbar=True, headers=get_earthaccess_session().headers)
+    downloader = _pooch.HTTPDownloader(
+        progressbar=True, headers=get_earthaccess_session().headers
+    )
     flist = download_url(url, path=dest_dir, downloader=downloader)
 
-    fname_shp = [f for f in flist if f.endswith('.shp')][0]
+    fname_shp = [f for f in flist if f.endswith(".shp")][0]
 
-    _logger.log("INFO", f"RGI: Fetching Randolph Glacier Inventory - see https://www.glims.org/rgi_user_guide/welcome.html")
+    _logger.log(
+        "INFO",
+        "RGI: Fetching Randolph Glacier Inventory - see https://www.glims.org/rgi_user_guide/welcome.html",
+    )
     _logger.log("DEBUG", f"RGI: URL = {url}")
     _logger.log("DEBUG", f"RGI: FILE = {fname_shp}")
 
@@ -342,7 +374,7 @@ def get_randolph_glacier_inventory(target_dem=None, dest_dir=None):
     return df
 
 
-def smooth_data(da: _xr.DataArray, kernel_size:int=3, n_iters=1)->_xr.DataArray:
+def smooth_data(da: _xr.DataArray, kernel_size: int = 3, n_iters=1) -> _xr.DataArray:
     """
     Smooth the data using a rolling mean filter (box kernel).
 
@@ -364,19 +396,21 @@ def smooth_data(da: _xr.DataArray, kernel_size:int=3, n_iters=1)->_xr.DataArray:
     da_smooth = da.copy()
     for _ in range(n_iters):
         da_smooth = da_smooth.rolling(
-            x=kernel_size, y=kernel_size, center=True, min_periods=1).mean()
+            x=kernel_size, y=kernel_size, center=True, min_periods=1
+        ).mean()
 
     if n_iters:
         da_smooth = da_smooth.assign_attrs(
-            smoothing_kernel='box_kernel',
+            smoothing_kernel="box_kernel",
             smoothing_kernel_size=kernel_size,
-            smoothing_iterations=n_iters)
-    
+            smoothing_iterations=n_iters,
+        )
+
     return da_smooth
 
 
-def calc_sentinel2_snow_melt_doy(da_scl)-> _xr.DataArray:
-    """ 
+def calc_sentinel2_snow_melt_doy(da_scl) -> _xr.DataArray:
+    """
     Calculates the day of year (DOY) when snow melt occurs based on Sentinel-2 SCL data.
 
     Parameters
@@ -389,25 +423,23 @@ def calc_sentinel2_snow_melt_doy(da_scl)-> _xr.DataArray:
     xarray.DataArray
         The day of year when snow melt occurs as an xarray DataArray.
     """
+
     def drop_poor_coverage_at_end(da, threshold=0.9):
         """
-        Drops the time steps at the end of the time series that 
-        occur after the last point that meets the threshold req. 
+        Drops the time steps at the end of the time series that
+        occur after the last point that meets the threshold req.
 
         Example
         -------
         [0.4, 0.5, 0.3, 0.7, 0.9, 0.3]
         [keep keep keep keep keep drop]
         """
-        counts = da.count(['x', 'y']).compute()
+        counts = da.count(["x", "y"]).compute()
         size = da.isel(time=0).size
         frac = counts / size
         good_cover = (
-            frac
-            .bfill('time')
-            .where(lambda x: x > threshold)
-            .dropna('time')
-            .time.values)
+            frac.bfill("time").where(lambda x: x > threshold).dropna("time").time.values
+        )
         return da.sel(time=slice(None, good_cover[-1]))
 
     def find_time_of_lowest_snow_cover(snow_mask, window=10):
@@ -415,7 +447,7 @@ def calc_sentinel2_snow_melt_doy(da_scl)-> _xr.DataArray:
         Returns the time step where the snow cover is the lowest
         """
         filled = snow_mask.rolling(time=window, center=True, min_periods=1).max()
-        lowest_cover_time = filled.count(['x', 'y']).idxmin()
+        lowest_cover_time = filled.count(["x", "y"]).idxmin()
         return lowest_cover_time
 
     def get_only_melt_period(snow_mask):
@@ -433,7 +465,7 @@ def calc_sentinel2_snow_melt_doy(da_scl)-> _xr.DataArray:
         Parameters
         ----------
         mask : xarray.DataArray
-            A DataArray with a 'time' dimension and boolean values 
+            A DataArray with a 'time' dimension and boolean values
             indicating the mask.
 
         Returns
@@ -448,22 +480,24 @@ def calc_sentinel2_snow_melt_doy(da_scl)-> _xr.DataArray:
         AssertionError
             If the mask contains data from more than one year.
         """
-        assert 'time' in mask.dims, "'time' dimension is required"
+        assert "time" in mask.dims, "'time' dimension is required"
 
         years = set(mask.time.dt.year.values.tolist())
         assert len(years) == 1, "Only one year is supported"
 
         doy_max = (
-            mask.time.dt.dayofyear  # get the day of year
-            .where(mask)  # broadcast the day of year to the mask shape
-            .max('time')  # get the last time step 
-            .astype('float32')
-            .rename('day_of_year'))
-        
+            mask.time.dt.dayofyear.where(  # get the day of year
+                mask
+            )  # broadcast the day of year to the mask shape
+            .max("time")  # get the last time step
+            .astype("float32")
+            .rename("day_of_year")
+        )
+
         return doy_max
-    
+
     scl = da_scl.compute()
-    scl_snow_ice = 11 
+    scl_snow_ice = 11
 
     # only one year allowed
     assert scl.time.dt.year.to_series().unique().size == 1, "Only one year is allowed"
@@ -477,17 +511,17 @@ def calc_sentinel2_snow_melt_doy(da_scl)-> _xr.DataArray:
     # find the time step where snow cover is the lowest, and remove anything after
     snow_melt = get_only_melt_period(snow_mask)
     # backfill the snow cover (assuming only melt) and create mask
-    snow_mask = snow_melt.bfill('time').notnull()
+    snow_mask = snow_melt.bfill("time").notnull()
     # compute the melt date based on a mask
     snow_melt_day = get_max_day_of_year_from_mask(snow_mask)
-    
+
     return snow_melt_day
 
 
 def get_earthaccess_session():
     """
     Logs into earthaccess and gets session info.
-    
+
     Returns
     -------
     session
@@ -508,29 +542,30 @@ def download_url(url, **kwargs):
     ----------
     url : str
         The URL of the file to download.
-    **kwargs : Additional properties passed to pooch.retrieve. 
+    **kwargs : Additional properties passed to pooch.retrieve.
         These properties will override the default settings.
 
     Returns
     -------
     list
-        A list of file paths to the downloaded (and possibly 
+        A list of file paths to the downloaded (and possibly
         decompressed) files.
     """
-    
-    if url.endswith('.zip'):
+
+    if url.endswith(".zip"):
         processor = _pooch.Unzip()
-    elif url.endswith('.tar.gz'):
+    elif url.endswith(".tar.gz"):
         processor = _pooch.Untar()
     else:
         processor = None
 
     default_props = dict(
         known_hash=None,
-        fname=url.split('/')[-1],
+        fname=url.split("/")[-1],
         path=None,
         downloader=_pooch.HTTPDownloader(progressbar=True),
-        processor=processor)
+        processor=processor,
+    )
 
     props = default_props | kwargs
     flist = _pooch.retrieve(url=url, **props)
@@ -538,7 +573,7 @@ def download_url(url, **kwargs):
     return flist
 
 
-def search_stac_items_planetary_computer(collection, bbox, **kwargs)->list:
+def search_stac_items_planetary_computer(collection, bbox, **kwargs) -> list:
     """
     Searches for STAC items from the Planetary Computer.
 
@@ -559,20 +594,17 @@ def search_stac_items_planetary_computer(collection, bbox, **kwargs)->list:
     URL_PLANETARY_COMPUTER = "https://planetarycomputer.microsoft.com/api/stac/v1"
 
     catalog = _pystac_client.Client.open(
-        url=URL_PLANETARY_COMPUTER,
-        modifier=_planetary_computer.sign_inplace)
+        url=URL_PLANETARY_COMPUTER, modifier=_planetary_computer.sign_inplace
+    )
 
-    search = catalog.search(
-        collections=[collection],
-        bbox=bbox, 
-        **kwargs)
+    search = catalog.search(collections=[collection], bbox=bbox, **kwargs)
 
     items = search.item_collection()
 
     return items
 
 
-def check_epsg(epsg:int)->bool:
+def check_epsg(epsg: int) -> bool:
     """
     Check if the provided EPSG code is valid.
 
@@ -591,11 +623,12 @@ def check_epsg(epsg:int)->bool:
     AssertionError
         If the EPSG code is not valid.
     """
+
     def check_epsg(epsg: int) -> bool:
         """
         Check if the provided EPSG code is valid.
 
-        This function checks whether the given EPSG code is either a UTM code 
+        This function checks whether the given EPSG code is either a UTM code
         (starting with '326') or the Lat/Lon code (4326).
 
         Args:
@@ -607,7 +640,8 @@ def check_epsg(epsg:int)->bool:
         Raises:
             AssertionError: If the EPSG code is not valid.
         """
-    is_valid_epsg = str(epsg).startswith('326') or (epsg == 4326)
+
+    is_valid_epsg = str(epsg).startswith("326") or (epsg == 4326)
     assert is_valid_epsg, "The EPSG code must be UTM (326xx) or Lat/Lon (4326)."
 
 

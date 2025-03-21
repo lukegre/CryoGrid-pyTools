@@ -1,7 +1,8 @@
 # standalone file that can be shared without the rest of the package
 import pathlib
-import pandas as pd
+
 import numpy as np
+import pandas as pd
 from loguru import logger
 from munch import Munch
 
@@ -11,22 +12,23 @@ class CryoGridConfigExcel:
     A class to read CryoGrid Excel configuration files and extract file paths
     and maybe in the future do some checks etc
     """
+
     def __init__(self, fname_xls: str, check_file_paths=True, check_strat_layers=True):
         """
         Initialize the CryoGridConfigExcel object.
 
         Reads in the Excel configuration file and parse the different classes
-        using a pandas DataFrame approach. 
+        using a pandas DataFrame approach.
 
         Parameters
         ----------
         fname_xls : path-like
             Path to the CryoGrid Excel configuration file.
         check_file_paths : bool, default=True, optional
-            If True, perform a check that all files linked in the configuration 
+            If True, perform a check that all files linked in the configuration
             can be found (path exists)
         check_strat_layers : bool, default=True, optional
-            If True, perform a check that stratigraphy layer parameters are 
+            If True, perform a check that stratigraphy layer parameters are
             physically plausible
         """
         self.fname = pathlib.Path(fname_xls).resolve()
@@ -39,7 +41,7 @@ class CryoGridConfigExcel:
         self.fname.coords = self.get_coord_path()
         self.fname.era5 = self.get_forcing_path()
         self.fname.datasets = self.get_dataset_paths()
-        
+
         self.time = self.get_start_end_times()
 
         if check_file_paths:
@@ -47,7 +49,9 @@ class CryoGridConfigExcel:
         if check_strat_layers:
             self.check_strat_layers()
 
-        logger.info(f"Start and end times: {self.time.time_start:%Y-%m-%d} - {self.time.time_end:%Y-%m-%d}")
+        logger.info(
+            f"Start and end times: {self.time.time_start:%Y-%m-%d} - {self.time.time_end:%Y-%m-%d}"
+        )
 
     def _get_root_path(self):
         """
@@ -60,14 +64,16 @@ class CryoGridConfigExcel:
         """
         path = self.fname.parent
         while True:
-            flist = path.glob('run_cryogrid.m')
+            flist = path.glob("run_cryogrid.m")
             if len(list(flist)) > 0:
                 self.root = path
                 logger.info(f"Found root path: {path}")
                 return self.root
-            elif str(path) == '/':
-                logger.warning("Could not find root path. Set to current directory. You can change this manually with excel_config.root = pathlib.Path('/path/to/root')")
-                return pathlib.Path('.')
+            elif str(path) == "/":
+                logger.warning(
+                    "Could not find root path. Set to current directory. You can change this manually with excel_config.root = pathlib.Path('/path/to/root')"
+                )
+                return pathlib.Path(".")
             else:
                 path = path.parent
 
@@ -80,12 +86,14 @@ class CryoGridConfigExcel:
         pandas.Series
             A Series with 'time_start' and 'time_end' as Timestamp objects.
         """
-        times = self.get_class('set_start_end_time').T.filter(regex='time')
-        times = times.map(lambda x: pd.Timestamp(year=int(x[0]), month=int(x[1]), day=int(x[2])))
+        times = self.get_class("set_start_end_time").T.filter(regex="time")
+        times = times.map(
+            lambda x: pd.Timestamp(year=int(x[0]), month=int(x[1]), day=int(x[2]))
+        )
 
         start = times.start_time.min()
         end = times.end_time.max()
-        times = pd.Series([start, end], index=['time_start', 'time_end'])
+        times = pd.Series([start, end], index=["time_start", "time_end"])
 
         return times
 
@@ -98,7 +106,9 @@ class CryoGridConfigExcel:
         pathlib.Path
             The file path for coordinates.
         """
-        fname = self.get_class_filepath('COORDINATES_FROM_FILE', fname_key='file_name', index=1)
+        fname = self.get_class_filepath(
+            "COORDINATES_FROM_FILE", fname_key="file_name", index=1
+        )
         return fname
 
     def get_dataset_paths(self):
@@ -110,16 +120,20 @@ class CryoGridConfigExcel:
         munch.Munch
             A dictionary-like object mapping dataset variable names to file paths.
         """
-        paths = self.get_class_filepath('READ_DATASET', fname_key='filename').to_frame(name='filepath').T
-        
-        datasets = self.get_class('READ_DATASET')
-        variable = datasets.T.variable_name
-        paths.loc['variable'] = variable
+        paths = (
+            self.get_class_filepath("READ_DATASET", fname_key="filename")
+            .to_frame(name="filepath")
+            .T
+        )
 
-        paths = Munch(**paths.T.set_index('variable').filepath.to_dict())
-        
+        datasets = self.get_class("READ_DATASET")
+        variable = datasets.T.variable_name
+        paths.loc["variable"] = variable
+
+        paths = Munch(**paths.T.set_index("variable").filepath.to_dict())
+
         return paths
-    
+
     def get_dem_path(self):
         """
         Get the path for the DEM file from the Excel configuration.
@@ -129,10 +143,12 @@ class CryoGridConfigExcel:
         pathlib.Path
             The DEM file path.
         """
-        fname = self.get_class_filepath('DEM', folder_key='folder', fname_key='filename', index=1)
+        fname = self.get_class_filepath(
+            "DEM", folder_key="folder", fname_key="filename", index=1
+        )
         return fname
-    
-    def get_forcing_path(self, class_name='read_mat_ERA'):
+
+    def get_forcing_path(self, class_name="read_mat_ERA"):
         """
         Obtain the forcing file path from the Excel configuration.
 
@@ -146,10 +162,14 @@ class CryoGridConfigExcel:
         pathlib.Path
             The forcing file path.
         """
-        fname = self.get_class_filepath(class_name, folder_key='path', fname_key='filename', index=1)
+        fname = self.get_class_filepath(
+            class_name, folder_key="path", fname_key="filename", index=1
+        )
         return fname
-    
-    def get_output_max_depth(self, output_class="OUT_regridded_FCI2", depth_key='depth_below_ground')->int:
+
+    def get_output_max_depth(
+        self, output_class="OUT_regridded_FCI2", depth_key="depth_below_ground"
+    ) -> int:
         """
         Get the maximum depth of the output file from the Excel configuration.
 
@@ -164,7 +184,7 @@ class CryoGridConfigExcel:
             The maximum depth value.
         """
         df = self.get_class(output_class)
-        
+
         depth = str(df.loc[depth_key].iloc[0])
         depth = int(depth)
 
@@ -184,10 +204,12 @@ class CryoGridConfigExcel:
         fname = self.get_forcing_path()
         times = self.get_start_end_times().dt.year.astype(str).values.tolist()
 
-        fname_years = re.findall(r'[-_]([12][1089][0-9][0-9])', fname.stem)
-        
-        assert times == fname_years, f"File name years do not match the forcing years: forcing {times} != fname {fname_years}"
-    
+        fname_years = re.findall(r"[-_]([12][1089][0-9][0-9])", fname.stem)
+
+        assert times == fname_years, (
+            f"File name years do not match the forcing years: forcing {times} != fname {fname_years}"
+        )
+
     def _load_xls(self, fname_xls: str) -> pd.DataFrame:
         """
         Load the Excel file into a DataFrame.
@@ -205,15 +227,15 @@ class CryoGridConfigExcel:
         import string
 
         alph = list(string.ascii_uppercase)
-        alphabet_extra = alph + [a+b for a in alph for b in alph]
+        alphabet_extra = alph + [a + b for a in alph for b in alph]
 
         df = pd.read_excel(fname_xls, header=None, dtype=str)
-        df.columns = [c for c in alphabet_extra[:df.columns.size]]
+        df.columns = [c for c in alphabet_extra[: df.columns.size]]
         df.index = df.index + 1
 
         return df
 
-    def _get_unique_key(self, key: str, col_value='B'):
+    def _get_unique_key(self, key: str, col_value="B"):
         """
         Retrieve a single unique value for a given key from the Excel data.
 
@@ -234,7 +256,7 @@ class CryoGridConfigExcel:
         ValueError
             If multiple values are found for the given key.
         """
-        df  = self._df
+        df = self._df
         idx = df.A == key
         value = df.loc[idx, col_value].values
         if len(value) == 0:
@@ -243,7 +265,7 @@ class CryoGridConfigExcel:
             raise ValueError(f"Multiple values found for key: {key}")
         else:
             return value[0]
-    
+
     def get_classes(self):
         """
         Returns a dictionary of class names and their corresponding row indices
@@ -258,16 +280,18 @@ class CryoGridConfigExcel:
 
         class_idx = []
         for i in range(len(df)):
-            try: 
+            try:
                 self._find_class_block(i)
                 class_idx.append(i)
-            except:
+            except Exception:
                 pass
 
-        classes = df.loc[class_idx, 'A'].to_dict()
+        classes = df.loc[class_idx, "A"].to_dict()
         return classes
 
-    def get_class_filepath(self, key, folder_key='folder', fname_key='file', index=None):
+    def get_class_filepath(
+        self, key, folder_key="folder", fname_key="file", index=None
+    ):
         """
         Construct a file path from folder and file entries in the Excel configuration.
 
@@ -312,8 +336,8 @@ class CryoGridConfigExcel:
             return names.loc[f"{key}_{index}"]
         else:
             raise TypeError(f"index must be None or int, not {type(index)}")
-        
-    def get_class(self, class_name: str)->pd.DataFrame:
+
+    def get_class(self, class_name: str) -> pd.DataFrame:
         """
         Return DataFrame blocks representing the specified class from the Excel data.
 
@@ -334,11 +358,11 @@ class CryoGridConfigExcel:
         blocks = [self._find_class_block(i0) for i0 in i0s]
         try:
             df = pd.concat(blocks, axis=1)
-        except:
+        except Exception:
             # only intended for debugging
-            df = blocks  
+            df = blocks
             logger.warning(f"Could not concatenate blocks for class: {class_name}")
-        
+
         return df
 
     def _find_class_block(self, class_idx0: int):
@@ -364,20 +388,20 @@ class CryoGridConfigExcel:
 
         class_name = df.A.loc[class_idx0]
         msg = f"Given class_idx0 ({class_name}) is not a class. Must have 'index' adjacent or on cell up and right."
-        is_index = df.B.loc[class_idx0 - 1: class_idx0].str.contains('index')
+        is_index = df.B.loc[class_idx0 - 1 : class_idx0].str.contains("index")
         assert is_index.any(), msg
 
         index_idx = is_index.idxmax()
         class_idx0 = index_idx
 
-        class_idx1 = df.A.loc[class_idx0:] == 'CLASS_END'
+        class_idx1 = df.A.loc[class_idx0:] == "CLASS_END"
         # get first True occurrence
         class_idx1 = class_idx1.idxmax()
         class_block = df.loc[class_idx0:class_idx1]
         class_block = self._process_class_block(class_block)
 
         return class_block
-    
+
     def _process_class_block(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Process a raw class block by removing comments, handling special structures, and shaping data.
@@ -399,19 +423,19 @@ class CryoGridConfigExcel:
         """
         """hacky way to process the class block"""
         # drop CLASS_END row
-        df = df[df.A != 'CLASS_END']
+        df = df[df.A != "CLASS_END"]
 
         # if any cell starts with '>', it is a comment
-        df = df.map(lambda x: x if not str(x).startswith('>') else np.nan)
+        df = df.map(lambda x: x if not str(x).startswith(">") else np.nan)
 
         # drop rows and columns that are all NaN
-        df = df.dropna(axis=1, how='all').dropna(axis=0, how='all')
+        df = df.dropna(axis=1, how="all").dropna(axis=0, how="all")
         df = df.astype(str)
 
         # H_LIST and V_MATRIX are special cases
-        contains_matrix = df.map(lambda x: 'MATRIX' in x).values
-        contains_vmatrix = df.map(lambda x: 'V_MATRIX' in x).values
-        contains_end = df.map(lambda x: 'END' in x).values
+        contains_matrix = df.map(lambda x: "MATRIX" in x).values
+        contains_vmatrix = df.map(lambda x: "V_MATRIX" in x).values
+        contains_end = df.map(lambda x: "END" in x).values
 
         ends = np.where(contains_end)
         if contains_matrix.any():
@@ -424,7 +448,7 @@ class CryoGridConfigExcel:
 
             r1 = ends[0][1]
             c1 = ends[1][0]
-            
+
             arr = df.iloc[r0:r1, c0:c1].values
             if contains_vmatrix.any():
                 # first column of V_MATRIX is the index but is not in the config file
@@ -433,36 +457,32 @@ class CryoGridConfigExcel:
 
             matrix = pd.DataFrame(arr[1:, 1:], index=arr[1:, 0], columns=arr[0, 1:])
             matrix.index.name = matrix.columns.name = df.iloc[r0, 0]
-            df = df.drop(index=df.index[r0:r1+1])
-            df.loc[r0, 'A'] = matrix.index.name
-            df.loc[r0, 'B'] = matrix.to_dict(),
-        
+            df = df.drop(index=df.index[r0 : r1 + 1])
+            df.loc[r0, "A"] = matrix.index.name
+            df.loc[r0, "B"] = (matrix.to_dict(),)
+
         for i, row in df.iterrows():
             # H_LIST first
-            if row.str.contains('H_LIST').any():
+            if row.str.contains("H_LIST").any():
                 r0 = 2
-                r1 = row.str.contains('END').argmax()
-                df.loc[i, 'B'] = row.iloc[r0:r1].values.tolist()
+                r1 = row.str.contains("END").argmax()
+                df.loc[i, "B"] = row.iloc[r0:r1].values.tolist()
 
         class_category = df.A.iloc[0]
         class_type = df.A.iloc[1]
         class_index = df.B.iloc[1]
-        col_name = f'{class_type}_{class_index}'
+        col_name = f"{class_type}_{class_index}"
 
-        df = (
-            df
-            .iloc[2:, :2]
-            .rename(columns=dict(B=col_name))
-            .set_index('A'))
+        df = df.iloc[2:, :2].rename(columns=dict(B=col_name)).set_index("A")
         df.index.name = class_category
 
         return df
-    
+
     def check_strat_layers(self):
         """
         Run checks to ensure stratigraphy layers have physically plausible parameter values.
         """
-        strat_layers = self.get_class('STRAT_layers')
+        strat_layers = self.get_class("STRAT_layers")
         logger.info("Checking stratigraphy layers...")
         for layer in strat_layers:
             try:
@@ -476,12 +496,11 @@ class CryoGridConfigExcel:
         Check if all the files in the configuration exist.
         """
 
-        flist = set([
-            self.get_forcing_path(), 
-            self.get_dem_path(), 
-            self.get_coord_path()] 
-            + list(self.get_dataset_paths().values()))
-        
+        flist = set(
+            [self.get_forcing_path(), self.get_dem_path(), self.get_coord_path()]
+            + list(self.get_dataset_paths().values())
+        )
+
         logger.info("Checking file locations...")
         for f in flist:
             if not f.exists():
@@ -521,19 +540,19 @@ def check_strat_layer_values(tuple_containing_dict):
     dictionary = tuple_containing_dict[0]
     df = pd.DataFrame(dictionary).astype(float).round(3)
 
-    df['porosity'] = (1 - df.mineral - df.organic).round(3)
-    df['airspace'] = (df.porosity - df.waterIce).round(3)
-    df['volume'] = (df.mineral + df.organic + df.waterIce).round(3)
+    df["porosity"] = (1 - df.mineral - df.organic).round(3)
+    df["airspace"] = (df.porosity - df.waterIce).round(3)
+    df["volume"] = (df.mineral + df.organic + df.waterIce).round(3)
 
     checks = pd.DataFrame()
-    checks['field_capacity_lt_porosity'] = df.field_capacity <= df.porosity
-    checks['airspace_ge_0'] = df.airspace >= 0
-    checks['volume_le_1'] = df.volume <= 1
-    checks['waterice_le_porosity'] = df.waterIce <= df.porosity
-    checks.index.name = 'layer'
+    checks["field_capacity_lt_porosity"] = df.field_capacity <= df.porosity
+    checks["airspace_ge_0"] = df.airspace >= 0
+    checks["volume_le_1"] = df.volume <= 1
+    checks["waterice_le_porosity"] = df.waterIce <= df.porosity
+    checks.index.name = "layer"
 
     if not checks.values.all():
         raise ValueError(
             "parameters are not physically plausible. "
-            "below are the violations: \n"
-            + str(checks.T))
+            "below are the violations: \n" + str(checks.T)
+        )
