@@ -43,13 +43,6 @@ classifiers = [  # see https://pypi.org/classifiers/
 ]
 
 [project.optional-dependencies]
-docs = [
-    "mkdocs>=1.5.0",
-    "mkdocs-rtd-dropdown>=1.0.2",
-    "mkdocstrings>=0.24.0",
-    "mkdocstrings-python>=1.7.0",
-    "pymdown-extensions>=10.14.1",
-]
 data = [
     "bottleneck>=1.4.2",
     "earthaccess>=0.11.0",
@@ -76,3 +69,13 @@ viz = [
 
 [tool.uv.sources]
 xarray-raster-vector = { git = "https://github.com/lukegre/xarray-raster-vector.git" }
+
+[dependency-groups]
+dev = [
+    "ipykernel>=6.29.5",
+    "mkdocs>=1.5.0",
+    "mkdocs-rtd-dropdown>=1.0.2",
+    "mkdocstrings>=0.24.0",
+    "mkdocstrings-python>=1.7.0",
+    "pymdown-extensions>=10.14.1",
+]

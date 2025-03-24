@@ -99,6 +99,23 @@ def plot_profile(da_profile: xr.DataArray, **kwargs):
         - colorbar: The colorbar object that is associated with the image.
     """
 
+    dims = da_profile.sizes
+    if "gridcell" in dims:
+        if dims["gridcell"] != 1:
+            raise ValueError(
+                "More than one gridcell found in dataset. Make sure that you're passing only one profile file pattern."
+            )
+        else:
+            da_profile = da_profile.isel(gridcell=0)
+
+    if "depth" not in dims:
+        if "depth" in da_profile.coords and "level" in dims:
+            da_profile = da_profile.set_index(level="depth").rename(level="depth")
+        else:
+            raise ValueError(
+                "Depth coordinate not found in dataset. Make sure that you're passing a profile dataset."
+            )
+
     name = da_profile.name
 
     long_name = da_profile.attrs.get("long_name", name)

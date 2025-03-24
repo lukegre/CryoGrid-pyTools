@@ -1,0 +1,28 @@
+repos:
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0  # Use the ref you want to point at
+    hooks:
+    - id: trailing-whitespace
+    - id: check-ast
+    - id: check-builtin-literals
+    - id: check-docstring-first
+    - id: check-executables-have-shebangs
+    - id: end-of-file-fixer
+    - id: mixed-line-ending
+      args: [--fix=lf]
+    - id: check-yaml
+
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.6.5
+    hooks:
+      - id: uv-lock
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: 'v0.9.10'
+    hooks:
+    - id: ruff
+      args: [--fix, --exit-non-zero-on-fix]
+      types_or: [ python, ]
+    - id: ruff-format
+      types_or: [ python, ]
