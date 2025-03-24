@@ -27,11 +27,15 @@ def calc_profile_props(ground_temperature_profile: xr.DataArray) -> xr.Dataset:
 
     """
     da = ground_temperature_profile
-    depth = da.depth
 
-    assert "depth" in da.dims, "depth dimension is required"
+    assert "depth" in da.coords, "depth dimension is required"
     assert "time" in da.dims, "time dimension is required"
     assert da.max() < 100, "temperature should be in degrees Celsius"
+    if 'gridcell' in da.dims:
+        assert da.sizes['gridcell'] == 1, "You are passing multiple profiles (e.g., dim gridcell size > 1)"
+    
+    da = da.set_index(level='depth').rename(level='depth')
+    depth = da.depth
 
     bottom_thawing_mask = detect_bottom_thawing(da)
     # create annual version

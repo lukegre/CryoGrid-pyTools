@@ -114,7 +114,7 @@ def plot_profile(da_profile: xr.DataArray, **kwargs):
     if "ax" in kwargs:
         props = dict(robust=True) | kwargs
     else:
-        props = dict(robust=True, aspect=4, size=3.5) | kwargs
+        props = dict(robust=True, aspect=4, size=3.5, center=0) | kwargs
 
     img = da_profile.plot.imshow(**props)
     img.axes.set_xlabel("")
