@@ -4,9 +4,9 @@ This page contains the detailed API reference for CryoGrid-pyTools.
 
 ## Main Functions
 
-::: cryogrid_pytools.read_OUT_regridded_FCI2_file
+::: cryogrid_pytools.read_OUT_regridded_file
 
-::: cryogrid_pytools.read_OUT_regridded_FCI2_clusters
+::: cryogrid_pytools.read_OUT_regridded_clusters
 
 ::: cryogrid_pytools.matlab_helpers.read_mat_struct_flat_as_dict
 

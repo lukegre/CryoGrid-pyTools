@@ -26,10 +26,10 @@ save('my_data.mat', 'variable1', 'variable2', '-v7.3')
 Once you have your MATLAB data in a compatible format:
 
 ```python
-import cryogrid_pytools as cgt
+import cryogrid_pytools as cg
 
 # Read the MATLAB file
-data = cgt.read_matlab_file('my_data.mat')
+data = cg.read_matlab_file('my_data.mat')
 ```
 
 The data will be converted to appropriate Python data structures, making it easy to work with in your Python environment.

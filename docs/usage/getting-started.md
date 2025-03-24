@@ -7,7 +7,7 @@ This guide will help you get started with CryoGrid-pyTools. The package provides
 First, import the package:
 
 ```python
-import cryogrid_pytools as cgt
+import cryogrid_pytools as cg
 ```
 
 The package provides several main functionalities:

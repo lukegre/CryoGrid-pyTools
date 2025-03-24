@@ -7,10 +7,10 @@ CryoGrid-pyTools provides functionality to read CryoGrid output files into Pytho
 Use the `read_OUT_regridded_FCI2_file` function to read a regridded FCI2 output file:
 
 ```python
-import cryogrid_pytools as cgt
+import cryogrid_pytools as cg
 
 # Read a single output file
-ds = cgt.read_OUT_regridded_FCI2_file(
+ds = cg.read_OUT_regridded_FCI2_file(
     'path/to/your/output_file.mat',
     deepest_point=-5  # Set the deepest point in meters
 )
@@ -32,7 +32,7 @@ For spatial runs with multiple output files, use `read_OUT_regridded_FCI2_cluste
 
 ```python
 # Read multiple output files
-ds = cgt.read_OUT_regridded_FCI2_clusters(
+ds = cg.read_OUT_regridded_FCI2_clusters(
     'path/to/output/directory/*.mat',  # Glob pattern for output files
     deepest_point=-5
 )

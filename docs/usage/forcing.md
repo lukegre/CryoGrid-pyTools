@@ -7,10 +7,10 @@ CryoGrid-pyTools provides functionality to work with ERA5 forcing data for CryoG
 You can read ERA5 forcing data from MATLAB files using the `read_mat_ear5` function:
 
 ```python
-import cryogrid_pytools as cgt
+import cryogrid_pytools as cg
 
 # Read ERA5 forcing data
-ds = cgt.read_mat_ear5('path/to/ERA5.mat')
+ds = cg.read_mat_ear5('path/to/ERA5.mat')
 ```
 
 The returned xarray Dataset contains all ERA5 forcing variables needed for CryoGrid simulations.
@@ -20,10 +20,10 @@ The returned xarray Dataset contains all ERA5 forcing variables needed for CryoG
 If you have ERA5 data from the Copernicus Climate Data Store (CDS) in netCDF format, you can convert it to the format expected by CryoGrid using `era5_to_matlab`:
 
 ```python
-import cryogrid_pytools as cgt
+import cryogrid_pytools as cg
 
 # Convert ERA5 netCDF to MATLAB format
-ds = cgt.era5_to_matlab(
+ds = cg.era5_to_matlab(
     era5_dataset,  # xarray Dataset from ERA5 CDS
     save_path='ERA5.mat'  # Optional: save to MATLAB file
 )

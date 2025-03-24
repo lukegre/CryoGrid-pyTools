@@ -11,13 +11,13 @@ pip install "cryogrid_pytools[data]"
 You can download DEM data from the Copernicus 30m dataset:
 
 ```python
-import cryogrid_pytools as cgt
+import cryogrid_pytools as cg
 
 # Define your area of interest (West, South, East, North)
 bbox = [70.0, 35.0, 71.0, 36.0]  # Example for a region in the Pamirs
 
 # Get DEM data at 30m resolution
-dem = cgt.data.get_dem_copernicus30(
+dem = cg.data.get_dem_copernicus30(
     bbox_WSEN=bbox,
     res_m=30,
     epsg=32643,  # UTM 43N (default for Pamir region)
@@ -31,7 +31,7 @@ dem = cgt.data.get_dem_copernicus30(
 Get ESA World Cover data for your region:
 
 ```python
-landcover = cgt.data.get_esa_land_cover(
+landcover = cg.data.get_esa_land_cover(
     bbox_WSEN=bbox,
     res_m=30,
     epsg=32643
@@ -46,7 +46,7 @@ Calculate snow melt timing using Sentinel-2 data:
 
 ```python
 # Get snow melt day of year for multiple years
-snow_melt = cgt.data.get_snow_melt_doy(
+snow_melt = cg.data.get_snow_melt_doy(
     bbox_WSEN=bbox,
     years=range(2018, 2025),  # Analysis period
     res_m=30,
@@ -60,10 +60,10 @@ Get Randolph Glacier Inventory (RGI) data for your region:
 
 ```python
 # Get glacier data as a raster matching your DEM
-glacier_data = cgt.data.get_randolph_glacier_inventory(target_dem=dem)
+glacier_data = cg.data.get_randolph_glacier_inventory(target_dem=dem)
 
 # Or get raw vector data
-glacier_vector = cgt.data.get_randolph_glacier_inventory()
+glacier_vector = cg.data.get_randolph_glacier_inventory()
 ```
 
 ## ERA5 Forcing Data
@@ -91,7 +91,7 @@ forcing = era5.get_data(
 You can smooth any spatial data using a rolling mean filter:
 
 ```python
-smoothed_dem = cgt.data.smooth_data(
+smoothed_dem = cg.data.smooth_data(
     dem,
     kernel_size=3,
     n_iters=2
@@ -103,7 +103,7 @@ smoothed_dem = cgt.data.smooth_data(
 Get raw Sentinel-2 data for custom analysis:
 
 ```python
-sentinel_data = cgt.data.get_sentinel2_data(
+sentinel_data = cg.data.get_sentinel2_data(
     bbox_WSEN=bbox,
     years=range(2018, 2025),
     assets=['SCL'],  # Scene Classification Layer
