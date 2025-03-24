@@ -118,13 +118,13 @@
 <pre class="highlight"><code class="language-bash">pip install "cryogrid_pytools[data]"</code></pre>
 <h2 id="digital-elevation-model-dem">Digital Elevation Model (DEM)</h2>
 <p>You can download DEM data from the Copernicus 30m dataset:</p>
-<pre class="highlight"><code class="language-python">import cryogrid_pytools as cgt
+<pre class="highlight"><code class="language-python">import cryogrid_pytools as cg
 
 # Define your area of interest (West, South, East, North)
 bbox = [70.0, 35.0, 71.0, 36.0]  # Example for a region in the Pamirs
 
 # Get DEM data at 30m resolution
-dem = cgt.data.get_dem_copernicus30(
+dem = cg.data.get_dem_copernicus30(
     bbox_WSEN=bbox,
     res_m=30,
     epsg=32643,  # UTM 43N (default for Pamir region)
@@ -133,7 +133,7 @@ dem = cgt.data.get_dem_copernicus30(
 )</code></pre>
 <h2 id="land-cover-data">Land Cover Data</h2>
 <p>Get ESA World Cover data for your region:</p>
-<pre class="highlight"><code class="language-python">landcover = cgt.data.get_esa_land_cover(
+<pre class="highlight"><code class="language-python">landcover = cg.data.get_esa_land_cover(
     bbox_WSEN=bbox,
     res_m=30,
     epsg=32643
@@ -142,7 +142,7 @@ dem = cgt.data.get_dem_copernicus30(
 <h2 id="snow-melt-timing">Snow Melt Timing</h2>
 <p>Calculate snow melt timing using Sentinel-2 data:</p>
 <pre class="highlight"><code class="language-python"># Get snow melt day of year for multiple years
-snow_melt = cgt.data.get_snow_melt_doy(
+snow_melt = cg.data.get_snow_melt_doy(
     bbox_WSEN=bbox,
     years=range(2018, 2025),  # Analysis period
     res_m=30,
@@ -151,10 +151,10 @@ snow_melt = cgt.data.get_snow_melt_doy(
 <h2 id="glacier-data">Glacier Data</h2>
 <p>Get Randolph Glacier Inventory (RGI) data for your region:</p>
 <pre class="highlight"><code class="language-python"># Get glacier data as a raster matching your DEM
-glacier_data = cgt.data.get_randolph_glacier_inventory(target_dem=dem)
+glacier_data = cg.data.get_randolph_glacier_inventory(target_dem=dem)
 
 # Or get raw vector data
-glacier_vector = cgt.data.get_randolph_glacier_inventory()</code></pre>
+glacier_vector = cg.data.get_randolph_glacier_inventory()</code></pre>
 <h2 id="era5-forcing-data">ERA5 Forcing Data</h2>
 <p>The module provides access to ERA5 climate forcing data through the <code>era5_downloader</code> package:</p>
 <pre class="highlight"><code class="language-python">from cryogrid_pytools.data import make_era5_downloader
@@ -171,14 +171,14 @@ forcing = era5.get_data(
 <h2 id="advanced-usage">Advanced Usage</h2>
 <h3 id="smoothing-data">Smoothing Data</h3>
 <p>You can smooth any spatial data using a rolling mean filter:</p>
-<pre class="highlight"><code class="language-python">smoothed_dem = cgt.data.smooth_data(
+<pre class="highlight"><code class="language-python">smoothed_dem = cg.data.smooth_data(
     dem,
     kernel_size=3,
     n_iters=2
 )</code></pre>
 <h3 id="working-with-sentinel-2-data">Working with Sentinel-2 Data</h3>
 <p>Get raw Sentinel-2 data for custom analysis:</p>
-<pre class="highlight"><code class="language-python">sentinel_data = cgt.data.get_sentinel2_data(
+<pre class="highlight"><code class="language-python">sentinel_data = cg.data.get_sentinel2_data(
     bbox_WSEN=bbox,
     years=range(2018, 2025),
     assets=['SCL'],  # Scene Classification Layer
