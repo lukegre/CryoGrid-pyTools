@@ -911,6 +911,14 @@ data = [
     { name = "stackstac" },
     { name = "xarray-raster-vector" },
 ]
+docs = [
+    { name = "mkdocs" },
+    { name = "mkdocs-material" },
+    { name = "mkdocs-rtd-dropdown" },
+    { name = "mkdocstrings" },
+    { name = "mkdocstrings-python" },
+    { name = "pymdown-extensions" },
+]
 viz = [
     { name = "folium" },
     { name = "geopandas" },
@@ -920,12 +928,6 @@ viz = [
 [package.dev-dependencies]
 dev = [
     { name = "ipykernel" },
-    { name = "mkdocs" },
-    { name = "mkdocs-material" },
-    { name = "mkdocs-rtd-dropdown" },
-    { name = "mkdocstrings" },
-    { name = "mkdocstrings-python" },
-    { name = "pymdown-extensions" },
 ]
 
 [package.metadata]
@@ -944,6 +946,11 @@ requires-dist = [
     { name = "mapclassify", marker = "extra == 'viz'", specifier = ">=2.8.1" },
     { name = "matplotlib" },
     { name = "memoization", marker = "extra == 'data'", specifier = ">=0.4.0" },
+    { name = "mkdocs", marker = "extra == 'docs'", specifier = ">=1.5.0" },
+    { name = "mkdocs-material", marker = "extra == 'docs'", specifier = ">=8.2.10" },
+    { name = "mkdocs-rtd-dropdown", marker = "extra == 'docs'", specifier = ">=1.0.2" },
+    { name = "mkdocstrings", marker = "extra == 'docs'", specifier = ">=0.24.0" },
+    { name = "mkdocstrings-python", marker = "extra == 'docs'", specifier = ">=1.7.0" },
     { name = "munch" },
     { name = "numpy", specifier = ">=2.0" },
     { name = "openpyxl" },
@@ -951,6 +958,7 @@ requires-dist = [
     { name = "pip", specifier = ">=24" },
     { name = "planetary-computer", marker = "extra == 'data'", specifier = ">=1.0.0" },
     { name = "pooch", marker = "extra == 'data'", specifier = ">=1.8.2" },
+    { name = "pymdown-extensions", marker = "extra == 'docs'", specifier = ">=10.14.1" },
     { name = "pystac-client", marker = "extra == 'data'", specifier = ">=0.8.3" },
     { name = "rioxarray", marker = "extra == 'data'", specifier = ">=0.15.0" },
     { name = "scipy", specifier = ">=1.13.1" },
@@ -958,18 +966,10 @@ requires-dist = [
     { name = "xarray", specifier = ">=2024" },
     { name = "xarray-raster-vector", marker = "extra == 'data'", git = "https://github.com/lukegre/xarray-raster-vector.git" },
 ]
-provides-extras = ["data", "viz"]
+provides-extras = ["data", "docs", "viz"]
 
 [package.metadata.requires-dev]
-dev = [
-    { name = "ipykernel", specifier = ">=6.29.5" },
-    { name = "mkdocs", specifier = ">=1.5.0" },
-    { name = "mkdocs-material", specifier = ">=8.2.10" },
-    { name = "mkdocs-rtd-dropdown", specifier = ">=1.0.2" },
-    { name = "mkdocstrings", specifier = ">=0.24.0" },
-    { name = "mkdocstrings-python", specifier = ">=1.7.0" },
-    { name = "pymdown-extensions", specifier = ">=10.14.1" },
-]
+dev = [{ name = "ipykernel", specifier = ">=6.29.5" }]
 
 [[package]]
 name = "cycler"
