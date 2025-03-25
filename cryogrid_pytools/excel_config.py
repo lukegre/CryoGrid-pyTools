@@ -168,7 +168,7 @@ class CryoGridConfigExcel:
         return fname
 
     def get_output_max_depth(
-        self, output_class="OUT_regridded_FCI2", depth_key="depth_below_ground"
+        self, output_class="OUT_regridded", depth_key="depth_below_ground"
     ) -> int:
         """
         Get the maximum depth of the output file from the Excel configuration.
@@ -176,7 +176,7 @@ class CryoGridConfigExcel:
         Parameters
         ----------
         output_class : str, optional
-            The class name to search for in the configuration, by default 'OUT_regridded_FCI2'.
+            The class name to search for in the configuration, by default 'OUT_regridded'.
 
         Returns
         -------
@@ -266,8 +266,9 @@ class CryoGridConfigExcel:
         else:
             return value[0]
 
-    def get_classes(self):
+    def get_classes(self) -> dict:
         """
+        Useful to find all the classes available in the Excel file.
         Returns a dictionary of class names and their corresponding row indices
         from the Excel file. To use as a reference for get_class(<class_name>).
 

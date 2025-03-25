@@ -78,4 +78,5 @@ dev = [
     "mkdocstrings>=0.24.0",
     "mkdocstrings-python>=1.7.0",
     "pymdown-extensions>=10.14.1",
+    "mkdocs-material>=8.2.10",
 ]

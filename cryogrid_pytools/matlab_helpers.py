@@ -6,7 +6,7 @@ from loguru import logger
 
 
 def read_mat_struct_as_dataset(
-    fname, drop_keys=None, index=None, index_is_datenum=False
+    fname, drop_keys=[], index=None, index_is_datenum=False
 ) -> xr.Dataset:
     """
     Read a MATLAB struct from a .mat file and return it as an xarray dataset.
@@ -16,15 +16,15 @@ def read_mat_struct_as_dataset(
     fname : str
         Path to the .mat file. All variables in the struct are assumed to have
         the same dimensions and shape (except for the index columns).
-    drop_keys : list, optional [default=None]
+    drop_keys : list, optional
         List of keys to drop from the struct. If None is passed [default], then
         no keys are dropped. This can be used when one of the struct fields is
         not the same shape as the others. Any dropped variables will be added
         back as DataArrays with their own dim.
-    index : str, tuple, optional [default=None]
+    index : str, tuple, optional
         Name of the index column. If None is passed [default], then no index is set.
         If a tuple is passed, then the corresponding columns are used as a multiindex.
-    index_is_datenum : bool, optional [default=False]
+    index_is_datenum : bool, optional
         If True, then the index is converted from MATLAB datenum to a pandas.Timestamp.
 
     Returns
@@ -35,10 +35,7 @@ def read_mat_struct_as_dataset(
     """
     data = read_mat_struct_flat_as_dict(fname)
 
-    dropped = {}
-    if drop_keys is not None:
-        for key in drop_keys:
-            dropped[key] = data.pop(key, None)
+    dropped = {k: data.pop(k, None) for k in drop_keys}
 
     ds = flat_dict_to_xarray(data, index=index, index_is_datenum=index_is_datenum)
 
@@ -76,14 +73,16 @@ def flat_dict_to_xarray(data: dict, index=None, index_is_datenum=False) -> xr.Da
     except ValueError as e:
         shapes = {k: data[k].shape for k in data}
         shapes = "\n".join([f"{k}: {v}" for k, v in shapes.items()])
-        logger.error(
-            f"Error converting dictionary to DataFrame: {e}\nCheck the length of the arrays and use drop_keys=['name']\n{shapes}"
+        raise ValueError(
+            f"Error converting dictionary to DataFrame: {e}\n"
+            f"Check the length of the arrays and use drop_keys=['name']\n{shapes}"
         )
-        return
+
     if index is not None:
         df = df.set_index(index)
     else:  # if no index, then sequential and +1 to match with MATLAB
         df.index += 1
+
     ds = df.to_xarray()
 
     if index_is_datenum:

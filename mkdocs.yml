@@ -1,6 +1,20 @@
 site_name: CryoGrid-pyTools
 theme:
-  name: readthedocs
+  icon:
+    logo: material/snowflake
+  name: material
+  palette:
+  - scheme: default
+    primary: blue
+    toggle:
+      icon: material/brightness-7
+      name: Switch to dark mode
+  # Palette toggle for dark mode
+  - scheme: slate
+    primary: blue
+    toggle:
+      icon: material/brightness-4
+      name: Switch to light mode
 
 repo_url: https://github.com/lukegre/CryoGrid-pyTools
 repo_name: GitHub
@@ -26,14 +40,17 @@ plugins:
         python:
           paths: [cryogrid_pytools]
           options:
-            show_source: true
+            heading_level: 3
+            show_source: false
+            show_signature: false
             show_root_heading: true
+            docstring_style: numpy
 
 nav:
   - Home: index.md
   - Installation: installation.md
+  - Getting Started: getting-started.md
   - Usage:
-    - Getting Started: usage/getting-started.md
     - Reading CryoGrid Output: usage/reading-output.md
     - Reading MATLAB Structs: usage/reading-matlab.md
     - Working with Forcing Data: usage/forcing.md
