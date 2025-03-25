@@ -1,792 +1,956 @@
-<!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link rel="shortcut icon" href="../img/favicon.ico" />
-    <title>API Reference - CryoGrid-pyTools</title>
-    <link rel="stylesheet" href="../css/theme.css" />
-    <link rel="stylesheet" href="../css/theme_extra.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
-        <link href="../assets/_mkdocstrings.css" rel="stylesheet" />
-        <link href="../stylesheets/extra.css" rel="stylesheet" />
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
     
-      <script>
-        // Current page data
-        var mkdocs_page_name = "API Reference";
-        var mkdocs_page_input_path = "api-reference.md";
-        var mkdocs_page_url = null;
-      </script>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../usage/spatial-data/">
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.9">
     
-    <!--[if lt IE 9]>
-      <script src="../js/html5shiv.min.js"></script>
-    <![endif]-->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-      <script>hljs.highlightAll();</script> 
-</head>
+    
+      
+        <title>API Reference - CryoGrid-pyTools</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.4af4bdda.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
 
-<body class="wy-body-for-nav" role="document">
 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
-    <div class="wy-side-scroll">
-      <div class="wy-side-nav-search">
-          <a href=".." class="icon icon-home"> CryoGrid-pyTools
-        </a><div role="search">
-  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
-      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
-  </form>
-</div>
-      </div>
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
 
-      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul>
-                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
-                </li>
-              </ul>
-              <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
-                </li>
-              </ul>
-              <p class="caption"><span class="caption-text">Usage</span></p>
-              <ul>
-                  <li class="toctree-l1"><a class="reference internal" href="../usage/getting-started/">Getting Started</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../usage/reading-output/">Reading CryoGrid Output</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../usage/reading-matlab/">Reading MATLAB Structs</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../usage/forcing/">Working with Forcing Data</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../usage/spatial-data/">Spatial Data and Forcing</a>
-                  </li>
-              </ul>
-              <ul class="current">
-                <li class="toctree-l1 current"><a class="reference internal current" href="#">API Reference</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#main-functions">Main Functions</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#cryogrid_pytools.read_OUT_regridded_file">read_OUT_regridded_file</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.read_OUT_regridded_file--parameters">Parameters</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.read_OUT_regridded_file--returns">Returns</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.read_OUT_regridded_file--notes">Notes</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#cryogrid_pytools.read_OUT_regridded_clusters">read_OUT_regridded_clusters</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.read_OUT_regridded_clusters--parameters">Parameters</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.read_OUT_regridded_clusters--returns">Returns</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#cryogrid_pytools.matlab_helpers.read_mat_struct_flat_as_dict">read_mat_struct_flat_as_dict</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.matlab_helpers.read_mat_struct_flat_as_dict--parameters">Parameters</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.matlab_helpers.read_mat_struct_flat_as_dict--returns">Returns</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#forcing-functions">Forcing Functions</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#cryogrid_pytools.forcing.read_mat_ear5">read_mat_ear5</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.forcing.read_mat_ear5--parameters">Parameters</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.forcing.read_mat_ear5--returns">Returns</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#cryogrid_pytools.forcing.era5_to_matlab">era5_to_matlab</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.forcing.era5_to_matlab--parameters">Parameters</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.forcing.era5_to_matlab--returns">Returns</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#configuration-functions">Configuration Functions</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel">CryoGridConfigExcel</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.__init__">__init__</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.__init__--parameters">Parameters</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.check_files_exist">check_files_exist</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.check_forcing_fname_times">check_forcing_fname_times</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.check_forcing_fname_times--raises">Raises</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.check_strat_layers">check_strat_layers</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.get_class">get_class</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.get_class--parameters">Parameters</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.get_class--returns">Returns</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.get_class_filepath">get_class_filepath</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.get_class_filepath--parameters">Parameters</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.get_class_filepath--returns">Returns</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.get_class_filepath--raises">Raises</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.get_classes">get_classes</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.get_classes--returns">Returns</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.get_coord_path">get_coord_path</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.get_coord_path--returns">Returns</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.get_dataset_paths">get_dataset_paths</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.get_dataset_paths--returns">Returns</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.get_dem_path">get_dem_path</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.get_dem_path--returns">Returns</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.get_forcing_path">get_forcing_path</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.get_forcing_path--parameters">Parameters</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.get_forcing_path--returns">Returns</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.get_output_max_depth">get_output_max_depth</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.get_output_max_depth--parameters">Parameters</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.get_output_max_depth--returns">Returns</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.get_start_end_times">get_start_end_times</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.CryoGridConfigExcel.get_start_end_times--returns">Returns</a>
-    </li>
-        </ul>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#cryogrid_pytools.excel_config.check_strat_layer_values">check_strat_layer_values</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.excel_config.check_strat_layer_values--parameters">Parameters</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.excel_config.check_strat_layer_values--raises">Raises</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.excel_config.check_strat_layer_values--notes">Notes</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.check_strat_layer_values--definitions">Definitions</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#cryogrid_pytools.excel_config.check_strat_layer_values--checks">Checks</a>
-    </li>
-        </ul>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#data-module-functions">Data Module Functions</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#cryogrid_pytools.data.get_dem_copernicus30">get_dem_copernicus30</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.data.get_dem_copernicus30--parameters">Parameters</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.data.get_dem_copernicus30--returns">Returns</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#cryogrid_pytools.data.get_esa_land_cover">get_esa_land_cover</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.data.get_esa_land_cover--parameters">Parameters</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.data.get_esa_land_cover--returns">Returns</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#cryogrid_pytools.data.get_snow_melt_doy">get_snow_melt_doy</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.data.get_snow_melt_doy--parameters">Parameters</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.data.get_snow_melt_doy--returns">Returns</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#cryogrid_pytools.data.get_randolph_glacier_inventory">get_randolph_glacier_inventory</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.data.get_randolph_glacier_inventory--parameters">Parameters</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#cryogrid_pytools.data.get_randolph_glacier_inventory--returns">Returns</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#utility-functions">Utility Functions</a>
-    </li>
-    </ul>
-                </li>
-              </ul>
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#api-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="CryoGrid-pyTools" class="md-header__button md-logo" aria-label="CryoGrid-pyTools" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m20.79 13.95-2.33.62-2-1.13v-2.88l2-1.13 2.33.62.52-1.93-1.77-.47.46-1.77-1.93-.52-.62 2.33-2 1.13L13 7.38V5.12l1.71-1.71L13.29 2 12 3.29 10.71 2 9.29 3.41 11 5.12v2.26L8.5 8.82l-2-1.13-.58-2.33L4 5.88l.47 1.77-1.77.47.52 1.93 2.33-.62 2 1.13v2.89l-2 1.13-2.33-.62-.52 1.93 1.77.47L4 18.12l1.93.52.62-2.33 2-1.13L11 16.62v2.26l-1.71 1.71L10.71 22 12 20.71 13.29 22l1.41-1.41-1.7-1.71v-2.26l2.5-1.45 2 1.13.62 2.33 1.88-.51-.47-1.77 1.77-.47zM9.5 10.56 12 9.11l2.5 1.45v2.88L12 14.89l-2.5-1.45z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CryoGrid-pyTools
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              API Reference
+            
+          </span>
+        </div>
       </div>
     </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="..">CryoGrid-pyTools</a>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
         
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
       </nav>
-      <div class="wy-nav-content">
-        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
-  <ul class="wy-breadcrumbs">
-    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
-      <li class="breadcrumb-item active">API Reference</li>
-    <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/lukegre/CryoGrid-pyTools/edit/master/docs/api-reference.md" class="icon icon-github"> Edit on GitHub</a>
-    </li>
-  </ul>
-  <hr/>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-            <div class="section" itemprop="articleBody">
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/lukegre/CryoGrid-pyTools" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
               
-                <h1 id="api-reference">API Reference</h1>
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="CryoGrid-pyTools" class="md-nav__button md-logo" aria-label="CryoGrid-pyTools" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m20.79 13.95-2.33.62-2-1.13v-2.88l2-1.13 2.33.62.52-1.93-1.77-.47.46-1.77-1.93-.52-.62 2.33-2 1.13L13 7.38V5.12l1.71-1.71L13.29 2 12 3.29 10.71 2 9.29 3.41 11 5.12v2.26L8.5 8.82l-2-1.13-.58-2.33L4 5.88l.47 1.77-1.77.47.52 1.93 2.33-.62 2 1.13v2.89l-2 1.13-2.33-.62-.52 1.93 1.77.47L4 18.12l1.93.52.62-2.33 2-1.13L11 16.62v2.26l-1.71 1.71L10.71 22 12 20.71 13.29 22l1.41-1.41-1.7-1.71v-2.26l2.5-1.45 2 1.13.62 2.33 1.88-.51-.47-1.77 1.77-.47zM9.5 10.56 12 9.11l2.5 1.45v2.88L12 14.89l-2.5-1.45z"/></svg>
+
+    </a>
+    CryoGrid-pyTools
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/lukegre/CryoGrid-pyTools" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Usage
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Usage
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/reading-output/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Reading CryoGrid Output
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/reading-matlab/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Reading MATLAB Structs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/forcing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Working with Forcing Data
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/spatial-data/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Spatial Data and Forcing
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#main-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Main Functions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Main Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.CryoGridConfigExcel" class="md-nav__link">
+    <span class="md-ellipsis">
+      CryoGridConfigExcel
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CryoGridConfigExcel">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.CryoGridConfigExcel.get_class" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_class
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.CryoGridConfigExcel.get_classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_classes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.CryoGridConfigExcel.get_coord_path" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_coord_path
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.CryoGridConfigExcel.get_dem_path" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_dem_path
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.CryoGridConfigExcel.get_output_max_depth" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_output_max_depth
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.read_OUT_regridded_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      read_OUT_regridded_file
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.read_OUT_regridded_clusters" class="md-nav__link">
+    <span class="md-ellipsis">
+      read_OUT_regridded_clusters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.read_mat_struct_flat_as_dict" class="md-nav__link">
+    <span class="md-ellipsis">
+      read_mat_struct_flat_as_dict
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.read_mat_struct_as_dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      read_mat_struct_as_dataset
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#era5-forcing" class="md-nav__link">
+    <span class="md-ellipsis">
+      ERA5 Forcing
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ERA5 Forcing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.forcing.read_mat_ear5" class="md-nav__link">
+    <span class="md-ellipsis">
+      read_mat_ear5
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.forcing.era5_to_matlab" class="md-nav__link">
+    <span class="md-ellipsis">
+      era5_to_matlab
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spatial-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Spatial Data
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Spatial Data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.data.get_dem_copernicus30" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_dem_copernicus30
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.data.get_esa_land_cover" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_esa_land_cover
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.data.get_snow_melt_doy" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_snow_melt_doy
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.data.get_randolph_glacier_inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_randolph_glacier_inventory
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#main-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Main Functions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Main Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.CryoGridConfigExcel" class="md-nav__link">
+    <span class="md-ellipsis">
+      CryoGridConfigExcel
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CryoGridConfigExcel">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.CryoGridConfigExcel.get_class" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_class
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.CryoGridConfigExcel.get_classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_classes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.CryoGridConfigExcel.get_coord_path" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_coord_path
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.CryoGridConfigExcel.get_dem_path" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_dem_path
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.CryoGridConfigExcel.get_output_max_depth" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_output_max_depth
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.read_OUT_regridded_file" class="md-nav__link">
+    <span class="md-ellipsis">
+      read_OUT_regridded_file
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.read_OUT_regridded_clusters" class="md-nav__link">
+    <span class="md-ellipsis">
+      read_OUT_regridded_clusters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.read_mat_struct_flat_as_dict" class="md-nav__link">
+    <span class="md-ellipsis">
+      read_mat_struct_flat_as_dict
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.read_mat_struct_as_dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      read_mat_struct_as_dataset
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#era5-forcing" class="md-nav__link">
+    <span class="md-ellipsis">
+      ERA5 Forcing
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ERA5 Forcing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.forcing.read_mat_ear5" class="md-nav__link">
+    <span class="md-ellipsis">
+      read_mat_ear5
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.forcing.era5_to_matlab" class="md-nav__link">
+    <span class="md-ellipsis">
+      era5_to_matlab
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spatial-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Spatial Data
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Spatial Data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.data.get_dem_copernicus30" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_dem_copernicus30
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.data.get_esa_land_cover" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_esa_land_cover
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.data.get_snow_melt_doy" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_snow_melt_doy
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cryogrid_pytools.data.get_randolph_glacier_inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_randolph_glacier_inventory
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="api-reference">API Reference</h1>
 <p>This page contains the detailed API reference for CryoGrid-pyTools.</p>
 <h2 id="main-functions">Main Functions</h2>
-
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="cryogrid_pytools.read_OUT_regridded_file" class="doc doc-heading">
-            <code class="highlight language-python">cryogrid_pytools.read_OUT_regridded_file(fname, deepest_point=None)</code>
-
-</h2>
-
-
-    <div class="doc doc-contents first">
-
-        <p>Read a CryoGrid OUT_regridded[_FCI2] file and return it as an xarray dataset.</p>
-<h4 id="cryogrid_pytools.read_OUT_regridded_file--parameters">Parameters</h4>
-<p>fname : str
-    Path to the .mat file
-deepest_point : float, optional
-    Represents the deepest depth of the profile relative to the surfface.
-    If not provided, then elevation is returned. Negative values represent
-    depths below the surface.</p>
-<h4 id="cryogrid_pytools.read_OUT_regridded_file--returns">Returns</h4>
-<p>ds : xarray.Dataset
-    Dataset with dimensions 'time' and 'level'. The <code>elevation</code> coordinate
-    represents the elevation above sea level based on the DEM. If
-    deepest_point is provided, then an additional coordinate, <code>depth</code>,
-    represents depth above surface.</p>
-<h4 id="cryogrid_pytools.read_OUT_regridded_file--notes">Notes</h4>
-<pre class="highlight"><code>For plotting, use `ds['variable'].plot(y='depth'/'elevation').</code></pre>
-
-
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/outputs.py</code></summary>
-              <pre class="highlight"><code class="language-python">def read_OUT_regridded_file(fname: str, deepest_point=None) -&gt; xr.Dataset:
-    """
-    Read a CryoGrid OUT_regridded[_FCI2] file and return it as an xarray dataset.
-
-    Parameters
-    ----------
-    fname : str
-        Path to the .mat file
-    deepest_point : float, optional
-        Represents the deepest depth of the profile relative to the surfface.
-        If not provided, then elevation is returned. Negative values represent
-        depths below the surface.
-
-    Returns
-    -------
-    ds : xarray.Dataset
-        Dataset with dimensions 'time' and 'level'. The `elevation` coordinate
-        represents the elevation above sea level based on the DEM. If
-        deepest_point is provided, then an additional coordinate, `depth`,
-        represents depth above surface.
-
-    Notes
-    -----
-        For plotting, use `ds['variable'].plot(y='depth'/'elevation').
-    """
-    from cryogrid_pytools.matlab_helpers import (
-        matlab2datetime,
-        read_mat_struct_flat_as_dict,
-    )
-
-    dat = read_mat_struct_flat_as_dict(fname)
-
-    for key in dat:
-        dat[key] = dat[key].squeeze()
-
-    ds = xr.Dataset()
-    ds.attrs["filename"] = fname
-
-    times = matlab2datetime(dat.pop("timestamp"))
-    elev = dat.pop("depths")
-
-    for key in dat:
-        ds[key] = xr.DataArray(
-            data=dat[key].astype("float32"),
-            dims=["level", "time"],
-            coords={"time": times},
-        )
-
-    ds = ds.chunk(dict(time=-1))
-
-    ds["elevation"] = xr.DataArray(
-        data=elev,
-        dims=["level"],
-        attrs={"units": "m", "long_name": "Elevation above sea level"},
-    )
-
-    ds = ds.set_coords("elevation")
-
-    if deepest_point is not None:
-        dz = deepest_point - ds["elevation"].min()
-        ds["depth"] = (ds["elevation"] + dz).assign_attrs(
-            units="m", long_name="Depth relative to surface"
-        )
-        ds = ds.set_coords("depth")
-
-    ds = ds.chunk(dict(time=-1))
-
-    return ds</code></pre>
-            </details>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="cryogrid_pytools.read_OUT_regridded_clusters" class="doc doc-heading">
-            <code class="highlight language-python">cryogrid_pytools.read_OUT_regridded_clusters(fname_glob, deepest_point, gridcell_func=lambda fname: fname.split('_')[-2], **joblib_kwargs)</code>
-
-</h2>
-
-
-    <div class="doc doc-contents first">
-
-        <p>Reads multiple files that are put out by the OUT_regridded class (and _FCI2)</p>
-<h4 id="cryogrid_pytools.read_OUT_regridded_clusters--parameters">Parameters</h4>
-<p>fname_glob: str
-    Path of the files that you want to read in.
-    Use same notation as for glob(). Note that it expects
-    name to follow the format <code>some_project_name_GRIDCELL_ID_date.mat</code>
-    where GRIDCELL_ID will be extracted to assign the gridcell dimension.
-    These GRIDCELL_IDs correspond with the index of the data in the
-    flattened array.
-deepest_point: float
-    When setting the configuration for when the data should be
-    saved, the maximum depth is set. Give this number as a
-    negative number here.
-joblib_kwargs: dict
-    Uses the joblib library to do parallel reading of the files.
-    Defaults are: n_jobs=-1, backend='threading', verbose=1</p>
-<h4 id="cryogrid_pytools.read_OUT_regridded_clusters--returns">Returns</h4>
-<p>xr.Dataset
-    An array with dimensions gridcell, depth, time.
-    Variables depend on how the class was configured, but
-    elevation will also be a variable.</p>
-
-
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/outputs.py</code></summary>
-              <pre class="highlight"><code class="language-python">def read_OUT_regridded_clusters(
-    fname_glob: str,
-    deepest_point: float,
-    gridcell_func=lambda fname: fname.split("_")[-2],
-    **joblib_kwargs,
-) -&gt; xr.Dataset:
-    """
-    Reads multiple files that are put out by the OUT_regridded class (and _FCI2)
-
-    Parameters
-    ----------
-    fname_glob: str
-        Path of the files that you want to read in.
-        Use same notation as for glob(). Note that it expects
-        name to follow the format `some_project_name_GRIDCELL_ID_date.mat`
-        where GRIDCELL_ID will be extracted to assign the gridcell dimension.
-        These GRIDCELL_IDs correspond with the index of the data in the
-        flattened array.
-    deepest_point: float
-        When setting the configuration for when the data should be
-        saved, the maximum depth is set. Give this number as a
-        negative number here.
-    joblib_kwargs: dict
-        Uses the joblib library to do parallel reading of the files.
-        Defaults are: n_jobs=-1, backend='threading', verbose=1
-
-    Returns
-    -------
-    xr.Dataset
-        An array with dimensions gridcell, depth, time.
-        Variables depend on how the class was configured, but
-        elevation will also be a variable.
-    """
-    import inspect
-
-    from .utils import regex_glob
-
-    # get the file list
-    flist = regex_glob(fname_glob)
-    # extract the gridcell from the file name
-    gridcell = [gridcell_func(f) for f in flist]
-    digits = [g.isdigit() for g in gridcell]
-
-    if len(flist) == 0:
-        raise FileNotFoundError(f"No files found with {fname_glob}")
-    elif len(gridcell) != len(flist):
-        raise ValueError(f"Could not extract gridcell from file names for {fname_glob}")
-    elif not all(digits):
-        not_digit = np.unique([f for f, d in zip(flist, digits) if not d])
-        bad_func = "".join(inspect.getsource(gridcell_func).split("lambda")[1:]).strip()
-        raise ValueError(
-            f"Check your fname_glob ({fname_glob}) \n or gridcell_func ({bad_func}). \nGridcell ID "
-            f"not a number for the following files:\n{not_digit}"
-        )
-    else:
-        gridcell = [int(g) for g in gridcell]
-
-    list_of_ds = _read_OUT_regridded_parallel(flist, deepest_point, **joblib_kwargs)
-
-    # assign the gridcell dimension so that we can combine the data by coordinates and time
-    list_of_ds = [ds.expand_dims(gridcell=[c]) for ds, c in zip(list_of_ds, gridcell)]
-    ds = xr.combine_by_coords(list_of_ds, combine_attrs="drop_conflicts")
-
-    assert isinstance(ds, xr.Dataset), "Something went wrong with the parallel reading."
-
-    # transpose data so that plotting is quick and easy
-    ds = ds.transpose("gridcell", "level", "time", ...)
-
-    return ds</code></pre>
-            </details>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="cryogrid_pytools.matlab_helpers.read_mat_struct_flat_as_dict" class="doc doc-heading">
-            <code class="highlight language-python">cryogrid_pytools.matlab_helpers.read_mat_struct_flat_as_dict(fname, key=None)</code>
-
-</h2>
-
-
-    <div class="doc doc-contents first">
-
-        <p>Read a MATLAB struct from a .mat file and return it as a dictionary.</p>
-<p>Assumes that the struct is flat, i.e. it does not contain any nested
-structs.</p>
-<h4 id="cryogrid_pytools.matlab_helpers.read_mat_struct_flat_as_dict--parameters">Parameters</h4>
-<p>fname : str
-    Path to the .mat file
-key : str, optional
-    The name of the matlab key in the .mat file. If None is passed [default],
-    then the first key that does not start with an underscore is used.
-    If a string is passed, then the corresponding key is used.</p>
-<h4 id="cryogrid_pytools.matlab_helpers.read_mat_struct_flat_as_dict--returns">Returns</h4>
-<p>data : dict
-    Dictionary with the struct fields as keys and the corresponding
-    data as values.</p>
-
-
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/matlab_helpers.py</code></summary>
-              <pre class="highlight"><code class="language-python">def read_mat_struct_flat_as_dict(fname: str, key=None) -&gt; dict:
-    """
-    Read a MATLAB struct from a .mat file and return it as a dictionary.
-
-    Assumes that the struct is flat, i.e. it does not contain any nested
-    structs.
-
-    Parameters
-    ----------
-    fname : str
-        Path to the .mat file
-    key : str, optional
-        The name of the matlab key in the .mat file. If None is passed [default],
-        then the first key that does not start with an underscore is used.
-        If a string is passed, then the corresponding key is used.
-
-    Returns
-    -------
-    data : dict
-        Dictionary with the struct fields as keys and the corresponding
-        data as values.
-    """
-    from scipy.io import loadmat
-
-    raw = loadmat(fname)
-
-    keys = [k for k in raw.keys() if not k.startswith("_")]
-
-    if key is None:
-        logger.log(
-            5,
-            f"No key specified. Using first key that does not start with an underscore: {keys[0]}",
-        )
-        key = keys[0]
-    elif key not in keys:
-        raise ValueError(
-            f"Key '{key}' not found in .mat file. Available keys are: {keys}"
-        )
-
-    named_array = unnest_matlab_struct_named_array(raw[key])
-    data = {k: named_array[k].squeeze() for k in named_array.dtype.names}
-
-    return data</code></pre>
-            </details>
-    </div>
-
-</div><h2 id="forcing-functions">Forcing Functions</h2>
-
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="cryogrid_pytools.forcing.read_mat_ear5" class="doc doc-heading">
-            <code class="highlight language-python">cryogrid_pytools.forcing.read_mat_ear5(filename)</code>
-
-</h2>
-
-
-    <div class="doc doc-contents first">
-
-        <p>Read the ERA5.mat forcing file for CryoGrid and return a xarray Dataset.</p>
-<h4 id="cryogrid_pytools.forcing.read_mat_ear5--parameters">Parameters</h4>
-<p>filename : str
-    Path to the ERA5.mat file</p>
-<h4 id="cryogrid_pytools.forcing.read_mat_ear5--returns">Returns</h4>
-<p>xr.Dataset
-    Dataset with the variables from the ERA5.mat file</p>
-
-
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/forcing.py</code></summary>
-              <pre class="highlight"><code class="language-python">def read_mat_ear5(filename: str) -&gt; xr.Dataset:
-    """
-    Read the ERA5.mat forcing file for CryoGrid and return a xarray Dataset.
-
-    Parameters
-    ----------
-    filename : str
-        Path to the ERA5.mat file
-
-    Returns
-    -------
-    xr.Dataset
-        Dataset with the variables from the ERA5.mat file
-    """
-    import pathlib
-
-    from .matlab_helpers import read_mat_struct_flat_as_dict
-
-    filename = pathlib.Path(filename).expanduser().absolute().resolve()
-
-    dat = read_mat_struct_flat_as_dict(filename)
-    out = _era5_mat_dict_to_xarray(dat)
-
-    out = out.assign_attrs(
-        info=(
-            "Data read in from CryoGrid ERA5 forcing file. "
-            "Data has been scaled to the original units with some modifications - units are given. "
-            "Data has been transposed from [lon, lat, level, time] --&gt; [time, level, lat, lon]. "
-            "See the ERA5 documentation for more info about the units etc."
-        ),
-        source=filename,
-    )
-
-    return out</code></pre>
-            </details>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="cryogrid_pytools.forcing.era5_to_matlab" class="doc doc-heading">
-            <code class="highlight language-python">cryogrid_pytools.forcing.era5_to_matlab(ds, save_path=None)</code>
-
-</h2>
-
-
-    <div class="doc doc-contents first">
-
-        <p>Convert a merged netCDF file from the Copernicus CDS to
-a dictionary that matches the expected format of
-the CryoGrid.POST_PROC.read_mat_ERA class (in MATLAB).</p>
-<h4 id="cryogrid_pytools.forcing.era5_to_matlab--parameters">Parameters</h4>
-<p>ds : xr.Dataset
-    Dataset from the ERA5 Copernicus CDS with variables required for
-    the CryoGrid.POST_PROC.read_mat_ERA class
-    single_levels   = [u10, v10, sp, d2m, t2m, ssrd, strd, tisr, tp, Zs]
-    pressure_levels = [t, z, q, u, v]
-    Note that Zs in the single levels is a special case since it is only
-    downloaded for a single date at the surface (doesn't change over time)
-save_path : str, optional
-    Path to save the dictionary as a .mat file, by default None, meaning
-    no file is saved and only the dictionary is returned</p>
-<h4 id="cryogrid_pytools.forcing.era5_to_matlab--returns">Returns</h4>
-<p>dict
-    Dictionary with the variables mapped to names that are expected by
-    CryoGrid.POST_PROC.read_mat_ERA</p>
-
-
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/forcing.py</code></summary>
-              <pre class="highlight"><code class="language-python">def era5_to_matlab(ds: xr.Dataset, save_path: str = None) -&gt; dict:
-    """
-    Convert a merged netCDF file from the Copernicus CDS to
-    a dictionary that matches the expected format of
-    the CryoGrid.POST_PROC.read_mat_ERA class (in MATLAB).
-
-    Parameters
-    ----------
-    ds : xr.Dataset
-        Dataset from the ERA5 Copernicus CDS with variables required for
-        the CryoGrid.POST_PROC.read_mat_ERA class
-        single_levels   = [u10, v10, sp, d2m, t2m, ssrd, strd, tisr, tp, Zs]
-        pressure_levels = [t, z, q, u, v]
-        Note that Zs in the single levels is a special case since it is only
-        downloaded for a single date at the surface (doesn't change over time)
-    save_path : str, optional
-        Path to save the dictionary as a .mat file, by default None, meaning
-        no file is saved and only the dictionary is returned
-
-    Returns
-    -------
-    dict
-        Dictionary with the variables mapped to names that are expected by
-        CryoGrid.POST_PROC.read_mat_ERA
-    """
-    import numpy as np
-
-    from .matlab_helpers import datetime2matlab
-
-    # transpose to lon x lat x time (original is time x lat x lon)
-    ds = ds.transpose("longitude", "latitude", "level", "time")
-
-    era = dict()
-    era["dims"] = "lon x lat (x pressure_levels) x time"
-    # while lat and lon have to be [coord x 1]
-    era["lat"] = ds["latitude"].values[:, None]
-    era["lon"] = ds["longitude"].values[:, None]
-    # pressure levels have to be [1 x coord] - only when pressure_levels present
-    era["p"] = ds["level"].values[None] * 100
-    # time for some reason has to be [1 x coord]
-    era["t"] = datetime2matlab(ds.time)[None]
-    # geopotential height at surface
-    era["Zs"] = ds.Zs.values / 9.81  # gravity m/s2
-
-    # single_level variables
-    # wind and pressure (no transformations)
-    era["u10"] = ds["u10"].values
-    era["v10"] = ds["v10"].values
-    era["ps"] = ds["sp"].values
-    # temperature variables (degK -&gt; degC)
-    era["Td2"] = ds["d2m"].values - 273.15
-    era["T2"] = ds["t2m"].values - 273.15
-    # radiation variables (/sec -&gt; /hour)
-    era["SW"] = ds["ssrd"].values / 3600
-    era["LW"] = ds["strd"].values / 3600
-    era["S_TOA"] = ds["tisr"].values / 3600
-    # precipitation (m -&gt; mm)
-    era["P"] = ds["tp"].values * 1000
-
-    # pressure levels
-    era["T"] = ds["t"].values - 273.15  # K to C
-    era["Z"] = ds["z"].values / 9.81  # gravity m/s2
-    era["q"] = ds["q"].values
-    era["u"] = ds["u"].values
-    era["v"] = ds["v"].values
-
-    # scaling factors
-    era["wind_sf"] = 1e-2
-    era["q_sf"] = 1e-6
-    era["ps_sf"] = 1e2
-    era["rad_sf"] = 1e-1
-    era["T_sf"] = 1e-2
-    era["P_sf"] = 1e-2
-
-    # apply scaling factors (done in the original, so we do it here)
-    # wind scaling
-    era["u"] = (era["u"] / era["wind_sf"]).astype(np.int16)
-    era["v"] = (era["v"] / era["wind_sf"]).astype(np.int16)
-    era["u10"] = (era["u10"] / era["wind_sf"]).astype(np.int16)
-    era["v10"] = (era["v10"] / era["wind_sf"]).astype(np.int16)
-    # temperature scaling
-    era["T"] = (era["T"] / era["T_sf"]).astype(np.int16)
-    era["Td2"] = (era["Td2"] / era["T_sf"]).astype(np.int16)
-    era["T2"] = (era["T2"] / era["T_sf"]).astype(np.int16)
-    # humidity scaling
-    era["q"] = (era["q"] / era["q_sf"]).astype(np.uint16)
-    # pressure scaling
-    era["ps"] = (era["ps"] / era["ps_sf"]).astype(np.uint16)
-    # radiation scaling
-    era["SW"] = (era["SW"] / era["rad_sf"]).astype(np.uint16)
-    era["LW"] = (era["LW"] / era["rad_sf"]).astype(np.uint16)
-    era["S_TOA"] = (era["S_TOA"] / era["rad_sf"]).astype(np.uint16)
-    # precipitation scaling
-    era["P"] = (era["P"] / era["P_sf"]).astype(np.uint16)
-    # no scaling for geoportential height
-    era["Z"] = era["Z"].astype(np.int16)
-
-    out = {"era": era}
-
-    if save_path is not None and isinstance(save_path, str):
-        from scipy.io import savemat
-
-        savemat(save_path, out, appendmat=True, do_compression=True)
-
-    return out</code></pre>
-            </details>
-    </div>
-
-</div><h2 id="configuration-functions">Configuration Functions</h2>
 
 
 <div class="doc doc-object doc-class">
 
 
 
-<h2 id="cryogrid_pytools.excel_config.CryoGridConfigExcel" class="doc doc-heading">
-            <code>cryogrid_pytools.excel_config.CryoGridConfigExcel</code>
+<h3 id="cryogrid_pytools.CryoGridConfigExcel" class="doc doc-heading">
+            <code>cryogrid_pytools.CryoGridConfigExcel</code>
 
 
-</h2>
+</h3>
 
 
     <div class="doc doc-contents first">
@@ -801,509 +965,6 @@ and maybe in the future do some checks etc</p>
 
 
 
-              <details class="quote">
-                <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
-                <pre class="highlight"><code class="language-python">class CryoGridConfigExcel:
-    """
-    A class to read CryoGrid Excel configuration files and extract file paths
-    and maybe in the future do some checks etc
-    """
-
-    def __init__(self, fname_xls: str, check_file_paths=True, check_strat_layers=True):
-        """
-        Initialize the CryoGridConfigExcel object.
-
-        Reads in the Excel configuration file and parse the different classes
-        using a pandas DataFrame approach.
-
-        Parameters
-        ----------
-        fname_xls : path-like
-            Path to the CryoGrid Excel configuration file.
-        check_file_paths : bool, default=True, optional
-            If True, perform a check that all files linked in the configuration
-            can be found (path exists)
-        check_strat_layers : bool, default=True, optional
-            If True, perform a check that stratigraphy layer parameters are
-            physically plausible
-        """
-        self.fname = pathlib.Path(fname_xls).resolve()
-        self.root = self._get_root_path()
-        self._df = self._load_xls(fname_xls)
-        logger.success(f"Loaded CryoGrid Excel configuration file: {self.fname}")
-
-        self.fname = Munch()
-        self.fname.dem = self.get_dem_path()
-        self.fname.coords = self.get_coord_path()
-        self.fname.era5 = self.get_forcing_path()
-        self.fname.datasets = self.get_dataset_paths()
-
-        self.time = self.get_start_end_times()
-
-        if check_file_paths:
-            self.check_files_exist()
-        if check_strat_layers:
-            self.check_strat_layers()
-
-        logger.info(
-            f"Start and end times: {self.time.time_start:%Y-%m-%d} - {self.time.time_end:%Y-%m-%d}"
-        )
-
-    def _get_root_path(self):
-        """
-        Find and set the root path by locating the 'run_cryogrid.m' file.
-
-        Returns
-        -------
-        pathlib.Path
-            The discovered root path or the current directory if not found.
-        """
-        path = self.fname.parent
-        while True:
-            flist = path.glob("run_cryogrid.m")
-            if len(list(flist)) &gt; 0:
-                self.root = path
-                logger.info(f"Found root path: {path}")
-                return self.root
-            elif str(path) == "/":
-                logger.warning(
-                    "Could not find root path. Set to current directory. You can change this manually with excel_config.root = pathlib.Path('/path/to/root')"
-                )
-                return pathlib.Path(".")
-            else:
-                path = path.parent
-
-    def get_start_end_times(self):
-        """
-        Retrieve the start and end times from the Excel configuration.
-
-        Returns
-        -------
-        pandas.Series
-            A Series with 'time_start' and 'time_end' as Timestamp objects.
-        """
-        times = self.get_class("set_start_end_time").T.filter(regex="time")
-        times = times.map(
-            lambda x: pd.Timestamp(year=int(x[0]), month=int(x[1]), day=int(x[2]))
-        )
-
-        start = times.start_time.min()
-        end = times.end_time.max()
-        times = pd.Series([start, end], index=["time_start", "time_end"])
-
-        return times
-
-    def get_coord_path(self):
-        """
-        Get the path to the coordinates file from the Excel configuration.
-
-        Returns
-        -------
-        pathlib.Path
-            The file path for coordinates.
-        """
-        fname = self.get_class_filepath(
-            "COORDINATES_FROM_FILE", fname_key="file_name", index=1
-        )
-        return fname
-
-    def get_dataset_paths(self):
-        """
-        Retrieve paths for each dataset from the Excel configuration.
-
-        Returns
-        -------
-        munch.Munch
-            A dictionary-like object mapping dataset variable names to file paths.
-        """
-        paths = (
-            self.get_class_filepath("READ_DATASET", fname_key="filename")
-            .to_frame(name="filepath")
-            .T
-        )
-
-        datasets = self.get_class("READ_DATASET")
-        variable = datasets.T.variable_name
-        paths.loc["variable"] = variable
-
-        paths = Munch(**paths.T.set_index("variable").filepath.to_dict())
-
-        return paths
-
-    def get_dem_path(self):
-        """
-        Get the path for the DEM file from the Excel configuration.
-
-        Returns
-        -------
-        pathlib.Path
-            The DEM file path.
-        """
-        fname = self.get_class_filepath(
-            "DEM", folder_key="folder", fname_key="filename", index=1
-        )
-        return fname
-
-    def get_forcing_path(self, class_name="read_mat_ERA"):
-        """
-        Obtain the forcing file path from the Excel configuration.
-
-        Parameters
-        ----------
-        class_name : str, optional
-            The class name to search for in the configuration, by default 'read_mat_ERA'.
-
-        Returns
-        -------
-        pathlib.Path
-            The forcing file path.
-        """
-        fname = self.get_class_filepath(
-            class_name, folder_key="path", fname_key="filename", index=1
-        )
-        return fname
-
-    def get_output_max_depth(
-        self, output_class="OUT_regridded_FCI2", depth_key="depth_below_ground"
-    ) -&gt; int:
-        """
-        Get the maximum depth of the output file from the Excel configuration.
-
-        Parameters
-        ----------
-        output_class : str, optional
-            The class name to search for in the configuration, by default 'OUT_regridded_FCI2'.
-
-        Returns
-        -------
-        float
-            The maximum depth value.
-        """
-        df = self.get_class(output_class)
-
-        depth = str(df.loc[depth_key].iloc[0])
-        depth = int(depth)
-
-        return depth
-
-    def check_forcing_fname_times(self):
-        """
-        Check if the file name matches the forcing years specified in the Excel configuration.
-
-        Raises
-        ------
-        AssertionError
-            If the forcing years in the file name do not match those in the configuration.
-        """
-        import re
-
-        fname = self.get_forcing_path()
-        times = self.get_start_end_times().dt.year.astype(str).values.tolist()
-
-        fname_years = re.findall(r"[-_]([12][1089][0-9][0-9])", fname.stem)
-
-        assert times == fname_years, (
-            f"File name years do not match the forcing years: forcing {times} != fname {fname_years}"
-        )
-
-    def _load_xls(self, fname_xls: str) -&gt; pd.DataFrame:
-        """
-        Load the Excel file into a DataFrame.
-
-        Parameters
-        ----------
-        fname_xls : str
-            Path to the Excel file.
-
-        Returns
-        -------
-        pandas.DataFrame
-            The loaded data with proper indexing and column names.
-        """
-        import string
-
-        alph = list(string.ascii_uppercase)
-        alphabet_extra = alph + [a + b for a in alph for b in alph]
-
-        df = pd.read_excel(fname_xls, header=None, dtype=str)
-        df.columns = [c for c in alphabet_extra[: df.columns.size]]
-        df.index = df.index + 1
-
-        return df
-
-    def _get_unique_key(self, key: str, col_value="B"):
-        """
-        Retrieve a single unique value for a given key from the Excel data.
-
-        Parameters
-        ----------
-        key : str
-            The key to look for in column 'A'.
-        col_value : str, optional
-            The column to retrieve the value from, by default 'B'.
-
-        Returns
-        -------
-        str or None
-            The found value or None if no value exists.
-
-        Raises
-        ------
-        ValueError
-            If multiple values are found for the given key.
-        """
-        df = self._df
-        idx = df.A == key
-        value = df.loc[idx, col_value].values
-        if len(value) == 0:
-            return None
-        elif len(value) &gt; 1:
-            raise ValueError(f"Multiple values found for key: {key}")
-        else:
-            return value[0]
-
-    def get_classes(self):
-        """
-        Returns a dictionary of class names and their corresponding row indices
-        from the Excel file. To use as a reference for get_class(&lt;class_name&gt;).
-
-        Returns
-        -------
-        dict of int: str
-            A dictionary mapping class names to row indices
-        """
-        df = self._df
-
-        class_idx = []
-        for i in range(len(df)):
-            try:
-                self._find_class_block(i)
-                class_idx.append(i)
-            except Exception:
-                pass
-
-        classes = df.loc[class_idx, "A"].to_dict()
-        return classes
-
-    def get_class_filepath(
-        self, key, folder_key="folder", fname_key="file", index=None
-    ):
-        """
-        Construct a file path from folder and file entries in the Excel configuration.
-
-        Parameters
-        ----------
-        key : str
-            The class name to search for.
-        folder_key : str, optional
-            Key to identify the folder in the DataFrame, by default 'folder'.
-        fname_key : str, optional
-            Key to identify the file name in the DataFrame, by default 'file'.
-        index : int or None, optional
-            If int, return a single entry. Otherwise return all matched entries.
-
-        Returns
-        -------
-        pathlib.Path or pandas.Series
-            The path(s) constructed from the Excel class entries.
-
-        Raises
-        ------
-        AssertionError
-            If multiple folder or filename keys are found.
-        TypeError
-            If index is not int or None.
-        """
-        df = self.get_class(key)
-
-        keys = df.index.values
-        folder_key = keys[[folder_key in k for k in keys]]
-        fname_key = keys[[fname_key in k for k in keys]]
-
-        assert len(folder_key) == 1, f"Multiple folder keys found: {folder_key}"
-        assert len(fname_key) == 1, f"Multiple fname keys found: {fname_key}"
-
-        names = df.loc[[folder_key[0], fname_key[0]]]
-        names = names.apply(lambda ser: self.root / ser.iloc[0] / ser.iloc[1])
-
-        if index is None:
-            return names
-        elif isinstance(index, int):
-            return names.loc[f"{key}_{index}"]
-        else:
-            raise TypeError(f"index must be None or int, not {type(index)}")
-
-    def get_class(self, class_name: str) -&gt; pd.DataFrame:
-        """
-        Return DataFrame blocks representing the specified class from the Excel data.
-
-        Parameters
-        ----------
-        class_name : str
-            The class name to look up (e.g., 'DEM', 'READ_DATASET').
-
-        Returns
-        -------
-        pandas.DataFrame
-            The concatenated DataFrame of class blocks.
-        """
-        df = self._df
-        i0s = df.A == class_name
-        i0s = i0s[i0s].index.values
-
-        blocks = [self._find_class_block(i0) for i0 in i0s]
-        try:
-            df = pd.concat(blocks, axis=1)
-        except Exception:
-            # only intended for debugging
-            df = blocks
-            logger.warning(f"Could not concatenate blocks for class: {class_name}")
-
-        return df
-
-    def _find_class_block(self, class_idx0: int):
-        """
-        Identify and extract the block of rows corresponding to a class definition.
-
-        Parameters
-        ----------
-        class_idx0 : int
-            Starting row index for the class in the Excel data.
-
-        Returns
-        -------
-        pandas.DataFrame
-            The processed block as a DataFrame.
-
-        Raises
-        ------
-        AssertionError
-            If the class structure is missing required indicators.
-        """
-        df = self._df
-
-        class_name = df.A.loc[class_idx0]
-        msg = f"Given class_idx0 ({class_name}) is not a class. Must have 'index' adjacent or on cell up and right."
-        is_index = df.B.loc[class_idx0 - 1 : class_idx0].str.contains("index")
-        assert is_index.any(), msg
-
-        index_idx = is_index.idxmax()
-        class_idx0 = index_idx
-
-        class_idx1 = df.A.loc[class_idx0:] == "CLASS_END"
-        # get first True occurrence
-        class_idx1 = class_idx1.idxmax()
-        class_block = df.loc[class_idx0:class_idx1]
-        class_block = self._process_class_block(class_block)
-
-        return class_block
-
-    def _process_class_block(self, df: pd.DataFrame) -&gt; pd.DataFrame:
-        """
-        Process a raw class block by removing comments, handling special structures, and shaping data.
-
-        Parameters
-        ----------
-        df : pandas.DataFrame
-            A DataFrame slice representing the raw class block.
-
-        Returns
-        -------
-        pandas.DataFrame
-            The cleaned and structured DataFrame of class data.
-
-        Raises
-        ------
-        AssertionError
-            When matrix structures in the block do not match expected format.
-        """
-        """hacky way to process the class block"""
-        # drop CLASS_END row
-        df = df[df.A != "CLASS_END"]
-
-        # if any cell starts with '&gt;', it is a comment
-        df = df.map(lambda x: x if not str(x).startswith("&gt;") else np.nan)
-
-        # drop rows and columns that are all NaN
-        df = df.dropna(axis=1, how="all").dropna(axis=0, how="all")
-        df = df.astype(str)
-
-        # H_LIST and V_MATRIX are special cases
-        contains_matrix = df.map(lambda x: "MATRIX" in x).values
-        contains_vmatrix = df.map(lambda x: "V_MATRIX" in x).values
-        contains_end = df.map(lambda x: "END" in x).values
-
-        ends = np.where(contains_end)
-        if contains_matrix.any():
-            r0, c0 = [a[0] for a in np.where(contains_matrix)]
-
-            assert c0 == 1, "Matrix must be in second column"
-            assert len(ends) == 2, "Only two ENDs are allowed"
-            assert r0 == ends[0][0]
-            assert c0 == ends[1][1]
-
-            r1 = ends[0][1]
-            c1 = ends[1][0]
-
-            arr = df.iloc[r0:r1, c0:c1].values
-            if contains_vmatrix.any():
-                # first column of V_MATRIX is the index but is not in the config file
-                # so we create it. It is one shorter than the num of rows because of header
-                arr[1:, 0] = np.arange(r1 - r0 - 1)
-
-            matrix = pd.DataFrame(arr[1:, 1:], index=arr[1:, 0], columns=arr[0, 1:])
-            matrix.index.name = matrix.columns.name = df.iloc[r0, 0]
-            df = df.drop(index=df.index[r0 : r1 + 1])
-            df.loc[r0, "A"] = matrix.index.name
-            df.loc[r0, "B"] = (matrix.to_dict(),)
-
-        for i, row in df.iterrows():
-            # H_LIST first
-            if row.str.contains("H_LIST").any():
-                r0 = 2
-                r1 = row.str.contains("END").argmax()
-                df.loc[i, "B"] = row.iloc[r0:r1].values.tolist()
-
-        class_category = df.A.iloc[0]
-        class_type = df.A.iloc[1]
-        class_index = df.B.iloc[1]
-        col_name = f"{class_type}_{class_index}"
-
-        df = df.iloc[2:, :2].rename(columns=dict(B=col_name)).set_index("A")
-        df.index.name = class_category
-
-        return df
-
-    def check_strat_layers(self):
-        """
-        Run checks to ensure stratigraphy layers have physically plausible parameter values.
-        """
-        strat_layers = self.get_class("STRAT_layers")
-        logger.info("Checking stratigraphy layers...")
-        for layer in strat_layers:
-            try:
-                check_strat_layer_values(strat_layers[layer].iloc[0])
-                logger.success(f"[{layer}]  parameters passed checks")
-            except ValueError as error:
-                logger.warning(f"[{layer}]  {error}")
-
-    def check_files_exist(self):
-        """
-        Check if all the files in the configuration exist.
-        """
-
-        flist = set(
-            [self.get_forcing_path(), self.get_dem_path(), self.get_coord_path()]
-            + list(self.get_dataset_paths().values())
-        )
-
-        logger.info("Checking file locations...")
-        for f in flist:
-            if not f.exists():
-                logger.warning(f"Cannot find file: {f}")
-            else:
-                logger.success(f"Located file: {f}")</code></pre>
-              </details>
 
 
 
@@ -1320,237 +981,71 @@ and maybe in the future do some checks etc</p>
 <div class="doc doc-object doc-function">
 
 
-<h3 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.__init__" class="doc doc-heading">
-            <code class="highlight language-python">__init__(fname_xls, check_file_paths=True, check_strat_layers=True)</code>
+<h4 id="cryogrid_pytools.CryoGridConfigExcel.get_class" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_class</span></code>
 
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Initialize the CryoGridConfigExcel object.</p>
-<p>Reads in the Excel configuration file and parse the different classes
-using a pandas DataFrame approach.</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.__init__--parameters">Parameters</h5>
-<p>fname_xls : path-like
-    Path to the CryoGrid Excel configuration file.
-check_file_paths : bool, default=True, optional
-    If True, perform a check that all files linked in the configuration
-    can be found (path exists)
-check_strat_layers : bool, default=True, optional
-    If True, perform a check that stratigraphy layer parameters are
-    physically plausible</p>
-
-
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
-              <pre class="highlight"><code class="language-python">def __init__(self, fname_xls: str, check_file_paths=True, check_strat_layers=True):
-    """
-    Initialize the CryoGridConfigExcel object.
-
-    Reads in the Excel configuration file and parse the different classes
-    using a pandas DataFrame approach.
-
-    Parameters
-    ----------
-    fname_xls : path-like
-        Path to the CryoGrid Excel configuration file.
-    check_file_paths : bool, default=True, optional
-        If True, perform a check that all files linked in the configuration
-        can be found (path exists)
-    check_strat_layers : bool, default=True, optional
-        If True, perform a check that stratigraphy layer parameters are
-        physically plausible
-    """
-    self.fname = pathlib.Path(fname_xls).resolve()
-    self.root = self._get_root_path()
-    self._df = self._load_xls(fname_xls)
-    logger.success(f"Loaded CryoGrid Excel configuration file: {self.fname}")
-
-    self.fname = Munch()
-    self.fname.dem = self.get_dem_path()
-    self.fname.coords = self.get_coord_path()
-    self.fname.era5 = self.get_forcing_path()
-    self.fname.datasets = self.get_dataset_paths()
-
-    self.time = self.get_start_end_times()
-
-    if check_file_paths:
-        self.check_files_exist()
-    if check_strat_layers:
-        self.check_strat_layers()
-
-    logger.info(
-        f"Start and end times: {self.time.time_start:%Y-%m-%d} - {self.time.time_end:%Y-%m-%d}"
-    )</code></pre>
-            </details>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.check_files_exist" class="doc doc-heading">
-            <code class="highlight language-python">check_files_exist()</code>
-
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Check if all the files in the configuration exist.</p>
-
-
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
-              <pre class="highlight"><code class="language-python">def check_files_exist(self):
-    """
-    Check if all the files in the configuration exist.
-    """
-
-    flist = set(
-        [self.get_forcing_path(), self.get_dem_path(), self.get_coord_path()]
-        + list(self.get_dataset_paths().values())
-    )
-
-    logger.info("Checking file locations...")
-    for f in flist:
-        if not f.exists():
-            logger.warning(f"Cannot find file: {f}")
-        else:
-            logger.success(f"Located file: {f}")</code></pre>
-            </details>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.check_forcing_fname_times" class="doc doc-heading">
-            <code class="highlight language-python">check_forcing_fname_times()</code>
-
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Check if the file name matches the forcing years specified in the Excel configuration.</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.check_forcing_fname_times--raises">Raises</h5>
-<p>AssertionError
-    If the forcing years in the file name do not match those in the configuration.</p>
-
-
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
-              <pre class="highlight"><code class="language-python">def check_forcing_fname_times(self):
-    """
-    Check if the file name matches the forcing years specified in the Excel configuration.
-
-    Raises
-    ------
-    AssertionError
-        If the forcing years in the file name do not match those in the configuration.
-    """
-    import re
-
-    fname = self.get_forcing_path()
-    times = self.get_start_end_times().dt.year.astype(str).values.tolist()
-
-    fname_years = re.findall(r"[-_]([12][1089][0-9][0-9])", fname.stem)
-
-    assert times == fname_years, (
-        f"File name years do not match the forcing years: forcing {times} != fname {fname_years}"
-    )</code></pre>
-            </details>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.check_strat_layers" class="doc doc-heading">
-            <code class="highlight language-python">check_strat_layers()</code>
-
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Run checks to ensure stratigraphy layers have physically plausible parameter values.</p>
-
-
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
-              <pre class="highlight"><code class="language-python">def check_strat_layers(self):
-    """
-    Run checks to ensure stratigraphy layers have physically plausible parameter values.
-    """
-    strat_layers = self.get_class("STRAT_layers")
-    logger.info("Checking stratigraphy layers...")
-    for layer in strat_layers:
-        try:
-            check_strat_layer_values(strat_layers[layer].iloc[0])
-            logger.success(f"[{layer}]  parameters passed checks")
-        except ValueError as error:
-            logger.warning(f"[{layer}]  {error}")</code></pre>
-            </details>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.get_class" class="doc doc-heading">
-            <code class="highlight language-python">get_class(class_name)</code>
-
-</h3>
+</h4>
 
 
     <div class="doc doc-contents ">
 
         <p>Return DataFrame blocks representing the specified class from the Excel data.</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.get_class--parameters">Parameters</h5>
-<p>class_name : str
-    The class name to look up (e.g., 'DEM', 'READ_DATASET').</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.get_class--returns">Returns</h5>
-<p>pandas.DataFrame
-    The concatenated DataFrame of class blocks.</p>
 
 
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
-              <pre class="highlight"><code class="language-python">def get_class(self, class_name: str) -&gt; pd.DataFrame:
-    """
-    Return DataFrame blocks representing the specified class from the Excel data.
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>class_name</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The class name to look up (e.g., 'DEM', 'READ_DATASET').</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-    Parameters
-    ----------
-    class_name : str
-        The class name to look up (e.g., 'DEM', 'READ_DATASET').
 
-    Returns
-    -------
-    pandas.DataFrame
-        The concatenated DataFrame of class blocks.
-    """
-    df = self._df
-    i0s = df.A == class_name
-    i0s = i0s[i0s].index.values
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="pandas.DataFrame">DataFrame</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The concatenated DataFrame of class blocks.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-    blocks = [self._find_class_block(i0) for i0 in i0s]
-    try:
-        df = pd.concat(blocks, axis=1)
-    except Exception:
-        # only intended for debugging
-        df = blocks
-        logger.warning(f"Could not concatenate blocks for class: {class_name}")
 
-    return df</code></pre>
-            </details>
     </div>
 
 </div>
@@ -1558,131 +1053,42 @@ check_strat_layers : bool, default=True, optional
 <div class="doc doc-object doc-function">
 
 
-<h3 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.get_class_filepath" class="doc doc-heading">
-            <code class="highlight language-python">get_class_filepath(key, folder_key='folder', fname_key='file', index=None)</code>
+<h4 id="cryogrid_pytools.CryoGridConfigExcel.get_classes" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_classes</span></code>
 
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Construct a file path from folder and file entries in the Excel configuration.</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.get_class_filepath--parameters">Parameters</h5>
-<p>key : str
-    The class name to search for.
-folder_key : str, optional
-    Key to identify the folder in the DataFrame, by default 'folder'.
-fname_key : str, optional
-    Key to identify the file name in the DataFrame, by default 'file'.
-index : int or None, optional
-    If int, return a single entry. Otherwise return all matched entries.</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.get_class_filepath--returns">Returns</h5>
-<p>pathlib.Path or pandas.Series
-    The path(s) constructed from the Excel class entries.</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.get_class_filepath--raises">Raises</h5>
-<p>AssertionError
-    If multiple folder or filename keys are found.
-TypeError
-    If index is not int or None.</p>
-
-
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
-              <pre class="highlight"><code class="language-python">def get_class_filepath(
-    self, key, folder_key="folder", fname_key="file", index=None
-):
-    """
-    Construct a file path from folder and file entries in the Excel configuration.
-
-    Parameters
-    ----------
-    key : str
-        The class name to search for.
-    folder_key : str, optional
-        Key to identify the folder in the DataFrame, by default 'folder'.
-    fname_key : str, optional
-        Key to identify the file name in the DataFrame, by default 'file'.
-    index : int or None, optional
-        If int, return a single entry. Otherwise return all matched entries.
-
-    Returns
-    -------
-    pathlib.Path or pandas.Series
-        The path(s) constructed from the Excel class entries.
-
-    Raises
-    ------
-    AssertionError
-        If multiple folder or filename keys are found.
-    TypeError
-        If index is not int or None.
-    """
-    df = self.get_class(key)
-
-    keys = df.index.values
-    folder_key = keys[[folder_key in k for k in keys]]
-    fname_key = keys[[fname_key in k for k in keys]]
-
-    assert len(folder_key) == 1, f"Multiple folder keys found: {folder_key}"
-    assert len(fname_key) == 1, f"Multiple fname keys found: {fname_key}"
-
-    names = df.loc[[folder_key[0], fname_key[0]]]
-    names = names.apply(lambda ser: self.root / ser.iloc[0] / ser.iloc[1])
-
-    if index is None:
-        return names
-    elif isinstance(index, int):
-        return names.loc[f"{key}_{index}"]
-    else:
-        raise TypeError(f"index must be None or int, not {type(index)}")</code></pre>
-            </details>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.get_classes" class="doc doc-heading">
-            <code class="highlight language-python">get_classes()</code>
-
-</h3>
+</h4>
 
 
     <div class="doc doc-contents ">
 
-        <p>Returns a dictionary of class names and their corresponding row indices
+        <p>Useful to find all the classes available in the Excel file.
+Returns a dictionary of class names and their corresponding row indices
 from the Excel file. To use as a reference for get_class(<class_name>).</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.get_classes--returns">Returns</h5>
-<p>dict of int: str
-    A dictionary mapping class names to row indices</p>
 
 
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
-              <pre class="highlight"><code class="language-python">def get_classes(self):
-    """
-    Returns a dictionary of class names and their corresponding row indices
-    from the Excel file. To use as a reference for get_class(&lt;class_name&gt;).
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code>dict of int: str</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A dictionary mapping class names to row indices</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-    Returns
-    -------
-    dict of int: str
-        A dictionary mapping class names to row indices
-    """
-    df = self._df
 
-    class_idx = []
-    for i in range(len(df)):
-        try:
-            self._find_class_block(i)
-            class_idx.append(i)
-        except Exception:
-            pass
-
-    classes = df.loc[class_idx, "A"].to_dict()
-    return classes</code></pre>
-            </details>
     </div>
 
 </div>
@@ -1690,36 +1096,40 @@ from the Excel file. To use as a reference for get_class(<class_name>).</p>
 <div class="doc doc-object doc-function">
 
 
-<h3 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.get_coord_path" class="doc doc-heading">
-            <code class="highlight language-python">get_coord_path()</code>
+<h4 id="cryogrid_pytools.CryoGridConfigExcel.get_coord_path" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_coord_path</span></code>
 
-</h3>
+</h4>
 
 
     <div class="doc doc-contents ">
 
         <p>Get the path to the coordinates file from the Excel configuration.</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.get_coord_path--returns">Returns</h5>
-<p>pathlib.Path
-    The file path for coordinates.</p>
 
 
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
-              <pre class="highlight"><code class="language-python">def get_coord_path(self):
-    """
-    Get the path to the coordinates file from the Excel configuration.
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="pathlib.Path">Path</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The file path for coordinates.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-    Returns
-    -------
-    pathlib.Path
-        The file path for coordinates.
-    """
-    fname = self.get_class_filepath(
-        "COORDINATES_FROM_FILE", fname_key="file_name", index=1
-    )
-    return fname</code></pre>
-            </details>
+
     </div>
 
 </div>
@@ -1727,82 +1137,40 @@ from the Excel file. To use as a reference for get_class(<class_name>).</p>
 <div class="doc doc-object doc-function">
 
 
-<h3 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.get_dataset_paths" class="doc doc-heading">
-            <code class="highlight language-python">get_dataset_paths()</code>
+<h4 id="cryogrid_pytools.CryoGridConfigExcel.get_dem_path" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_dem_path</span></code>
 
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Retrieve paths for each dataset from the Excel configuration.</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.get_dataset_paths--returns">Returns</h5>
-<p>munch.Munch
-    A dictionary-like object mapping dataset variable names to file paths.</p>
-
-
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
-              <pre class="highlight"><code class="language-python">def get_dataset_paths(self):
-    """
-    Retrieve paths for each dataset from the Excel configuration.
-
-    Returns
-    -------
-    munch.Munch
-        A dictionary-like object mapping dataset variable names to file paths.
-    """
-    paths = (
-        self.get_class_filepath("READ_DATASET", fname_key="filename")
-        .to_frame(name="filepath")
-        .T
-    )
-
-    datasets = self.get_class("READ_DATASET")
-    variable = datasets.T.variable_name
-    paths.loc["variable"] = variable
-
-    paths = Munch(**paths.T.set_index("variable").filepath.to_dict())
-
-    return paths</code></pre>
-            </details>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.get_dem_path" class="doc doc-heading">
-            <code class="highlight language-python">get_dem_path()</code>
-
-</h3>
+</h4>
 
 
     <div class="doc doc-contents ">
 
         <p>Get the path for the DEM file from the Excel configuration.</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.get_dem_path--returns">Returns</h5>
-<p>pathlib.Path
-    The DEM file path.</p>
 
 
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
-              <pre class="highlight"><code class="language-python">def get_dem_path(self):
-    """
-    Get the path for the DEM file from the Excel configuration.
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="pathlib.Path">Path</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The DEM file path.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-    Returns
-    -------
-    pathlib.Path
-        The DEM file path.
-    """
-    fname = self.get_class_filepath(
-        "DEM", folder_key="folder", fname_key="filename", index=1
-    )
-    return fname</code></pre>
-            </details>
+
     </div>
 
 </div>
@@ -1810,136 +1178,71 @@ from the Excel file. To use as a reference for get_class(<class_name>).</p>
 <div class="doc doc-object doc-function">
 
 
-<h3 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.get_forcing_path" class="doc doc-heading">
-            <code class="highlight language-python">get_forcing_path(class_name='read_mat_ERA')</code>
+<h4 id="cryogrid_pytools.CryoGridConfigExcel.get_output_max_depth" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_output_max_depth</span></code>
 
-</h3>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Obtain the forcing file path from the Excel configuration.</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.get_forcing_path--parameters">Parameters</h5>
-<p>class_name : str, optional
-    The class name to search for in the configuration, by default 'read_mat_ERA'.</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.get_forcing_path--returns">Returns</h5>
-<p>pathlib.Path
-    The forcing file path.</p>
-
-
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
-              <pre class="highlight"><code class="language-python">def get_forcing_path(self, class_name="read_mat_ERA"):
-    """
-    Obtain the forcing file path from the Excel configuration.
-
-    Parameters
-    ----------
-    class_name : str, optional
-        The class name to search for in the configuration, by default 'read_mat_ERA'.
-
-    Returns
-    -------
-    pathlib.Path
-        The forcing file path.
-    """
-    fname = self.get_class_filepath(
-        class_name, folder_key="path", fname_key="filename", index=1
-    )
-    return fname</code></pre>
-            </details>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.get_output_max_depth" class="doc doc-heading">
-            <code class="highlight language-python">get_output_max_depth(output_class='OUT_regridded_FCI2', depth_key='depth_below_ground')</code>
-
-</h3>
+</h4>
 
 
     <div class="doc doc-contents ">
 
         <p>Get the maximum depth of the output file from the Excel configuration.</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.get_output_max_depth--parameters">Parameters</h5>
-<p>output_class : str, optional
-    The class name to search for in the configuration, by default 'OUT_regridded_FCI2'.</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.get_output_max_depth--returns">Returns</h5>
-<p>float
-    The maximum depth value.</p>
 
 
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
-              <pre class="highlight"><code class="language-python">def get_output_max_depth(
-    self, output_class="OUT_regridded_FCI2", depth_key="depth_below_ground"
-) -&gt; int:
-    """
-    Get the maximum depth of the output file from the Excel configuration.
-
-    Parameters
-    ----------
-    output_class : str, optional
-        The class name to search for in the configuration, by default 'OUT_regridded_FCI2'.
-
-    Returns
-    -------
-    float
-        The maximum depth value.
-    """
-    df = self.get_class(output_class)
-
-    depth = str(df.loc[depth_key].iloc[0])
-    depth = int(depth)
-
-    return depth</code></pre>
-            </details>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h3 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.get_start_end_times" class="doc doc-heading">
-            <code class="highlight language-python">get_start_end_times()</code>
-
-</h3>
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>output_class</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The class name to search for in the configuration, by default 'OUT_regridded'.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;OUT_regridded&#39;</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
 
-    <div class="doc doc-contents ">
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The maximum depth value.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-        <p>Retrieve the start and end times from the Excel configuration.</p>
-<h5 id="cryogrid_pytools.excel_config.CryoGridConfigExcel.get_start_end_times--returns">Returns</h5>
-<p>pandas.Series
-    A Series with 'time_start' and 'time_end' as Timestamp objects.</p>
 
-
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
-              <pre class="highlight"><code class="language-python">def get_start_end_times(self):
-    """
-    Retrieve the start and end times from the Excel configuration.
-
-    Returns
-    -------
-    pandas.Series
-        A Series with 'time_start' and 'time_end' as Timestamp objects.
-    """
-    times = self.get_class("set_start_end_time").T.filter(regex="time")
-    times = times.map(
-        lambda x: pd.Timestamp(year=int(x[0]), month=int(x[1]), day=int(x[2]))
-    )
-
-    start = times.start_time.min()
-    end = times.end_time.max()
-    times = pd.Series([start, end], index=["time_start", "time_end"])
-
-    return times</code></pre>
-            </details>
     </div>
 
 </div>
@@ -1955,180 +1258,739 @@ from the Excel file. To use as a reference for get_class(<class_name>).</p>
 <div class="doc doc-object doc-function">
 
 
-<h2 id="cryogrid_pytools.excel_config.check_strat_layer_values" class="doc doc-heading">
-            <code class="highlight language-python">cryogrid_pytools.excel_config.check_strat_layer_values(tuple_containing_dict)</code>
+<h3 id="cryogrid_pytools.read_OUT_regridded_file" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">cryogrid_pytools</span><span class="o">.</span><span class="n">read_OUT_regridded_file</span></code>
 
-</h2>
+</h3>
 
 
     <div class="doc doc-contents first">
 
-        <p>Validate that stratigraphy layer parameters are physically plausible.</p>
-<h4 id="cryogrid_pytools.excel_config.check_strat_layer_values--parameters">Parameters</h4>
-<p>tuple_containing_dict : tuple
-    A tuple containing a dictionary whose keys represent layer parameters.</p>
-<h4 id="cryogrid_pytools.excel_config.check_strat_layer_values--raises">Raises</h4>
-<p>ValueError
-    If any parameter check fails for the stratigraphy layers.</p>
-<h4 id="cryogrid_pytools.excel_config.check_strat_layer_values--notes">Notes</h4>
-<h6 id="cryogrid_pytools.excel_config.check_strat_layer_values--definitions">Definitions</h6>
-<ul>
-<li><code>porosity = 1 - mineral - organic</code></li>
-<li><code>airspace = porosity - waterIce</code></li>
-<li><code>volume = mineral + organic + waterIce</code></li>
-</ul>
-<h6 id="cryogrid_pytools.excel_config.check_strat_layer_values--checks">Checks</h6>
-<ul>
-<li><code>field_capacity &lt; porosity</code>  :  field capacity is a subset of the porosity</li>
-<li><code>airspace &gt;= 0</code>  :  cannot have negative airspace</li>
-<li><code>volume &lt;= 1</code>  :  the sum of mineral, organic, and waterIce cannot exceed 1</li>
-<li><code>waterIce &lt;= porosity</code>  :  waterIce cannot exceed porosity</li>
-</ul>
+        <p>Read a CryoGrid OUT_regridded[_FCI2] file and return it as an xarray dataset.</p>
 
 
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/excel_config.py</code></summary>
-              <pre class="highlight"><code class="language-python">def check_strat_layer_values(tuple_containing_dict):
-    """
-    Validate that stratigraphy layer parameters are physically plausible.
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>fname</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Path to the .mat file</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>deepest_point</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Represents the deepest depth of the profile relative to the surfface.
+If not provided, then elevation is returned. Negative values represent
+depths below the surface.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-    Parameters
-    ----------
-    tuple_containing_dict : tuple
-        A tuple containing a dictionary whose keys represent layer parameters.
 
-    Raises
-    ------
-    ValueError
-        If any parameter check fails for the stratigraphy layers.
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>ds</code></td>            <td>
+                  <code><span title="xarray.Dataset">Dataset</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Dataset with dimensions 'time' and 'level'. The <code>elevation</code> coordinate
+represents the elevation above sea level based on the DEM. If
+deepest_point is provided, then an additional coordinate, <code>depth</code>,
+represents depth above surface.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-    Notes
-    -----
-    #### Definitions
-    - `porosity = 1 - mineral - organic`
-    - `airspace = porosity - waterIce`
-    - `volume = mineral + organic + waterIce`
 
-    #### Checks
-    - `field_capacity &lt; porosity`  :  field capacity is a subset of the porosity
-    - `airspace &gt;= 0`  :  cannot have negative airspace
-    - `volume &lt;= 1`  :  the sum of mineral, organic, and waterIce cannot exceed 1
-    - `waterIce &lt;= porosity`  :  waterIce cannot exceed porosity
+<details class="note" open>
+  <summary>Notes</summary>
+  <div class="highlight"><pre><span></span><code>For plotting, use `ds[&#39;variable&#39;].plot(y=&#39;depth&#39;/&#39;elevation&#39;).
+</code></pre></div>
+</details>
 
-    """
-    dictionary = tuple_containing_dict[0]
-    df = pd.DataFrame(dictionary).astype(float).round(3)
-
-    df["porosity"] = (1 - df.mineral - df.organic).round(3)
-    df["airspace"] = (df.porosity - df.waterIce).round(3)
-    df["volume"] = (df.mineral + df.organic + df.waterIce).round(3)
-
-    checks = pd.DataFrame()
-    checks["field_capacity_lt_porosity"] = df.field_capacity &lt;= df.porosity
-    checks["airspace_ge_0"] = df.airspace &gt;= 0
-    checks["volume_le_1"] = df.volume &lt;= 1
-    checks["waterice_le_porosity"] = df.waterIce &lt;= df.porosity
-    checks.index.name = "layer"
-
-    if not checks.values.all():
-        raise ValueError(
-            "parameters are not physically plausible. "
-            "below are the violations: \n" + str(checks.T)
-        )</code></pre>
-            </details>
     </div>
 
-</div><h2 id="data-module-functions">Data Module Functions</h2>
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="cryogrid_pytools.read_OUT_regridded_clusters" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">cryogrid_pytools</span><span class="o">.</span><span class="n">read_OUT_regridded_clusters</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+        <p>Reads multiple files that are put out by the OUT_regridded class (and _FCI2)</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>fname_glob</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Path of the files that you want to read in.
+Use same notation as for glob(). Note that it expects
+name to follow the format <code>some_project_name_GRIDCELL_ID_date.mat</code>
+where GRIDCELL_ID will be extracted to assign the gridcell dimension.
+These GRIDCELL_IDs correspond with the index of the data in the
+flattened array.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>deepest_point</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>When setting the configuration for when the data should be
+saved, the maximum depth is set. Give this number as a
+negative number here.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>joblib_kwargs</code>
+            </td>
+            <td>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Uses the joblib library to do parallel reading of the files.
+Defaults are: n_jobs=-1, backend='threading', verbose=1</p>
+              </div>
+            </td>
+            <td>
+                  <code>{}</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="xarray.Dataset">Dataset</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>An array with dimensions gridcell, depth, time.
+Variables depend on how the class was configured, but
+elevation will also be a variable.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="cryogrid_pytools.read_mat_struct_flat_as_dict" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">cryogrid_pytools</span><span class="o">.</span><span class="n">read_mat_struct_flat_as_dict</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+        <p>Read a MATLAB struct from a .mat file and return it as a dictionary.</p>
+<p>Assumes that the struct is flat, i.e. it does not contain any nested
+structs.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>fname</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Path to the .mat file</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>key</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The name of the matlab key in the .mat file. If None is passed [default],
+then the first key that does not start with an underscore is used.
+If a string is passed, then the corresponding key is used.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>data</code></td>            <td>
+                  <code><span title="dict">dict</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Dictionary with the struct fields as keys and the corresponding
+data as values.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="cryogrid_pytools.read_mat_struct_as_dataset" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">cryogrid_pytools</span><span class="o">.</span><span class="n">read_mat_struct_as_dataset</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+        <p>Read a MATLAB struct from a .mat file and return it as an xarray dataset.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>fname</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Path to the .mat file. All variables in the struct are assumed to have
+the same dimensions and shape (except for the index columns).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>drop_keys</code>
+            </td>
+            <td>
+                  <code><span title="list">list</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>List of keys to drop from the struct. If None is passed [default], then
+no keys are dropped. This can be used when one of the struct fields is
+not the same shape as the others. Any dropped variables will be added
+back as DataArrays with their own dim.</p>
+              </div>
+            </td>
+            <td>
+                  <code>[]</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>index</code>
+            </td>
+            <td>
+                  <code>(<span title="str">str</span>, <span title="tuple">tuple</span>)</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Name of the index column. If None is passed [default], then no index is set.
+If a tuple is passed, then the corresponding columns are used as a multiindex.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>index_is_datenum</code>
+            </td>
+            <td>
+                  <code><span title="bool">bool</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If True, then the index is converted from MATLAB datenum to a pandas.Timestamp.</p>
+              </div>
+            </td>
+            <td>
+                  <code>False</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>ds</code></td>            <td>
+                  <code><span title="xarray.Dataset">Dataset</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Dataset with the struct fields as variables and the corresponding
+data as values.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div><h2 id="era5-forcing">ERA5 Forcing</h2>
 
 
 <div class="doc doc-object doc-function">
 
 
-<h2 id="cryogrid_pytools.data.get_dem_copernicus30" class="doc doc-heading">
-            <code class="highlight language-python">cryogrid_pytools.data.get_dem_copernicus30(bbox_WSEN, res_m=30, epsg=32643, smoothing_iters=2, smoothing_size=3)</code>
+<h3 id="cryogrid_pytools.forcing.read_mat_ear5" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">cryogrid_pytools</span><span class="o">.</span><span class="n">forcing</span><span class="o">.</span><span class="n">read_mat_ear5</span></code>
 
-</h2>
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+        <p>Read the ERA5.mat forcing file for CryoGrid and return a xarray Dataset.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>filename</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Path to the ERA5.mat file</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="xarray.Dataset">Dataset</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Dataset with the variables from the ERA5.mat file</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="cryogrid_pytools.forcing.era5_to_matlab" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">cryogrid_pytools</span><span class="o">.</span><span class="n">forcing</span><span class="o">.</span><span class="n">era5_to_matlab</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents first">
+
+        <p>Convert a merged netCDF file from the Copernicus CDS to
+a dictionary that matches the expected format of
+the CryoGrid.POST_PROC.read_mat_ERA class (in MATLAB).</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>ds</code>
+            </td>
+            <td>
+                  <code><span title="xarray.Dataset">Dataset</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Dataset from the ERA5 Copernicus CDS with variables required for
+the CryoGrid.POST_PROC.read_mat_ERA class
+single_levels   = [u10, v10, sp, d2m, t2m, ssrd, strd, tisr, tp, Zs]
+pressure_levels = [t, z, q, u, v]
+Note that Zs in the single levels is a special case since it is only
+downloaded for a single date at the surface (doesn't change over time)</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>save_path</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Path to save the dictionary as a .mat file, by default None, meaning
+no file is saved and only the dictionary is returned</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="dict">dict</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Dictionary with the variables mapped to names that are expected by
+CryoGrid.POST_PROC.read_mat_ERA</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+
+</div><h2 id="spatial-data">Spatial Data</h2>
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="cryogrid_pytools.data.get_dem_copernicus30" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">cryogrid_pytools</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get_dem_copernicus30</span></code>
+
+</h3>
 
 
     <div class="doc doc-contents first">
 
         <p>Download DEM data from the STAC catalog (default is COP DEM Global 30m).</p>
-<h4 id="cryogrid_pytools.data.get_dem_copernicus30--parameters">Parameters</h4>
-<p>bbox_WSEN : list
-    The bounding box of the area of interest in WSEN format.
-res_m : int
-    The resolution of the DEM data in meters.
-epsg : int, optional
-    The EPSG code of the projection of the DEM data. Default is
-    EPSG:32643 (UTM 43N) for the Pamir region.
-smoothing_iters : int, optional
-    The number of iterations to apply the smoothing filter. Default is 2.
-    Set to 0 to disable smoothing.
-smoothing_size : int, optional
-    The size of the kernel (num pixels) for the smoothing filter. Default is 3.</p>
-<h4 id="cryogrid_pytools.data.get_dem_copernicus30--returns">Returns</h4>
-<p>xarray.DataArray
-    The DEM data as an xarray DataArray with attributes.</p>
 
 
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/data.py</code></summary>
-              <pre class="highlight"><code class="language-python">@_decorator_dataarray_to_bbox
-def get_dem_copernicus30(
-    bbox_WSEN: list, res_m: int = 30, epsg=32643, smoothing_iters=2, smoothing_size=3
-) -&gt; _xr.DataArray:
-    """
-    Download DEM data from the STAC catalog (default is COP DEM Global 30m).
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>bbox_WSEN</code>
+            </td>
+            <td>
+                  <code><span title="list">list</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The bounding box of the area of interest in WSEN format.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>res_m</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The resolution of the DEM data in meters.</p>
+              </div>
+            </td>
+            <td>
+                  <code>30</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>epsg</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The EPSG code of the projection of the DEM data. Default is
+EPSG:32643 (UTM 43N) for the Pamir region.</p>
+              </div>
+            </td>
+            <td>
+                  <code>32643</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>smoothing_iters</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The number of iterations to apply the smoothing filter. Default is 2.
+Set to 0 to disable smoothing.</p>
+              </div>
+            </td>
+            <td>
+                  <code>2</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>smoothing_size</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The size of the kernel (num pixels) for the smoothing filter. Default is 3.</p>
+              </div>
+            </td>
+            <td>
+                  <code>3</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-    Parameters
-    ----------
-    bbox_WSEN : list
-        The bounding box of the area of interest in WSEN format.
-    res_m : int
-        The resolution of the DEM data in meters.
-    epsg : int, optional
-        The EPSG code of the projection of the DEM data. Default is
-        EPSG:32643 (UTM 43N) for the Pamir region.
-    smoothing_iters : int, optional
-        The number of iterations to apply the smoothing filter. Default is 2.
-        Set to 0 to disable smoothing.
-    smoothing_size : int, optional
-        The size of the kernel (num pixels) for the smoothing filter. Default is 3.
 
-    Returns
-    -------
-    xarray.DataArray
-        The DEM data as an xarray DataArray with attributes.
-    """
-    from .utils import drop_coords_without_dim
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="xarray.DataArray">DataArray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The DEM data as an xarray DataArray with attributes.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-    check_epsg(epsg)
 
-    assert res_m &gt;= 30, (
-        "The resolution must be greater than 30m for the COP DEM Global 30m dataset."
-    )
-    res = res_m / 111111 if epsg == 4326 else res_m
-
-    _logger.info("Fetching COP DEM Global 30m data from Planetary Computer")
-    items = search_stac_items_planetary_computer("cop-dem-glo-30", bbox_WSEN)
-    da_dem = _stackstac.stack(
-        items=items, bounds_latlon=bbox_WSEN, resolution=res, epsg=epsg
-    )
-
-    da_dem = (
-        da_dem.mean("time")
-        .squeeze()
-        .pipe(drop_coords_without_dim)
-        .pipe(smooth_data, n_iters=smoothing_iters, kernel_size=smoothing_size)
-        .rio.write_crs(f"EPSG:{epsg}")
-        .assign_attrs(
-            source=items[0].links[0].href,  # collection URL
-            bbox_request=bbox_WSEN,
-        )
-    )
-
-    return da_dem</code></pre>
-            </details>
     </div>
 
 </div>
@@ -2136,108 +1998,104 @@ def get_dem_copernicus30(
 <div class="doc doc-object doc-function">
 
 
-<h2 id="cryogrid_pytools.data.get_esa_land_cover" class="doc doc-heading">
-            <code class="highlight language-python">cryogrid_pytools.data.get_esa_land_cover(bbox_WSEN, res_m=30, epsg=32643)</code>
+<h3 id="cryogrid_pytools.data.get_esa_land_cover" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">cryogrid_pytools</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get_esa_land_cover</span></code>
 
-</h2>
+</h3>
 
 
     <div class="doc doc-contents first">
 
         <p>Get the ESA World Cover dataset on the target grid and resolution.</p>
-<h4 id="cryogrid_pytools.data.get_esa_land_cover--parameters">Parameters</h4>
-<p>bbox_WSEN : tuple
-    Bounding box in the format (West, South, East, North).
-res_m : int, optional
-    Resolution in meters. Defaults to 30.
-epsg : int, optional
-    EPSG code for the coordinate reference system. Defaults to 32643.</p>
-<h4 id="cryogrid_pytools.data.get_esa_land_cover--returns">Returns</h4>
-<p>xr.DataArray
-    A DataArray with the land cover data on the target grid. Contains
-    attributes 'class_values', 'class_descriptions', 'class_colors' for plotting.</p>
 
 
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/data.py</code></summary>
-              <pre class="highlight"><code class="language-python">@_decorator_dataarray_to_bbox
-def get_esa_land_cover(bbox_WSEN: tuple, res_m: int = 30, epsg=32643) -&gt; _xr.DataArray:
-    """
-    Get the ESA World Cover dataset on the target grid and resolution.
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>bbox_WSEN</code>
+            </td>
+            <td>
+                  <code><span title="tuple">tuple</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Bounding box in the format (West, South, East, North).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>res_m</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Resolution in meters. Defaults to 30.</p>
+              </div>
+            </td>
+            <td>
+                  <code>30</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>epsg</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>EPSG code for the coordinate reference system. Defaults to 32643.</p>
+              </div>
+            </td>
+            <td>
+                  <code>32643</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-    Parameters
-    ----------
-    bbox_WSEN : tuple
-        Bounding box in the format (West, South, East, North).
-    res_m : int, optional
-        Resolution in meters. Defaults to 30.
-    epsg : int, optional
-        EPSG code for the coordinate reference system. Defaults to 32643.
 
-    Returns
-    -------
-    xr.DataArray
-        A DataArray with the land cover data on the target grid. Contains
-        attributes 'class_values', 'class_descriptions', 'class_colors' for plotting.
-    """
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="xr.DataArray">DataArray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A DataArray with the land cover data on the target grid. Contains
+attributes 'class_values', 'class_descriptions', 'class_colors' for plotting.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-    def get_land_cover_classes(item):
-        """
-        Get the land cover class names, and colors from the ESA World Cover dataset
 
-        Args:
-            item (pystac.Item): The STAC item containing the land cover data.
-
-        Returns:
-            dict: A dictionary with class values, descriptions, and colors.
-        """
-        import pandas as pd
-
-        classes = item.assets["map"].extra_fields["classification:classes"]
-        df = (
-            pd.DataFrame(classes)
-            .set_index("value")
-            .rename(
-                columns=lambda s: s.replace("-", "_")
-            )  # bug fix for version 2.7.8 (stacstack back compatibility)
-        )
-
-        df["color_hint"] = "#" + df["color_hint"]
-
-        out = dict(
-            class_values=df.index.values,
-            class_descriptions=df["description"].values,
-            class_colors=df["color_hint"].values,
-        )
-
-        return out
-
-    # make sure epsg is supported
-    check_epsg(epsg)
-
-    # get the units in the projection
-    res = get_res_in_proj_units(res_m, epsg, min_res=10)
-
-    _logger.info("Fetching ESA World Cover (v2.0) data from Planetary Computer")
-    items = search_stac_items_planetary_computer(
-        collection="esa-worldcover",
-        bbox=bbox_WSEN,
-        query={"esa_worldcover:product_version": {"eq": "2.0.0"}},
-    )
-
-    stac_props = dict(
-        items=items, assets=["map"], epsg=epsg, bounds_latlon=bbox_WSEN, resolution=res
-    )
-
-    da = (
-        _stackstac.stack(**stac_props)
-        .max(["band", "time"], keep_attrs=True)  # removing the single band dimension
-        .rename("land_cover")
-        .assign_attrs(**get_land_cover_classes(items[0]))
-    )
-
-    return da</code></pre>
-            </details>
     </div>
 
 </div>
@@ -2245,64 +2103,119 @@ def get_esa_land_cover(bbox_WSEN: tuple, res_m: int = 30, epsg=32643) -&gt; _xr.
 <div class="doc doc-object doc-function">
 
 
-<h2 id="cryogrid_pytools.data.get_snow_melt_doy" class="doc doc-heading">
-            <code class="highlight language-python">cryogrid_pytools.data.get_snow_melt_doy(bbox_WSEN, years=range(2018, 2025), res_m=30, epsg=32643)</code>
+<h3 id="cryogrid_pytools.data.get_snow_melt_doy" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">cryogrid_pytools</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get_snow_melt_doy</span></code>
 
-</h2>
+</h3>
 
 
     <div class="doc doc-contents first">
 
         <p>Calculate the snow melt day of year (DOY) from Sentinel-2 SCL data for a given bounding box and years.</p>
-<h4 id="cryogrid_pytools.data.get_snow_melt_doy--parameters">Parameters</h4>
-<p>bbox_WSEN : tuple
-    Bounding box coordinates in the format (West, South, East, North).
-years : range, optional
-    Range of years to consider. Defaults to range(2018, 2025).
-res_m : int, optional
-    Spatial resolution in meters. Defaults to 30.
-epsg : int, optional
-    EPSG code for the coordinate reference system. Defaults to 32643.</p>
-<h4 id="cryogrid_pytools.data.get_snow_melt_doy--returns">Returns</h4>
-<p>_xr.DataArray
-    DataArray containing the snow melt DOY for each year.</p>
 
 
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/data.py</code></summary>
-              <pre class="highlight"><code class="language-python">@_decorator_dataarray_to_bbox
-def get_snow_melt_doy(
-    bbox_WSEN: tuple, years=range(2018, 2025), res_m: int = 30, epsg=32643
-) -&gt; _xr.DataArray:
-    """
-    Calculate the snow melt day of year (DOY) from Sentinel-2 SCL data for a given bounding box and years.
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>bbox_WSEN</code>
+            </td>
+            <td>
+                  <code><span title="tuple">tuple</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Bounding box coordinates in the format (West, South, East, North).</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>years</code>
+            </td>
+            <td>
+                  <code><span title="range">range</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Range of years to consider. Defaults to range(2018, 2025).</p>
+              </div>
+            </td>
+            <td>
+                  <code><span title="range">range</span>(2018, 2025)</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>res_m</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Spatial resolution in meters. Defaults to 30.</p>
+              </div>
+            </td>
+            <td>
+                  <code>30</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>epsg</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>EPSG code for the coordinate reference system. Defaults to 32643.</p>
+              </div>
+            </td>
+            <td>
+                  <code>32643</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-    Parameters
-    ----------
-    bbox_WSEN : tuple
-        Bounding box coordinates in the format (West, South, East, North).
-    years : range, optional
-        Range of years to consider. Defaults to range(2018, 2025).
-    res_m : int, optional
-        Spatial resolution in meters. Defaults to 30.
-    epsg : int, optional
-        EPSG code for the coordinate reference system. Defaults to 32643.
 
-    Returns
-    -------
-    _xr.DataArray
-        DataArray containing the snow melt DOY for each year.
-    """
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code><span title="xarray.DataArray">DataArray</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>DataArray containing the snow melt DOY for each year.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-    da = get_sentinel2_data(
-        bbox_WSEN, years=years, res_m=res_m, epsg=epsg, max_cloud_cover=10
-    )
 
-    _logger.info("Calculating snow melt day of year (DOY) from Sentinel-2 SCL data")
-    doy = da.groupby("time.year").apply(calc_sentinel2_snow_melt_doy)
-
-    return doy</code></pre>
-            </details>
     </div>
 
 </div>
@@ -2310,130 +2223,144 @@ def get_snow_melt_doy(
 <div class="doc doc-object doc-function">
 
 
-<h2 id="cryogrid_pytools.data.get_randolph_glacier_inventory" class="doc doc-heading">
-            <code class="highlight language-python">cryogrid_pytools.data.get_randolph_glacier_inventory(target_dem=None, dest_dir=None)</code>
+<h3 id="cryogrid_pytools.data.get_randolph_glacier_inventory" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">cryogrid_pytools</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get_randolph_glacier_inventory</span></code>
 
-</h2>
+</h3>
 
 
     <div class="doc doc-contents first">
 
         <p>Fetches the Randolph Glacier Inventory (RGI) data and returns it as a GeoDataFrame or raster dataset.</p>
-<h4 id="cryogrid_pytools.data.get_randolph_glacier_inventory--parameters">Parameters</h4>
-<p>target_dem : optional
-    A digital elevation model (DEM) object. If provided, the function will return
-    the RGI data clipped to the bounding box of the DEM and reprojected to the DEM's CRS.
-dest_dir : str, optional
-    The directory where the downloaded RGI data will be stored. If None, the data will
-    be stored in the pooch cache directory (~/.cache/pooch/).</p>
-<h4 id="cryogrid_pytools.data.get_randolph_glacier_inventory--returns">Returns</h4>
-<p>GeoDataFrame or raster dataset
-    If target_dem is None, returns a GeoDataFrame containing the RGI data.
-    If target_dem is provided, returns a raster dataset clipped and reprojected to the DEM.</p>
 
 
-            <details class="quote">
-              <summary>Source code in <code>cryogrid_pytools/data.py</code></summary>
-              <pre class="highlight"><code class="language-python">@_cached
-def get_randolph_glacier_inventory(target_dem=None, dest_dir=None):
-    """
-    Fetches the Randolph Glacier Inventory (RGI) data and returns it as a GeoDataFrame or raster dataset.
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>target_dem</code>
+            </td>
+            <td>
+                  <code><span title="optional">optional</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>A digital elevation model (DEM) object. If provided, the function will return
+the RGI data clipped to the bounding box of the DEM and reprojected to the DEM's CRS.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>dest_dir</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The directory where the downloaded RGI data will be stored. If None, the data will
+be stored in the pooch cache directory (~/.cache/pooch/).</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-    Parameters
-    ----------
-    target_dem : optional
-        A digital elevation model (DEM) object. If provided, the function will return
-        the RGI data clipped to the bounding box of the DEM and reprojected to the DEM's CRS.
-    dest_dir : str, optional
-        The directory where the downloaded RGI data will be stored. If None, the data will
-        be stored in the pooch cache directory (~/.cache/pooch/).
 
-    Returns
-    -------
-    GeoDataFrame or raster dataset
-        If target_dem is None, returns a GeoDataFrame containing the RGI data.
-        If target_dem is provided, returns a raster dataset clipped and reprojected to the DEM.
-    """
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code>GeoDataFrame or raster dataset</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If target_dem is None, returns a GeoDataFrame containing the RGI data.
+If target_dem is provided, returns a raster dataset clipped and reprojected to the DEM.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
-    url = "https://daacdata.apps.nsidc.org/pub/DATASETS/nsidc0770_rgi_v7/regional_files/RGI2000-v7.0-G/RGI2000-v7.0-G-13_central_asia.zip"
 
-    downloader = _pooch.HTTPDownloader(
-        progressbar=True, headers=get_earthaccess_session().headers
-    )
-    flist = download_url(url, path=dest_dir, downloader=downloader)
-
-    fname_shp = [f for f in flist if f.endswith(".shp")][0]
-
-    _logger.log(
-        "INFO",
-        "RGI: Fetching Randolph Glacier Inventory - see https://www.glims.org/rgi_user_guide/welcome.html",
-    )
-    _logger.log("DEBUG", f"RGI: URL = {url}")
-    _logger.log("DEBUG", f"RGI: FILE = {fname_shp}")
-
-    if target_dem is None:
-        # reads the whole file
-        df = _gpd.read_file(fname_shp)
-    else:
-        # gets the bounding box and then reads the file
-        bbox = target_dem.rv.get_bbox_latlon()
-        df = _gpd.read_file(fname_shp, bbox=bbox).to_crs(target_dem.rio.crs)
-        df = df.dissolve()
-        ds = df.rv.to_raster(target_dem)
-        return ds
-
-    return df</code></pre>
-            </details>
     </div>
 
-</div><h2 id="utility-functions">Utility Functions</h2>
-<p>Additional utility functions are available in the package. See the source code documentation for more details.</p>
-              
-            </div>
-          </div><footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../usage/spatial-data/" class="btn btn-neutral float-left" title="Spatial Data and Forcing"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-    </div>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <!-- Copyright etc -->
-  </div>
-
-  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
-</footer>
-          
-        </div>
-      </div>
-
-    </section>
-
-  </div>
-
-  <div class="rst-versions" role="note" aria-label="Versions">
-  <span class="rst-current-version" data-toggle="rst-current-version">
-    
-        <span>
-          <a href="https://github.com/lukegre/CryoGrid-pyTools" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
-        </span>
-    
-    
-      <span><a href="../usage/spatial-data/" style="color: #fcfcfc">&laquo; Previous</a></span>
-    
-    
-  </span>
 </div>
-    <script src="../js/jquery-3.6.0.min.js"></script>
-    <script>var base_url = "..";</script>
-    <script src="../js/theme_extra.js"></script>
-    <script src="../js/theme.js"></script>
-      <script src="../search/main.js"></script>
-    <script>
-        jQuery(function () {
-            SphinxRtdTheme.Navigation.enable(true);
-        });
-    </script>
 
-</body>
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.c8b220af.min.js"></script>
+      
+    
+  </body>
 </html>

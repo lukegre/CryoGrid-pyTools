@@ -9,25 +9,25 @@
       
       
       
-        <link rel="prev" href="../reading-output/">
+        <link rel="prev" href="../installation/">
       
       
-        <link rel="next" href="../forcing/">
+        <link rel="next" href="../usage/reading-output/">
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.9">
     
     
       
-        <title>Reading MATLAB Structs - CryoGrid-pyTools</title>
+        <title>Getting Started - CryoGrid-pyTools</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.4af4bdda.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.4af4bdda.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -46,11 +46,11 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
     
-      <link rel="stylesheet" href="../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#reading-matlab-structs" class="md-skip">
+        <a href="#getting-started" class="md-skip">
           Skip to content
         </a>
       
@@ -92,7 +92,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="CryoGrid-pyTools" class="md-header__button md-logo" aria-label="CryoGrid-pyTools" data-md-component="logo">
+    <a href=".." title="CryoGrid-pyTools" class="md-header__button md-logo" aria-label="CryoGrid-pyTools" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m20.79 13.95-2.33.62-2-1.13v-2.88l2-1.13 2.33.62.52-1.93-1.77-.47.46-1.77-1.93-.52-.62 2.33-2 1.13L13 7.38V5.12l1.71-1.71L13.29 2 12 3.29 10.71 2 9.29 3.41 11 5.12v2.26L8.5 8.82l-2-1.13-.58-2.33L4 5.88l.47 1.77-1.77.47.52 1.93 2.33-.62 2 1.13v2.89l-2 1.13-2.33-.62-.52 1.93 1.77.47L4 18.12l1.93.52.62-2.33 2-1.13L11 16.62v2.26l-1.71 1.71L10.71 22 12 20.71 13.29 22l1.41-1.41-1.7-1.71v-2.26l2.5-1.45 2 1.13.62 2.33 1.88-.51-.47-1.77 1.77-.47zM9.5 10.56 12 9.11l2.5 1.45v2.88L12 14.89l-2.5-1.45z"/></svg>
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Reading MATLAB Structs
+              Getting Started
             
           </span>
         </div>
@@ -225,7 +225,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="CryoGrid-pyTools" class="md-nav__button md-logo" aria-label="CryoGrid-pyTools" data-md-component="logo">
+    <a href=".." title="CryoGrid-pyTools" class="md-nav__button md-logo" aria-label="CryoGrid-pyTools" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m20.79 13.95-2.33.62-2-1.13v-2.88l2-1.13 2.33.62.52-1.93-1.77-.47.46-1.77-1.93-.52-.62 2.33-2 1.13L13 7.38V5.12l1.71-1.71L13.29 2 12 3.29 10.71 2 9.29 3.41 11 5.12v2.26L8.5 8.82l-2-1.13-.58-2.33L4 5.88l.47 1.77-1.77.47.52 1.93 2.33-.62 2 1.13v2.89l-2 1.13-2.33-.62-.52 1.93 1.77.47L4 18.12l1.93.52.62-2.33 2-1.13L11 16.62v2.26l-1.71 1.71L10.71 22 12 20.71 13.29 22l1.41-1.41-1.7-1.71v-2.26l2.5-1.45 2 1.13.62 2.33 1.88-.51-.47-1.77 1.77-.47zM9.5 10.56 12 9.11l2.5 1.45v2.88L12 14.89l-2.5-1.45z"/></svg>
@@ -255,7 +255,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href=".." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -276,7 +276,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../installation/" class="md-nav__link">
+      <a href="../installation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -292,87 +292,6 @@
     
       
       
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../getting-started/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Getting Started
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-    
-  
-  
-  
-    
-    
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
-            
-  
-  <span class="md-ellipsis">
-    Usage
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_4">
-            <span class="md-nav__icon md-icon"></span>
-            Usage
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../reading-output/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Reading CryoGrid Output
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
   
   
     
@@ -391,7 +310,7 @@
           
   
   <span class="md-ellipsis">
-    Reading MATLAB Structs
+    Getting Started
     
   </span>
   
@@ -403,7 +322,7 @@
         
   
   <span class="md-ellipsis">
-    Reading MATLAB Structs
+    Getting Started
     
   </span>
   
@@ -426,27 +345,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#important-note" class="md-nav__link">
+  <a href="#basic-usage" class="md-nav__link">
     <span class="md-ellipsis">
-      Important Note
+      Basic Usage
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#preparing-matlab-data" class="md-nav__link">
+  <a href="#example-notebook" class="md-nav__link">
     <span class="md-ellipsis">
-      Preparing MATLAB Data
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#reading-matlab-files-in-python" class="md-nav__link">
-    <span class="md-ellipsis">
-      Reading MATLAB Files in Python
+      Example Notebook
     </span>
   </a>
   
@@ -459,6 +369,63 @@
     </li>
   
 
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Usage
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Usage
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/reading-output/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Reading CryoGrid Output
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
               
             
               
@@ -468,7 +435,29 @@
   
   
     <li class="md-nav__item">
-      <a href="../forcing/" class="md-nav__link">
+      <a href="../usage/reading-matlab/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Reading MATLAB Structs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/forcing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -490,7 +479,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../spatial-data/" class="md-nav__link">
+      <a href="../usage/spatial-data/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -519,7 +508,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../api-reference/" class="md-nav__link">
+      <a href="../api-reference/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -560,27 +549,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#important-note" class="md-nav__link">
+  <a href="#basic-usage" class="md-nav__link">
     <span class="md-ellipsis">
-      Important Note
+      Basic Usage
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#preparing-matlab-data" class="md-nav__link">
+  <a href="#example-notebook" class="md-nav__link">
     <span class="md-ellipsis">
-      Preparing MATLAB Data
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#reading-matlab-files-in-python" class="md-nav__link">
-    <span class="md-ellipsis">
-      Reading MATLAB Files in Python
+      Example Notebook
     </span>
   </a>
   
@@ -605,31 +585,26 @@
   
 
 
-<h1 id="reading-matlab-structs">Reading MATLAB Structs</h1>
-<p>CryoGrid-pyTools provides functionality to read MATLAB struct files into Python. Here's how to work with MATLAB data.</p>
-<h2 id="important-note">Important Note</h2>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>The <code>run_info.mat</code> file cannot be read directly as it contains special classes not supported by <code>scipy.io.loadmat</code>. You'll need to save the required data in a different format from MATLAB.</p>
-</div>
-<h2 id="preparing-matlab-data">Preparing MATLAB Data</h2>
-<p>When working in MATLAB, ensure you:</p>
+<h1 id="getting-started">Getting Started</h1>
+<p>This guide will help you get started with CryoGrid-pyTools. The package provides various functions to work with CryoGrid data in Python.</p>
+<h2 id="basic-usage">Basic Usage</h2>
+<p>First, import the package:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">cryogrid_pytools</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cg</span>
+</code></pre></div>
+<p>The package provides several main functionalities:</p>
 <ol>
-<li>Add the <code>CryoGrid/source</code> directory to the MATLAB path before saving files</li>
-<li>Save data in a compatible format</li>
+<li>Reading CryoGrid output files</li>
+<li>Processing MATLAB struct files</li>
+<li>Working with ERA5 forcing data</li>
+<li>Handling configuration files</li>
 </ol>
-<p>For example, to save parts of <code>run_info</code>, use this MATLAB code:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c">% Save specific variables from run_info</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">save</span><span class="p">(</span><span class="s">&#39;my_data.mat&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;variable1&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;variable2&#39;</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;-v7.3&#39;</span><span class="p">)</span>
-</code></pre></div>
-<h2 id="reading-matlab-files-in-python">Reading MATLAB Files in Python</h2>
-<p>Once you have your MATLAB data in a compatible format:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">cryogrid_pytools</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">cg</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1"># Read the MATLAB file</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">data</span> <span class="o">=</span> <span class="n">cg</span><span class="o">.</span><span class="n">read_matlab_file</span><span class="p">(</span><span class="s1">&#39;my_data.mat&#39;</span><span class="p">)</span>
-</code></pre></div>
-<p>The data will be converted to appropriate Python data structures, making it easy to work with in your Python environment.</p>
+<p>Check out the specific guides for each functionality:</p>
+<ul>
+<li><a href="reading-output.md">Reading CryoGrid Output</a></li>
+<li><a href="reading-matlab.md">Reading MATLAB Structs</a></li>
+</ul>
+<h2 id="example-notebook">Example Notebook</h2>
+<p>For comprehensive examples, check out the <code>demo.ipynb</code> notebook in the repository. It contains detailed examples of various use cases and functionalities.</p>
 
 
 
@@ -676,10 +651,10 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.c8b220af.min.js"></script>
+      <script src="../assets/javascripts/bundle.c8b220af.min.js"></script>
       
     
   </body>
