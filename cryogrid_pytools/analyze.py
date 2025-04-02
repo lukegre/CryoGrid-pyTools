@@ -33,8 +33,9 @@ def calc_profile_props(ground_temperature_profile: xr.DataArray) -> xr.Dataset:
     assert da.max() < 100, "temperature should be in degrees Celsius"
     if 'gridcell' in da.dims:
         assert da.sizes['gridcell'] == 1, "You are passing multiple profiles (e.g., dim gridcell size > 1)"
-    
-    da = da.set_index(level='depth').rename(level='depth')
+    if 'level' in da.dims and 'depth' not in da.dims:
+        da = da.swap_dims(level='depth')
+
     depth = da.depth
 
     bottom_thawing_mask = detect_bottom_thawing(da)

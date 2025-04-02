@@ -153,9 +153,9 @@ def _read_OUT_regridded_parallel(
     return list_of_ds
 
 
-def read_OUT_regridded_clusters(
+def read_OUT_regridded_files(
     fname_glob: str,
-    deepest_point: float,
+    deepest_point: Union[float, None] = None,
     gridcell_func=lambda fname: fname.split("_")[-2],
     **joblib_kwargs,
 ) -> xr.Dataset:
@@ -171,10 +171,9 @@ def read_OUT_regridded_clusters(
         where GRIDCELL_ID will be extracted to assign the gridcell dimension.
         These GRIDCELL_IDs correspond with the index of the data in the
         flattened array.
-    deepest_point: float
-        When setting the configuration for when the data should be
-        saved, the maximum depth is set. Give this number as a
-        negative number here.
+    deepest_point: float or None
+        The depth below the surface that each profile is saved. 
+        If None, then depth is not returned as a coordinate.
     joblib_kwargs: dict
         Uses the joblib library to do parallel reading of the files.
         Defaults are: n_jobs=-1, backend='threading', verbose=1
@@ -187,6 +186,7 @@ def read_OUT_regridded_clusters(
         elevation will also be a variable.
     """
     import inspect
+    from loguru import logger
 
     from .utils import regex_glob
 
@@ -221,6 +221,15 @@ def read_OUT_regridded_clusters(
     # transpose data so that plotting is quick and easy
     ds = ds.transpose("gridcell", "level", "time", ...)
 
+    # fix depths - they should be the same, but could be numerically different
+    if 'depth' in ds.coords:
+        if 'gridcell' in ds.depth.dims and (ds.depth.std("gridcell") < 1e-8).all():  # set a very low threshold for equality
+            depth = ds.depth.mean('gridcell').compute()
+            ds = ds.assign_coords(depth=depth)
+            # now that depths are the same, we can rename the index to depth from the surface
+        logger.info("Depths are the same for all gridcells. Setting depth as the dimension.")
+        ds = ds.swap_dims(level='depth')
+        
     return ds
 
 
