@@ -12,12 +12,12 @@ endif
 env:  ## create your environment with uv
 	@echo Creating environment with uv
 	@source $$(pwd)/.env
-	@uv sync
+	@uv sync --all-groups --all-extras
 
 pypi-publish: env  ## build and upload to pypi (set up .env with PYPI_TOKEN)
 	@echo Removing \"dist\" directory if present
 	@rm -rf dist *.egg-info
-	@echo 
+	@echo
 	uv build
 	@echo
 	@echo publish --token '$$(PYPI_TOKEN)'

@@ -10,7 +10,7 @@ import cryogrid_pytools as cg
 fname_profiles = '.../runs/abramov-small-3classes/outputs/abramov-small-3classes_[0-9]+_197[5-9][0-9]{4}.mat'
 
 # the outputs of ds_profiles have dimensions [gridcell, depth, time]
-ds_profiles = cg.read_OUT_regridded_clusters(fname_profiles, deepest_point=-20)
+ds_profiles = cg.read_OUT_regridded_files(fname_profiles, deepest_point=-20)
 ```
 
 ## Reduce variable to one value per profile
@@ -41,7 +41,7 @@ fname_spatial = ".../runs/abramov-small-3classes/outputs/run_spatial_info.mat"
 ds_spatial = cg.spatial_clusters.read_spatial_data(fname_spatial)
 
 # Here, we map the temperature data to the spatial grid using the cluster centroid gridcell numbers
-temp_2m_mapped = cg_spatial.map_gridcells_to_clusters(
+temp_2m_mapped = cg.spatial_clusters.map_gridcells_to_clusters(
     temp_2m_mean,  # dims = [gridcell]
     ds_spatial.cluster_centroid_gridcell_2d,  # dims = [y, x]
 )
