@@ -2,12 +2,11 @@
 
 This page contains the detailed API reference for CryoGrid-pyTools.
 
-## Main Functions
+## Excel Config file
 
 ::: cryogrid_pytools.CryoGridConfigExcel
     handler: python
     options:
-      docstring_style: numpy
       members:
         - get_class
         - get_classes
@@ -15,17 +14,23 @@ This page contains the detailed API reference for CryoGrid-pyTools.
         - get_dem_path
         - get_output_max_depth
 
+## Reading profile outputs
+
 ::: cryogrid_pytools.read_OUT_regridded_file
-::: cryogrid_pytools.read_OUT_regridded_clusters
+::: cryogrid_pytools.read_OUT_regridded_files
 ::: cryogrid_pytools.read_mat_struct_flat_as_dict
 ::: cryogrid_pytools.read_mat_struct_as_dataset
+
+## Reading clustering outputs
+::: cryogrid_pytools.spatial_clusters.read_spatial_data
+::: cryogrid_pytools.spatial_clusters.map_gridcells_to_clusters
 
 ## ERA5 Forcing
 
 ::: cryogrid_pytools.forcing.read_mat_ear5
 ::: cryogrid_pytools.forcing.era5_to_matlab
 
-## Spatial Data
+## Elevation, land cover, snow melt
 
 ::: cryogrid_pytools.data.get_dem_copernicus30
 ::: cryogrid_pytools.data.get_esa_land_cover

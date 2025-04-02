@@ -19,8 +19,8 @@ The package provides several main functionalities:
 
 Check out the specific guides for each functionality:
 
-- [Reading CryoGrid Output](reading-output.md)
-- [Reading MATLAB Structs](reading-matlab.md)
+- [Reading CryoGrid Output](usage/reading-output.md)
+- [Reading MATLAB Structs](usage/reading-matlab.md)
 
 ## Example Notebook
 

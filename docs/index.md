@@ -17,7 +17,7 @@ CryoGrid-pyTools is a Python package designed to facilitate working with CryoGri
 ## Quick Links
 
 - [Installation Guide](installation.md)
-- [Getting Started](usage/getting-started.md)
+- [Getting Started](getting-started.md)
 - [API Reference](api-reference.md)
 
 ## License

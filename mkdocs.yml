@@ -53,6 +53,7 @@ nav:
   - Usage:
     - Reading CryoGrid Output: usage/reading-output.md
     - Reading MATLAB Structs: usage/reading-matlab.md
+    - Mapping clustered runs: usage/mapping-clustered-runs.md
     - Working with Forcing Data: usage/forcing.md
-    - Spatial Data and Forcing: usage/spatial-data.md
+    - Spatial Data and Forcing: usage/forcing-spatial.md
   - API Reference: api-reference.md
