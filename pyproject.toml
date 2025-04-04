@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "cryogrid_pytools"
-version = "0.3.2"
+version = "0.3.3"
 description = "Tools to read in CryoGrid MATLAB data to Python and create forcing data"
 readme = "README.md"
 license = "MIT"
@@ -46,15 +46,20 @@ classifiers = [  # see https://pypi.org/classifiers/
 data = [
     "bottleneck>=1.4.2",
     "earthaccess>=0.11.0",
+    "ee>=0.2",
     "era5-downloader>=0.1.4",
     "geopandas>=1.0.1",
     "ipywidgets>=8.1.5",
     "memoization>=0.4.0",
     "planetary-computer>=1.0.0",
     "pooch>=1.8.2",
+    "pyarrow>=19.0.1",
     "pystac-client>=0.8.3",
+    "pyzenodo3>=1.0.2",
     "rioxarray>=0.15.0",
+    "setuptools>=78.1.0",
     "stackstac>=0.5.1",
+    "wxee>=0.4.2",
     "xarray-raster-vector",
 ]
 docs = [
