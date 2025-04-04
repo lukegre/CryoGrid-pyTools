@@ -4,6 +4,7 @@ import ee
 import wxee  # noqa
 import rioxarray  # noqa
 
+from loguru import logger
 from .utils import _decorator_dataarray_to_bbox
 
 
@@ -43,6 +44,9 @@ def get_modis_albedo_500m(bbox_WSEN):
 
     # Load the MODIS image collection
     image_collection = ee.ImageCollection("MODIS/061/MCD43A3")
+    logger.info(
+        "Fetching MODIS albedo data from Earth Engine (MODIS/061/MCD43A3 @ 500m)"
+    )
 
     # Define the region of interest
     rio = ee.Geometry.BBox(*bbox_WSEN)
@@ -92,6 +96,9 @@ def get_aster_ged_100m_v3(bbox_WSEN):
 
     # Load the ASTER GED image
     image = ee.Image("NASA/ASTER_GED/AG100_003")
+    logger.info(
+        "Fetching ASTER-GED emissivity data from Earth Engine (NASA/ASTER_GED/AG100_003 @ 100m)"
+    )
 
     # Define the region of interest
     roi = ee.Geometry.BBox(*bbox_WSEN)

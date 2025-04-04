@@ -53,7 +53,9 @@ def get_dem_copernicus30(
     )
     res = res_m / 111_111 if epsg == 4326 else res_m
 
-    _logger.info("Fetching COP DEM Global 30m data from Planetary Computer")
+    _logger.info(
+        f"Fetching COP DEM Global data from Planetary Computer (cop-dem-glo-30 @ {res_m}m)"
+    )
     items = search_stac_items_planetary_computer("cop-dem-glo-30", bbox_WSEN)
     da_dem = _stackstac.stack(
         items=items, bounds_latlon=bbox_WSEN, resolution=res, epsg=epsg
@@ -137,7 +139,9 @@ def get_esa_land_cover(bbox_WSEN: tuple, res_m: int = 30, epsg=32643) -> _xr.Dat
     # get the units in the projection
     res = get_res_in_proj_units(res_m, epsg, min_res=10)
 
-    _logger.info("Fetching ESA World Cover (v2.0) data from Planetary Computer")
+    _logger.info(
+        f"Fetching ESA World Cover (v2.0) data from Planetary Computer (esa-worldcover @ {res_m}m)"
+    )
     items = search_stac_items_planetary_computer(
         collection="esa-worldcover",
         bbox=bbox_WSEN,
