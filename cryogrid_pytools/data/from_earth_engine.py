@@ -133,8 +133,8 @@ def get_aster_ged_100m_v3(bbox_WSEN):
     # Convert the Earth Engine image to an xarray dataset
     ds = (
         image_clipped.wx.to_xarray(scale=100, region=roi, progress=False)
-        .assign_attrs(period="2000-2008")
         .isel(time=0, drop=True)
+        .assign_attrs(period="2000-2008")
     )
 
     return ds
@@ -179,6 +179,19 @@ def get_aster_ged_emmis_elev(bbox_WSEN):
             long_name="Emissivity",
             units="dimensionless",
             standard_name="emissivity",
+            product_description=(
+                "The Advanced Spaceborne Thermal Emission and Reflection Radiometer "
+                "Global Emissivity Database (ASTER-GED) was developed by the National "
+                "Aeronautics and Space Administration's (NASA) Jet Propulsion Laboratory "
+                "(JPL), California Institute of Technology. This product includes the "
+                "mean emissivity and standard deviation for all 5 ASTER Thermal Infrared "
+                "bands, and a re-sampled ASTER GDEM. "
+                "ASTER-GED land surface temperature and emissivity (LST&E) are generated "
+                "using the ASTER Temperature Emissivity Separation (TES) algorithm in "
+                "combination with a Water Vapor Scaling (WVS) atmospheric correction "
+                "method using MODIS MOD07 atmospheric profiles and the MODTRAN 5.2 "
+                "radiative transfer model."
+            ),
             description=(
                 "Emissivity in the 8-11 um range "
                 "from ASTER Global Emissivity Dataset (ASTER GED)"
