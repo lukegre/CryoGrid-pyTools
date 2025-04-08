@@ -348,6 +348,7 @@ def _calc_sentinel2_snow_melt_doy(da_scl) -> _xr.DataArray:
         """
         Returns the time step where the snow cover is the lowest
         """
+        window = min(window, snow_mask.sizes["time"])
         filled = snow_mask.rolling(time=window, center=True, min_periods=1).max()
         lowest_cover_time = filled.count(["x", "y"]).idxmin()
         return lowest_cover_time
