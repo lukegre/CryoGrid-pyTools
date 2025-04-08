@@ -1,5 +1,5 @@
 # CryoGrid-pyTools
-Tools to read in CryoGrid MATLAB data to Python, includes forcing, outputs, DEMs, etc. 
+Tools to read in CryoGrid MATLAB data to Python, includes forcing, outputs, DEMs, etc.
 
 Feel free to use, modify, and distribute as you see fit.
 
@@ -7,10 +7,21 @@ Feel free to use, modify, and distribute as you see fit.
 
 ```bash
 pip install cryogrid_pytools
+
+# OR for the very latest bleeeeding edge version
+pip install "cryogrid-pytools[data,viz] @ git+https://github.com/lukegre/CryoGrid-pyTools.git"
+```
+
+However, I recommend using `uv` to manage your Python environments. This would be
+```bash
+uv add cryogrid-pytools[data,viz]
+
+# OR
+uv add "cryogrid-pytools[data,viz] @ git+https://github.com/lukegre/CryoGrid-pyTools.git"
 ```
 
 ## Usage
-This package can read in 
+This package can read in
 - CryoGrid output (from `OUT_regridded_FCI2`)
 - simple MATLAB struct files (not `run_info.mat`)
 - ERA5 forcing
@@ -20,8 +31,8 @@ Basic examples are shown below for the first two items, but see `demo.ipynb` for
 
 ### Reading single CryoGrid output files
 
-Currently, only output files from the calss `OUT_regridded_FCI2` are supported. 
-However, the majority of files you'll use follow this format. 
+Currently, only output files from the calss `OUT_regridded_FCI2` are supported.
+However, the majority of files you'll use follow this format.
 ```python
 import cryogrid_pytools as cgt
 
@@ -59,4 +70,3 @@ Then, in Python:
 fname = 'path_to_file/run_spatial_statvar.mat'
 spatial = cgt.read_mat_struct_as_dataset(fname, index=['Y', 'X'])
 ```
-
