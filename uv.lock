@@ -253,18 +253,6 @@ wheels = [
 ]
 
 [[package]]
-name = "blessings"
-version = "1.7"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "six" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/5c/f8/9f5e69a63a9243448350b44c87fae74588aa634979e6c0c501f26a4f6df7/blessings-1.7.tar.gz", hash = "sha256:98e5854d805f50a5b58ac2333411b0482516a8210f23f43308baeb58d77c157d", size = 28194 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/03/74/489f85a78247609c6b4f13733cbf3ba0d864b11aa565617b645d6fdf2a4a/blessings-1.7-py3-none-any.whl", hash = "sha256:b1fdd7e7a675295630f9ae71527a8ebc10bfefa236b3d6aa4932ee4462c17ba3", size = 18460 },
-]
-
-[[package]]
 name = "bokeh"
 version = "3.4.3"
 source = { registry = "https://pypi.org/simple" }
@@ -929,7 +917,7 @@ data = [
     { name = "bottleneck" },
     { name = "earthaccess", version = "0.11.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
     { name = "earthaccess", version = "0.14.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
-    { name = "ee" },
+    { name = "earthengine-api" },
     { name = "era5-downloader" },
     { name = "geopandas" },
     { name = "ipywidgets" },
@@ -975,7 +963,7 @@ requires-dist = [
     { name = "dask", extras = ["array"], specifier = ">=2024" },
     { name = "dask", extras = ["diagnostics"], specifier = ">=2024" },
     { name = "earthaccess", marker = "extra == 'data'", specifier = ">=0.11.0" },
-    { name = "ee", marker = "extra == 'data'", specifier = ">=0.2" },
+    { name = "earthengine-api", marker = "extra == 'data'", specifier = ">=1.5.9" },
     { name = "era5-downloader", marker = "extra == 'data'", specifier = ">=0.1.4" },
     { name = "folium", marker = "extra == 'viz'", specifier = ">=0.19.5" },
     { name = "geopandas", marker = "extra == 'data'", specifier = ">=1.0.1" },
@@ -1206,15 +1194,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/fa/30/2b0b4654d4e4a8465
 wheels = [
     { url = "https://files.pythonhosted.org/packages/2d/f0/2e86a16768ba5afd7acb749cf3800085fe5ec82f5517388723d3043a62ba/earthengine_api-1.5.9-py3-none-any.whl", hash = "sha256:a8d008891139af80590676bad7494d65cf1f16b2bb4e9fe62964289936c8d11a", size = 461097 },
 ]
-
-[[package]]
-name = "ee"
-version = "0.2"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "blessings" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/1e/85/c84cb4e02eeec6be1be045bc9b6c16ed964cb0c614abd3f0eee127f1b2be/ee-0.2.tar.gz", hash = "sha256:3f1bc017e8eb293425e7378a865c2b24cef67166f6929bd2289ea9413d0a7c65", size = 3038 }
 
 [[package]]
 name = "era5-downloader"
@@ -1761,7 +1740,7 @@ name = "importlib-metadata"
 version = "8.6.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "zipp" },
+    { name = "zipp", marker = "python_full_version < '3.12'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/33/08/c1395a292bb23fd03bdf572a1357c5a733d3eecbab877641ceacab23db6e/importlib_metadata-8.6.1.tar.gz", hash = "sha256:310b41d755445d74569f993ccfc22838295d9fe005425094fad953d7f15c8580", size = 55767 }
 wheels = [
