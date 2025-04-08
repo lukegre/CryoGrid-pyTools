@@ -4,7 +4,7 @@ import xarray as _xr
 import earthaccess as _earthaccess
 import pooch as _pooch
 import rioxarray as _rxr  # noqa
-import xarray_raster_vector as _xrv  # noqa
+from .. import xr_raster_vector as _xrv  # noqa
 
 
 def _decorator_dataarray_to_bbox(func):

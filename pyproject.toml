@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "cryogrid_pytools"
-version = "0.3.4"
+version = "0.3.6"
 description = "Tools to read in CryoGrid MATLAB data to Python and create forcing data"
 readme = "README.md"
 license = "MIT"
@@ -27,6 +27,7 @@ dependencies = [
     "pip>=24",
     "scipy>=1.13.1",
     "xarray>=2024",
+    "zarr<=3.0.0",
 ]
 classifiers = [  # see https://pypi.org/classifiers/
     "Development Status :: 3 - Alpha",
@@ -57,10 +58,10 @@ data = [
     "pystac-client>=0.8.3",
     "pyzenodo3>=1.0.2",
     "rioxarray>=0.15.0",
+    "scikit-image>=0.24.0",
     "setuptools>=78.1.0",
     "stackstac>=0.5.1",
     "wxee>=0.4.2",
-    "xarray-raster-vector",
 ]
 docs = [
     "mkdocs>=1.5.0",
@@ -72,8 +73,9 @@ docs = [
 ]
 viz = [
     "folium>=0.19.5",
-    "mapclassify>=2.8.1",
     "geopandas>=1.0.1",
+    "mapclassify>=2.8.1",
+    "scikit-image>=0.24.0",
 ]
 
 [tool.setuptools.packages.find]
@@ -83,8 +85,8 @@ include = ["cryogrid_pytools", "cryogrid_pytools.*"]
 "Homepage" = "https://github.com/lukegre/CryoGrid-pyTools"
 "CryoGrid" = "https://github.com/CryoGrid"
 
-[tool.uv.sources]
-xarray-raster-vector = { git = "https://github.com/lukegre/xarray-raster-vector.git" }
+[tool.hatch.metadata]
+allow-direct-references = true
 
 [dependency-groups]
 dev = [

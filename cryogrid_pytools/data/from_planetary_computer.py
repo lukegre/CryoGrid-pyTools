@@ -1,9 +1,9 @@
 try:
     import rioxarray as _rxr  # noqa
     import stackstac as _stackstac  # noqa
-    import xarray_raster_vector as _xrv  # noqa
     import pystac_client as _pystac_client
     import planetary_computer as _planetary_computer
+    from .. import xr_raster_vector as _xrv  # noqa
 except ImportError as e:
     missing_package = str(e).split("'")[1]
     raise ImportError(
@@ -77,7 +77,7 @@ def get_dem_copernicus30(
         The DEM data as an xarray DataArray with attributes.
     """
     from ..utils import drop_coords_without_dim
-    from .utils import check_epsg, search_stac_items_planetary_computer, smooth_data
+    from .utils import check_epsg, smooth_data
 
     check_epsg(epsg)
 
@@ -100,6 +100,7 @@ def get_dem_copernicus30(
         .pipe(drop_coords_without_dim)
         .pipe(smooth_data, n_iters=smoothing_iters, kernel_size=smoothing_size)
         .rio.write_crs(f"EPSG:{epsg}")
+        .rename("cop_dem_glo_30")
         .assign_attrs(
             source=items[0].links[0].href,  # collection URL
             bbox_request=bbox_WSEN,
@@ -132,7 +133,6 @@ def get_esa_land_cover(bbox_WSEN: tuple, res_m: int = 30, epsg=32643) -> _xr.Dat
     from .utils import (
         check_epsg,
         get_res_in_proj_units,
-        search_stac_items_planetary_computer,
     )
 
     def get_land_cover_classes(item):
@@ -188,7 +188,7 @@ def get_esa_land_cover(bbox_WSEN: tuple, res_m: int = 30, epsg=32643) -> _xr.Dat
     da = (
         _stackstac.stack(**stac_props)
         .max(["band", "time"], keep_attrs=True)  # removing the single band dimension
-        .rename("land_cover")
+        .rename("esa_world_cover")
         .assign_attrs(**get_land_cover_classes(items[0]))
     )
 
@@ -231,7 +231,6 @@ def get_sentinel2_data(
     from .utils import (
         check_epsg,
         get_res_in_proj_units,
-        search_stac_items_planetary_computer,
     )
 
     check_epsg(epsg)

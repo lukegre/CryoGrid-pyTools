@@ -1,5 +1,6 @@
 from functools import lru_cache
 
+import xarray as xr
 import ee
 import wxee  # noqa
 import rioxarray  # noqa
@@ -16,16 +17,17 @@ def gee_auth():
     This function initializes the Earth Engine API. If the user is not
     authenticated, it prompts for authentication and then initializes the API.
     """
+    from ee.ee_exception import EEException
+
     try:
         ee.Initialize()
-    except Exception as e:
-        if "not authenticated" in str(e):
-            ee.Authenticate()
-            ee.Initialize()
+    except EEException:
+        ee.Authenticate()
+        ee.Initialize()
 
 
 @_decorator_dataarray_to_bbox
-def get_modis_albedo_500m(bbox_WSEN):
+def get_modis_albedo_500m(bbox_WSEN) -> xr.DataArray:
     """
     Retrieve MODIS albedo data at 500m resolution for a given bounding box.
 
@@ -68,9 +70,10 @@ def get_modis_albedo_500m(bbox_WSEN):
     # Convert the Earth Engine image to an xarray dataset
     ds = (
         image_10th_pct.wx.to_xarray(scale=500, region=rio, progress=False)
-        .assign_attrs(period="2000-2008")
+        .assign_attrs(period="2000-2008", percentile=10)
         .pipe(lambda x: x * 0.001)  # Scale factor for albedo
-        .isel(time=0, drop=True)
+        .isel(time=0, drop=True)["Albedo_BSA_shortwave_p10"]
+        .rename("modis_albedo_BSA_shortwave")
     )
 
     return ds
@@ -177,7 +180,7 @@ def get_aster_ged_emmis_elev(bbox_WSEN):
     )
 
     # Combine elevation and emissivity into a single dataset
-    out = ds[["elevation"]]
-    out["emissivity"] = emissivity
+    out = ds[["elevation"]].rename(elevation="aster_elevation")
+    out["aster_emissivity"] = emissivity
 
     return out

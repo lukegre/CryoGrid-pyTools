@@ -52,7 +52,7 @@ def get_randolph_glacier_inventory(target_dem=None, dest_dir=None):
         bbox = target_dem.rv.get_bbox_latlon()
         df = gpd.read_file(fname_shp, bbox=bbox).to_crs(target_dem.rio.crs)
         df = df.dissolve()
-        ds = df.rv.to_raster(target_dem)
+        ds = df.rv.to_raster(target_dem).rename("glaciers_RGI")
         return ds
 
     return df
@@ -98,9 +98,9 @@ def get_TPRoGI_rock_glaciers(target_dem=None, dest_dir=None) -> gpd.GeoDataFrame
         df = df.dissolve()
         if len(df) == 0:
             logger.warning("No rock glaciers found in the bounding box.")
-            return (target_dem * 0).astype(bool)
+            return (target_dem * 0).astype(bool).rename("rock_glaciers_TPRoGI")
         else:
-            ds = df.rv.to_raster(target_dem)
+            ds = df.rv.to_raster(target_dem).rename("rock_glaciers_TPRoGI")
         return ds
 
     return df
