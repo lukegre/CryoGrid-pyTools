@@ -58,7 +58,7 @@ def get_modis_albedo_500m(bbox_WSEN) -> xr.DataArray:
     image_clipped = (
         image_collection.select("Albedo_BSA_shortwave")
         .filterBounds(rio)
-        .filterDate("2007-06-01", "2008-09-01")
+        .filterDate("2002-06-01", "2010-09-01")
         .filter(ee.Filter.calendarRange(6, 9, "month"))
     )
 
@@ -70,10 +70,28 @@ def get_modis_albedo_500m(bbox_WSEN) -> xr.DataArray:
     # Convert the Earth Engine image to an xarray dataset
     ds = (
         image_10th_pct.wx.to_xarray(scale=500, region=rio, progress=False)
-        .assign_attrs(period="2000-2008", percentile=10)
         .pipe(lambda x: x * 0.001)  # Scale factor for albedo
         .isel(time=0, drop=True)["Albedo_BSA_shortwave_p10"]
         .rename("modis_albedo_BSA_shortwave")
+        .assign_attrs(
+            period="2000-2008",
+            percentile=10,
+            processing=(
+                "Data between 2000 and 2008 for only the summer months was used to "
+                "compute the 10th percentile of the albedo values on the Albedo_BSA_shortwave "
+                "variable. This means that estimates are on the lower end when there is no "
+                "snow cover. Minimum was not used since this could include numerical noise."
+            ),
+            product_description=(
+                "The MCD43A3 V6.1 Albedo Model dataset is a daily 16-day product. "
+                "It provides both directional hemispherical reflectance (black sky albedo) "
+                "and bihemispherical reflectance (white sky albedo) for each of the MODIS "
+                "surface reflectance bands (band 1 through band 7) as well as 3 broad "
+                "spectrum bands (visible, near infrared, and shortwave). Each 500m/pixel "
+                "daily image is generated using 16 days of data, centered on the given day. "
+                "A quality band is also provided for each of the 10 albedo bands."
+            ),
+        )
     )
 
     return ds
