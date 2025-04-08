@@ -3,8 +3,6 @@ import xarray as _xr
 
 import earthaccess as _earthaccess
 import pooch as _pooch
-import pystac_client as _pystac_client
-import planetary_computer as _planetary_computer
 import rioxarray as _rxr  # noqa
 import xarray_raster_vector as _xrv  # noqa
 
@@ -113,37 +111,6 @@ def download_url(url, **kwargs):
     flist = _pooch.retrieve(url=url, **props)
 
     return flist
-
-
-def search_stac_items_planetary_computer(collection, bbox, **kwargs) -> list:
-    """
-    Searches for STAC items from the Planetary Computer.
-
-    Parameters
-    ----------
-    collection : str
-        The name of the collection to search within.
-    bbox : list
-        The bounding box to search within, specified as [minx, miny, maxx, maxy].
-    **kwargs : Additional keyword arguments to pass to the search.
-
-    Returns
-    -------
-    list
-        A list of STAC items matching the search criteria.
-    """
-
-    URL_PLANETARY_COMPUTER = "https://planetarycomputer.microsoft.com/api/stac/v1"
-
-    catalog = _pystac_client.Client.open(
-        url=URL_PLANETARY_COMPUTER, modifier=_planetary_computer.sign_inplace
-    )
-
-    search = catalog.search(collections=[collection], bbox=bbox, **kwargs)
-
-    items = search.item_collection()
-
-    return items
 
 
 def check_epsg(epsg: int) -> bool:
