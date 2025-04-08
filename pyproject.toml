@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "cryogrid_pytools"
-version = "0.3.3"
+version = "0.3.4"
 description = "Tools to read in CryoGrid MATLAB data to Python and create forcing data"
 readme = "README.md"
 license = "MIT"
@@ -75,6 +75,9 @@ viz = [
     "mapclassify>=2.8.1",
     "geopandas>=1.0.1",
 ]
+
+[tool.setuptools.packages.find]
+include = ["cryogrid_pytools", "cryogrid_pytools.*"]
 
 [project.urls]
 "Homepage" = "https://github.com/lukegre/CryoGrid-pyTools"
