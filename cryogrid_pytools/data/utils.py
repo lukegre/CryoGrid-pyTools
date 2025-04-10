@@ -1,9 +1,9 @@
-from memoization import cached as _cached
-import xarray as _xr
-
 import earthaccess as _earthaccess
 import pooch as _pooch
 import rioxarray as _rxr  # noqa
+import xarray as _xr
+from memoization import cached as _cached
+
 from .. import xr_raster_vector as _xrv  # noqa
 
 
@@ -272,3 +272,9 @@ def read_zenodo_record(zenodo_id, flist=None, dest_dir=None):
         else:
             out.append(fname)
     return out
+
+
+def _long_string_processor(text):
+    from textwrap import dedent
+
+    return " ".join(dedent(text).splitlines()).strip()

@@ -100,3 +100,32 @@ def regex_glob(fpath_with_wildcards_or_regex):
     else:
         # Use glob for glob patterns or literal paths
         return sorted(glob(fpath_with_wildcards_or_regex))
+
+
+def check_packages(required_package_names: tuple[str], message: str = None):
+    """
+    Check if the required packages are installed.
+
+    Parameters
+    ----------
+    required_package_names : tuple of str
+        A tuple of package names to check for installation.
+    message : str, optional
+        A custom message to display if any package is not installed.
+
+    Raises
+    ------
+    ImportError
+        If any of the required packages are not installed.
+    """
+    import importlib
+
+    for package_name in required_package_names:
+        try:
+            importlib.import_module(package_name)
+        except ImportError:
+            print(package_name)
+            raise ImportError(
+                message
+                or f"Package '{package_name}' is not installed. Please install it."
+            )

@@ -22,7 +22,7 @@ repos:
     rev: 'v0.9.10'
     hooks:
     - id: ruff
-      args: [--fix, --exit-non-zero-on-fix]
+      args: [--fix, --exit-non-zero-on-fix, --select, I,F,RUFF]
       types_or: [ python, ]
     - id: ruff-format
       types_or: [ python, ]

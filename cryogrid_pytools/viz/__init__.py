@@ -1,3 +1,14 @@
+from ..utils import check_packages
+
+check_packages(
+    ("folium", "geopandas", "mapclassify", "skimage", "rioxarray"),
+    message=(
+        "You need to install Cryogrid-PyTools with the `viz` extra to use this module. \n"
+        'Please install it with `pip install "cryogrid-pytools[viz]"`.\n'
+        'For a full installation use `pip install "cryogrid-pytools[data,viz]".'
+    ),
+)
+
 import rioxarray as xrx  # noqa
 from .. import xr_raster_vector as _xrv  # noqa
 
