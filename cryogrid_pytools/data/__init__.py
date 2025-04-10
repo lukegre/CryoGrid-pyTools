@@ -34,6 +34,7 @@ from .from_earth_engine import get_aster_ged_emmis_elev, get_modis_albedo_500m
 from .from_planetary_computer import (
     get_dem_copernicus30,
     get_esa_land_cover,
+    get_esri_land_cover,
     get_snow_melt_doy,
 )
 from .shapefiles import (
@@ -46,6 +47,7 @@ __all__ = [
     "make_era5_downloader",
     "get_dem_copernicus30",
     "get_esa_land_cover",
+    "get_esri_land_cover",
     "get_snow_melt_doy",
     "get_modis_albedo_500m",
     "get_aster_ged_emmis_elev",
