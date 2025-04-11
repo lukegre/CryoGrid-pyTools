@@ -1,9 +1,10 @@
+import warnings
+
 import geopandas as gpd
 import numpy as np
-import xarray as xr
 import pandas as pd
+import xarray as xr
 from loguru import logger
-import warnings
 
 warnings.filterwarnings(
     "ignore", category=UserWarning, message=".*Geometry is in a geographic CRS.*"
@@ -45,7 +46,7 @@ def raster_bool_to_vector(
         crs = "EPSG:4326"
 
     def get_coord(s):
-        geometry.Polygon(s[0]["coordinates"][0])
+        return geometry.Polygon(s[0]["coordinates"][0])
 
     polygons = [get_coord(shape) for shape in shapes if shape[1] == 1]
 

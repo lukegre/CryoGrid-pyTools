@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "cryogrid_pytools"
-version = "0.3.9"
+version = "0.3.10"
 description = "Tools to read in CryoGrid MATLAB data to Python and create forcing data"
 readme = "README.md"
 license = "MIT"
@@ -60,6 +60,7 @@ data = [
     "setuptools>=78.1.0",
     "stackstac>=0.5.1",
     "wxee>=0.4.2",
+    "zarr<3",
 ]
 dev = [
     "ipykernel>=6.29.5",
