@@ -234,6 +234,7 @@ def read_OUT_regridded_files(
             "Depths are the same for all gridcells. Setting depth as the dimension."
         )
         ds = ds.swap_dims(level="depth")
+        ds = ds.reset_coords("elevation")
 
     return ds
 
