@@ -1543,7 +1543,7 @@ flattened array.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>The depth below the surface that each profile is saved. 
+                <p>The depth below the surface that each profile is saved.
 If None, then depth is not returned as a coordinate.</p>
               </div>
             </td>
@@ -1839,27 +1839,21 @@ data as values.</p>
   <p>You have to manually save this data since Python cannot read in
 the run_parameters.mat file. It needs to be a flat struct. Below is the
 MATLAB code to save the spatial data:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">cluster_num</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">run_info</span><span class="p">.</span><span class="n">CLUSTER</span><span class="p">.</span><span class="n">STATVAR</span><span class="p">.</span><span class="n">cluster_number</span><span class="p">;</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">data</span><span class="p">.</span><span class="n">coord_x</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">run_info</span><span class="p">.</span><span class="n">SPATIAL</span><span class="p">.</span><span class="n">STATVAR</span><span class="p">.</span><span class="n">X</span><span class="p">;</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">data</span><span class="p">.</span><span class="n">coord_y</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">run_info</span><span class="p">.</span><span class="n">SPATIAL</span><span class="p">.</span><span class="n">STATVAR</span><span class="p">.</span><span class="n">Y</span><span class="p">;</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">data</span><span class="p">.</span><span class="n">lat</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">run_info</span><span class="p">.</span><span class="n">SPATIAL</span><span class="p">.</span><span class="n">STATVAR</span><span class="p">.</span><span class="n">latitude</span><span class="p">;</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">data</span><span class="p">.</span><span class="n">lon</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">run_info</span><span class="p">.</span><span class="n">SPATIAL</span><span class="p">.</span><span class="n">STATVAR</span><span class="p">.</span><span class="n">longitude</span><span class="p">;</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">data</span><span class="p">.</span><span class="n">mask</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">run_info</span><span class="p">.</span><span class="n">SPATIAL</span><span class="p">.</span><span class="n">STATVAR</span><span class="p">.</span><span class="n">mask</span><span class="p">;</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="n">data</span><span class="p">.</span><span class="n">elevation</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">run_info</span><span class="p">.</span><span class="n">SPATIAL</span><span class="p">.</span><span class="n">STATVAR</span><span class="p">.</span><span class="n">altitude</span><span class="p">;</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="n">data</span><span class="p">.</span><span class="n">slope_angle</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">run_info</span><span class="p">.</span><span class="n">SPATIAL</span><span class="p">.</span><span class="n">STATVAR</span><span class="p">.</span><span class="n">slope_angle</span><span class="p">;</span>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="n">data</span><span class="p">.</span><span class="n">aspect</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">run_info</span><span class="p">.</span><span class="n">SPATIAL</span><span class="p">.</span><span class="n">STATVAR</span><span class="p">.</span><span class="n">aspect</span><span class="p">;</span>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="n">data</span><span class="p">.</span><span class="n">skyview_factor</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">run_info</span><span class="p">.</span><span class="n">SPATIAL</span><span class="p">.</span><span class="n">STATVAR</span><span class="p">.</span><span class="n">skyview_factor</span><span class="p">;</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="n">data</span><span class="p">.</span><span class="n">stratigraphy_index</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">run_info</span><span class="p">.</span><span class="n">SPATIAL</span><span class="p">.</span><span class="n">STATVAR</span><span class="p">.</span><span class="n">stratigraphy_index</span><span class="p">;</span>
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="n">data</span><span class="p">.</span><span class="n">matlab_index</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nb">size</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">elevation</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)]</span><span class="o">&#39;</span><span class="p">;</span>
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="n">data</span><span class="p">.</span><span class="n">cluster_num</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">run_info</span><span class="p">.</span><span class="n">CLUSTER</span><span class="p">.</span><span class="n">STATVAR</span><span class="p">.</span><span class="n">cluster_number</span><span class="p">;</span>
-<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="n">data</span><span class="p">.</span><span class="n">cluster_idx</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">run_info</span><span class="p">.</span><span class="n">CLUSTER</span><span class="p">.</span><span class="n">STATVAR</span><span class="p">.</span><span class="n">sample_centroid_index</span><span class="p">;</span>
-<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>
-<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="n">sname</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">strcat</span><span class="p">(</span><span class="n">provider</span><span class="p">.</span><span class="n">PARA</span><span class="p">.</span><span class="n">result_path</span><span class="p">,</span><span class="w"> </span><span class="n">provider</span><span class="p">.</span><span class="n">PARA</span><span class="p">.</span><span class="n">run_name</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;/run_spatial_info.mat&#39;</span><span class="p">);</span>
-<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="nb">save</span><span class="p">(</span><span class="n">sname</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;data&#39;</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">skip_fields</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">{</span><span class="s">&#39;key&#39;</span><span class="p">};</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">for</span><span class="w"> </span><span class="n">field</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">fieldnames</span><span class="p">(</span><span class="n">run_info</span><span class="p">.</span><span class="n">SPATIAL</span><span class="p">.</span><span class="n">STATVAR</span><span class="p">)</span><span class="o">&#39;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="n">field_item_spatial</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">field</span><span class="p">{</span><span class="mi">1</span><span class="p">};</span><span class="w"> </span><span class="c">% Extract string</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">~</span><span class="nb">ismember</span><span class="p">(</span><span class="n">field_item_spatial</span><span class="p">,</span><span class="w"> </span><span class="n">skip_fields</span><span class="p">)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">        </span><span class="n">data</span><span class="p">.(</span><span class="n">field_item_spatial</span><span class="p">)</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">run_info</span><span class="p">.</span><span class="n">SPATIAL</span><span class="p">.</span><span class="n">STATVAR</span><span class="p">.(</span><span class="n">field_item_spatial</span><span class="p">);</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="k">end</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="k">end</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="k">for</span><span class="w"> </span><span class="n">field</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">fieldnames</span><span class="p">(</span><span class="n">run_info</span><span class="p">.</span><span class="n">CLUSTER</span><span class="p">.</span><span class="n">STATVAR</span><span class="p">)</span><span class="o">&#39;</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="n">field_item_cluster</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">field</span><span class="p">{</span><span class="mi">1</span><span class="p">};</span><span class="w"> </span><span class="c">% Same fix here</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="n">data</span><span class="p">.(</span><span class="n">field_item_cluster</span><span class="p">)</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">run_info</span><span class="p">.</span><span class="n">CLUSTER</span><span class="p">.</span><span class="n">STATVAR</span><span class="p">.(</span><span class="n">field_item_cluster</span><span class="p">);</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="k">end</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="n">sname</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">strcat</span><span class="p">(</span><span class="n">provider</span><span class="p">.</span><span class="n">PARA</span><span class="p">.</span><span class="n">result_path</span><span class="p">,</span><span class="w"> </span><span class="n">provider</span><span class="p">.</span><span class="n">PARA</span><span class="p">.</span><span class="n">run_name</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;/run_spatial_info.mat&#39;</span><span class="p">);</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="nb">save</span><span class="p">(</span><span class="n">sname</span><span class="p">,</span><span class="w"> </span><span class="s">&#39;data&#39;</span><span class="p">);</span>
 </code></pre></div>
 </details>
 
@@ -1908,23 +1902,6 @@ by default None</p>
                   <code>None</code>
             </td>
           </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>gridcell_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Name of the gridcell variable in the spatial data, by default 'matlab_index'
-This is based on how you save the spatial data in MATLAB</p>
-              </div>
-            </td>
-            <td>
-                  <code>&#39;matlab_index&#39;</code>
-            </td>
-          </tr>
       </tbody>
     </table>
 
@@ -1946,17 +1923,18 @@ This is based on how you save the spatial data in MATLAB</p>
               <div class="doc-md-description">
                 <p>Dataset with the spatial information. Contains the variables:
 1D variables [cluster_num as dim]:
-    - cluster_centroid_gridcell:
-            the gridcell of the cluster centroid of
+    - cluster_centroid_index:
+            the index of the cluster centroid of
             each cluster with the cluster_num as the dimension
 2D variables [y, x as dims]:
-    - lon / lat: longitude and latitude of the gridcells
-    - mask: mask of the gridcells
-    - elevation-based variables (e.g., elevation, slope, aspect)
-    - stratigraphy_index: used for stratigraphy configuration selection
-    - gridcell: the index of flattened data represented in 2D
-    - cluster_num_2d: the cluster number that each gridcell belongs to
-    - cluster_centroid_gridcell_2d: the gridcell of the cluster centroid of each cluster</p>
+    - longitude / latitude
+    - mask: mask of the indexs
+    - all variables in run_info.SPATIAL.STATVAR
+    - from run_info.CLUSTER.STATVAR
+        - cluster_number: the cluster number that each index belongs to
+        - cluster_number_mapped: a 2d representation of the cluster_number
+        - cluster_centroid_index: the index of the cluster centroid with cluster_number as the dim
+        - cluster_centroid_index_mapped: the index of the cluster centroid of each cluster</p>
               </div>
             </td>
           </tr>
@@ -2002,8 +1980,8 @@ This is based on how you save the spatial data in MATLAB</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Single depth selection of the profiles with gridcell dimension only.
-Note that gridcell must start at 1 (0 is reserved for masked data).</p>
+                <p>Single depth selection of the profiles with <code>index</code> dimension only.
+Note that <code>index</code> must start at 1 (0 is reserved for masked data).</p>
               </div>
             </td>
             <td>
@@ -2012,14 +1990,14 @@ Note that gridcell must start at 1 (0 is reserved for masked data).</p>
           </tr>
           <tr class="doc-section-item">
             <td>
-                <code>cluster_centroid_gridcell_2D</code>
+                <code>cluster_centroid_index_mapped</code>
             </td>
             <td>
                   <code><span title="xarray.DataArray">DataArray</span></code>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>2D array with the gridcell of the cluster centroid of each cluster
+                <p>2D array with the index of the cluster centroid of each cluster
 Must have dtype uint32. Can have 0 to represent masked data.</p>
               </div>
             </td>
@@ -2047,7 +2025,7 @@ Must have dtype uint32. Can have 0 to represent masked data.</p>
             <td>
               <div class="doc-md-description">
                 <p>The 2D array of the profiles mapped to the clusters with the same shape as
-cluster_centroid_gridcell_2D. The 2D gridcells will also be given as a coordinate</p>
+cluster_centroid_index_mapped. The 2D gridcells will also be given as a coordinate</p>
               </div>
             </td>
           </tr>
@@ -2070,7 +2048,7 @@ cluster_centroid_gridcell_2D. The 2D gridcells will also be given as a coordinat
             </td>
             <td>
               <div class="doc-md-description">
-                <p>If da (variable to be mapped) does not have gridcell dimension only</p>
+                <p>If da (variable to be mapped) does not have index dimension only</p>
               </div>
             </td>
           </tr>
