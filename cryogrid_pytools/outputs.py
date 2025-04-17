@@ -172,7 +172,7 @@ def read_OUT_regridded_files(
         These GRIDCELL_IDs correspond with the index of the data in the
         flattened array.
     deepest_point: float or None
-        The depth below the surface that each profile is saved. 
+        The depth below the surface that each profile is saved.
         If None, then depth is not returned as a coordinate.
     joblib_kwargs: dict
         Uses the joblib library to do parallel reading of the files.
@@ -186,6 +186,7 @@ def read_OUT_regridded_files(
         elevation will also be a variable.
     """
     import inspect
+
     from loguru import logger
 
     from .utils import regex_glob
@@ -193,13 +194,13 @@ def read_OUT_regridded_files(
     # get the file list
     flist = regex_glob(fname_glob)
     # extract the gridcell from the file name
-    gridcell = [gridcell_func(f) for f in flist]
-    digits = [g.isdigit() for g in gridcell]
+    index = [gridcell_func(f) for f in flist]
+    digits = [g.isdigit() for g in index]
 
     if len(flist) == 0:
         raise FileNotFoundError(f"No files found with {fname_glob}")
-    elif len(gridcell) != len(flist):
-        raise ValueError(f"Could not extract gridcell from file names for {fname_glob}")
+    elif len(index) != len(flist):
+        raise ValueError(f"Could not extract index from file names for {fname_glob}")
     elif not all(digits):
         not_digit = np.unique([f for f, d in zip(flist, digits) if not d])
         bad_func = "".join(inspect.getsource(gridcell_func).split("lambda")[1:]).strip()
@@ -208,28 +209,32 @@ def read_OUT_regridded_files(
             f"not a number for the following files:\n{not_digit}"
         )
     else:
-        gridcell = [int(g) for g in gridcell]
+        index = [int(g) for g in index]
 
     list_of_ds = _read_OUT_regridded_parallel(flist, deepest_point, **joblib_kwargs)
 
-    # assign the gridcell dimension so that we can combine the data by coordinates and time
-    list_of_ds = [ds.expand_dims(gridcell=[c]) for ds, c in zip(list_of_ds, gridcell)]
+    # assign the index dimension so that we can combine the data by coordinates and time
+    list_of_ds = [ds.expand_dims(index=[c]) for ds, c in zip(list_of_ds, index)]
     ds = xr.combine_by_coords(list_of_ds, combine_attrs="drop_conflicts")
 
     assert isinstance(ds, xr.Dataset), "Something went wrong with the parallel reading."
 
     # transpose data so that plotting is quick and easy
-    ds = ds.transpose("gridcell", "level", "time", ...)
+    ds = ds.transpose("index", "level", "time", ...)
 
     # fix depths - they should be the same, but could be numerically different
-    if 'depth' in ds.coords:
-        if 'gridcell' in ds.depth.dims and (ds.depth.std("gridcell") < 1e-8).all():  # set a very low threshold for equality
-            depth = ds.depth.mean('gridcell').compute()
+    if "depth" in ds.coords:
+        if (
+            "index" in ds.depth.dims and (ds.depth.std("index") < 1e-8).all()
+        ):  # set a very low threshold for equality
+            depth = ds.depth.mean("index").compute()
             ds = ds.assign_coords(depth=depth)
             # now that depths are the same, we can rename the index to depth from the surface
-        logger.info("Depths are the same for all gridcells. Setting depth as the dimension.")
-        ds = ds.swap_dims(level='depth')
-        
+        logger.info(
+            "Depths are the same for all gridcells. Setting depth as the dimension."
+        )
+        ds = ds.swap_dims(level="depth")
+
     return ds
 
 
