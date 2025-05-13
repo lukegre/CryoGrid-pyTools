@@ -1,11 +1,11 @@
 from functools import lru_cache
 
-import xarray as xr
 import ee
-import wxee  # noqa
 import rioxarray  # noqa
-
+import wxee  # noqa
+import xarray as xr
 from loguru import logger
+
 from .utils import _decorator_dataarray_to_bbox
 
 
@@ -27,7 +27,7 @@ def gee_auth():
 
 
 @_decorator_dataarray_to_bbox
-def get_modis_albedo_500m(bbox_WSEN) -> xr.DataArray:
+def get_modis_albedo_500m(bbox_WSEN, res=500, **kwargs) -> xr.DataArray:
     """
     Retrieve MODIS albedo data at 500m resolution for a given bounding box.
 
@@ -35,6 +35,8 @@ def get_modis_albedo_500m(bbox_WSEN) -> xr.DataArray:
     ----------
     bbox_WSEN : list or tuple
         Bounding box in the format [west, south, east, north].
+    res : int
+        Resolution in meters. Default is 500m.
 
     Returns
     -------
@@ -69,7 +71,7 @@ def get_modis_albedo_500m(bbox_WSEN) -> xr.DataArray:
 
     # Convert the Earth Engine image to an xarray dataset
     ds = (
-        image_10th_pct.wx.to_xarray(scale=500, region=rio, progress=False)
+        image_10th_pct.wx.to_xarray(scale=res, region=rio, progress=False)
         .pipe(lambda x: x * 0.001)  # Scale factor for albedo
         .isel(time=0, drop=True)["Albedo_BSA_shortwave_p10"]
         .rename("modis_albedo_BSA_shortwave")
@@ -98,7 +100,7 @@ def get_modis_albedo_500m(bbox_WSEN) -> xr.DataArray:
 
 
 @_decorator_dataarray_to_bbox
-def get_aster_ged_100m_v3(bbox_WSEN):
+def get_aster_ged_100m_v3(bbox_WSEN, res=100, **kwargs):
     """
     Retrieve ASTER GED data at 100m resolution for a given bounding box.
 
@@ -106,6 +108,8 @@ def get_aster_ged_100m_v3(bbox_WSEN):
     ----------
     bbox_WSEN : list or tuple
         Bounding box in the format [west, south, east, north].
+    res : int
+        Resolution in meters. Default is 100m.
 
     Returns
     -------
@@ -132,7 +136,7 @@ def get_aster_ged_100m_v3(bbox_WSEN):
 
     # Convert the Earth Engine image to an xarray dataset
     ds = (
-        image_clipped.wx.to_xarray(scale=100, region=roi, progress=False)
+        image_clipped.wx.to_xarray(scale=res, region=roi, progress=False)
         .isel(time=0, drop=True)
         .assign_attrs(period="2000-2008")
     )
@@ -141,7 +145,7 @@ def get_aster_ged_100m_v3(bbox_WSEN):
 
 
 @_decorator_dataarray_to_bbox
-def get_aster_ged_emmis_elev(bbox_WSEN):
+def get_aster_ged_emmis_elev(bbox_WSEN, res=100, **kwargs):
     """
     Retrieve ASTER GED emissivity and elevation data for a given bounding box.
 
@@ -161,7 +165,7 @@ def get_aster_ged_emmis_elev(bbox_WSEN):
     bbox_WSEN = tuple(bbox_WSEN)
 
     # Retrieve ASTER GED data
-    ds = get_aster_ged_100m_v3(bbox_WSEN)
+    ds = get_aster_ged_100m_v3(bbox_WSEN, res=res)
 
     # Process emissivity bands
     emissivity_bands = [f"emissivity_band{b:02d}" for b in range(10, 15)]

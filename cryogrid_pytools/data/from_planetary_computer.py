@@ -52,7 +52,7 @@ def search_stac_items_planetary_computer(collection, bbox, **kwargs) -> list:
 
 @utils._decorator_dataarray_to_bbox
 def get_dem_copernicus30(
-    bbox_WSEN: list, res_m: int = 30, epsg=32643, smoothing_iters=2, smoothing_size=3
+    bbox_WSEN: list, res: int = 30, epsg=32643, smoothing_iters=2, smoothing_size=3
 ) -> _xr.DataArray:
     """
     Download DEM data from the STAC catalog (default is COP DEM Global 30m).
@@ -61,8 +61,8 @@ def get_dem_copernicus30(
     ----------
     bbox_WSEN : list
         The bounding box of the area of interest in WSEN format.
-    res_m : int
-        The resolution of the DEM data in meters.
+    res : int
+        The resolution of the DEM data in EPSG units.
     epsg : int, optional
         The EPSG code of the projection of the DEM data. Default is
         EPSG:32643 (UTM 43N) for the Pamir region.
@@ -82,13 +82,8 @@ def get_dem_copernicus30(
 
     check_epsg(epsg)
 
-    assert res_m >= 30, (
-        "The resolution must be greater than 30m for the COP DEM Global 30m dataset."
-    )
-    res = res_m / 111_111 if epsg == 4326 else res_m
-
     _logger.info(
-        f"Fetching COP DEM Global data from Planetary Computer (cop-dem-glo-30 @ {res_m}m)"
+        f"Fetching COP DEM Global data from Planetary Computer (cop-dem-glo-30 @ {res:.2g})"
     )
     items = search_stac_items_planetary_computer("cop-dem-glo-30", bbox_WSEN)
     da_dem = _stackstac.stack(
@@ -112,7 +107,7 @@ def get_dem_copernicus30(
 
 
 @utils._decorator_dataarray_to_bbox
-def get_esa_land_cover(bbox_WSEN: tuple, res_m: int = 30, epsg=32643) -> _xr.DataArray:
+def get_esa_land_cover(bbox_WSEN: tuple, res: int = 30, epsg=32643) -> _xr.DataArray:
     """
     Get the ESA World Cover dataset on the target grid and resolution.
 
@@ -120,8 +115,8 @@ def get_esa_land_cover(bbox_WSEN: tuple, res_m: int = 30, epsg=32643) -> _xr.Dat
     ----------
     bbox_WSEN : tuple
         Bounding box in the format (West, South, East, North).
-    res_m : int, optional
-        Resolution in meters. Defaults to 30.
+    res : int, optional
+        Resolution in EPSG units. Defaults to 30 (meters for UTM).
     epsg : int, optional
         EPSG code for the coordinate reference system. Defaults to 32643.
 
@@ -168,10 +163,10 @@ def get_esa_land_cover(bbox_WSEN: tuple, res_m: int = 30, epsg=32643) -> _xr.Dat
     check_epsg(epsg)
 
     # get the units in the projection
-    res = get_res_in_proj_units(res_m, epsg, min_res=10)
+    res = get_res_in_proj_units(res, epsg, min_res=10)
 
     _logger.info(
-        f"Fetching ESA World Cover (v2.0) data from Planetary Computer (esa-worldcover @ {res_m}m)"
+        f"Fetching ESA World Cover (v2.0) data from Planetary Computer (esa-worldcover @ {res}m)"
     )
     items = search_stac_items_planetary_computer(
         collection="esa-worldcover",
@@ -210,7 +205,7 @@ def get_esa_land_cover(bbox_WSEN: tuple, res_m: int = 30, epsg=32643) -> _xr.Dat
 
 
 @utils._decorator_dataarray_to_bbox
-def get_esri_land_cover(bbox_WSEN: tuple, res_m: int = 30, epsg: int = 32643):
+def get_esri_land_cover(bbox_WSEN: tuple, res: int = 30, epsg: int = 32643):
     from .utils import _long_string_processor
 
     items = search_stac_items_planetary_computer(
@@ -222,7 +217,7 @@ def get_esri_land_cover(bbox_WSEN: tuple, res_m: int = 30, epsg: int = 32643):
     da = _stackstac.stack(
         items,
         epsg=epsg,
-        resolution=res_m,
+        resolution=res,
         bounds_latlon=bbox_WSEN,
     ).isel(time=0, band=0)
 
@@ -269,7 +264,7 @@ def get_sentinel2_data(
     bbox_WSEN: tuple,
     years=range(2018, 2025),
     assets=["SCL"],
-    res_m: int = 30,
+    res: int = 30,
     epsg=32643,
     max_cloud_cover=5,
 ) -> _xr.DataArray:
@@ -284,8 +279,8 @@ def get_sentinel2_data(
         Range of years to fetch data for. Defaults to range(2018, 2025).
     assets : list, optional
         List of assets to fetch. Defaults to ['SCL'].
-    res_m : int, optional
-        Resolution in meters. Defaults to 30.
+    res : int, optional
+        Resolution in EPSG units. Defaults to 30 (meters for UTM).
     epsg : int, optional
         EPSG code for the coordinate reference system. Defaults to 32643.
     max_cloud_cover : int, optional
@@ -299,11 +294,9 @@ def get_sentinel2_data(
     from ..utils import drop_coords_without_dim
     from .utils import (
         check_epsg,
-        get_res_in_proj_units,
     )
 
     check_epsg(epsg)
-    res = get_res_in_proj_units(res_m, epsg, min_res=10)
 
     da_list = []
     for year in years:
@@ -348,7 +341,7 @@ def get_sentinel2_data(
 
 @utils._decorator_dataarray_to_bbox
 def get_snow_melt_doy(
-    bbox_WSEN: tuple, years=range(2018, 2025), res_m: int = 30, epsg=32643
+    bbox_WSEN: tuple, years=range(2018, 2025), res: int = 30, epsg=32643
 ) -> _xr.DataArray:
     """
     Calculate the snow melt day of year (DOY) from Sentinel-2 SCL data for a given bounding box and years.
@@ -359,7 +352,7 @@ def get_snow_melt_doy(
         Bounding box coordinates in the format (West, South, East, North).
     years : range, optional
         Range of years to consider. Defaults to range(2018, 2025).
-    res_m : int, optional
+    res : int, optional
         Spatial resolution in meters. Defaults to 30.
     epsg : int, optional
         EPSG code for the coordinate reference system. Defaults to 32643.
@@ -371,7 +364,7 @@ def get_snow_melt_doy(
     """
 
     da = get_sentinel2_data(
-        bbox_WSEN, years=years, res_m=res_m, epsg=epsg, max_cloud_cover=10
+        bbox_WSEN, years=years, res=res, epsg=epsg, max_cloud_cover=10
     )
 
     _logger.info("Calculating snow melt day of year (DOY) from Sentinel-2 SCL data")

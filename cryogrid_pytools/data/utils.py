@@ -26,8 +26,12 @@ def _decorator_dataarray_to_bbox(func):
         The wrapped function with the additional functionality of handling
         DataArray and reprojecting the output.
     """
+    from functools import wraps
+
+    import numpy as np
 
     @_cached
+    @wraps(func)
     def wrapper(*args, **kwargs):
         if len(args) >= 1:
             bbox_or_target = args[0]
@@ -38,6 +42,10 @@ def _decorator_dataarray_to_bbox(func):
         if isinstance(bbox_or_target, _xr.DataArray):
             da = bbox_or_target
             bbox = da.rv.get_bbox_latlon()
+            res = np.abs(da.rio.resolution()).mean()
+            epsg = da.rio.crs.to_epsg()
+            kwargs.update(res=res, epsg=epsg)
+
             out = func(bbox, *args, **kwargs)
             out = out.rio.reproject_match(da)
 
