@@ -4,6 +4,7 @@ try:
     import pystac_client as _pystac_client
     import planetary_computer as _planetary_computer
     from .. import xr_raster_vector as _xrv  # noqa
+    from ..utils import drop_coords_without_dim
 except ImportError as e:
     missing_package = str(e).split("'")[1]
     raise ImportError(
@@ -85,7 +86,6 @@ def get_dem_copernicus(
     xarray.DataArray
         The DEM data as an xarray DataArray with attributes.
     """
-    from ..utils import drop_coords_without_dim
     from .utils import check_epsg, smooth_data
 
     check_epsg(epsg)
@@ -134,7 +134,7 @@ def get_esa_land_cover(bbox_WSEN: tuple, res: int = 30, epsg=32643) -> _xr.DataA
         A DataArray with the land cover data on the target grid. Contains
         attributes 'class_values', 'class_descriptions', 'class_colors' for plotting.
     """
-    from .utils import _long_string_processor, check_epsg, get_res_in_proj_units
+    from .utils import _long_string_processor, check_epsg
 
     def get_land_cover_classes(item):
         """
@@ -169,9 +169,6 @@ def get_esa_land_cover(bbox_WSEN: tuple, res: int = 30, epsg=32643) -> _xr.DataA
 
     # make sure epsg is supported
     check_epsg(epsg)
-
-    # get the units in the projection
-    res = get_res_in_proj_units(res, epsg, min_res=10)
 
     _logger.info(
         f"Fetching ESA World Cover (v2.0) data from Planetary Computer (esa-worldcover @ {res}m)"
@@ -208,6 +205,8 @@ def get_esa_land_cover(bbox_WSEN: tuple, res: int = 30, epsg=32643) -> _xr.DataA
             ),
         )
     )
+
+    da = da.pipe(drop_coords_without_dim).rio.write_crs(f"EPSG:{epsg}")
 
     return da
 
@@ -268,6 +267,7 @@ def get_esri_land_cover(bbox_WSEN: tuple, res: int = 30, epsg: int = 32643):
         ),
     )
 
+    da = da.pipe(drop_coords_without_dim).rio.write_crs(f"EPSG:{epsg}")
     return da
 
 
@@ -303,10 +303,7 @@ def get_sentinel2_data(
     xr.DataArray
         DataArray containing the fetched Sentinel-2 data.
     """
-    from ..utils import drop_coords_without_dim
-    from .utils import (
-        check_epsg,
-    )
+    from .utils import check_epsg
 
     check_epsg(epsg)
 
