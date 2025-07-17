@@ -51,8 +51,13 @@ def search_stac_items_planetary_computer(collection, bbox, **kwargs) -> list:
 
 
 @utils._decorator_dataarray_to_bbox
-def get_dem_copernicus30(
-    bbox_WSEN: list, res: int = 30, epsg=32643, smoothing_iters=2, smoothing_size=3
+def get_dem_copernicus(
+    bbox_WSEN: list,
+    res: int = 30,
+    epsg=32643,
+    collection="cop-dem-glo-30",
+    smoothing_iters=2,
+    smoothing_size=3,
 ) -> _xr.DataArray:
     """
     Download DEM data from the STAC catalog (default is COP DEM Global 30m).
@@ -66,6 +71,9 @@ def get_dem_copernicus30(
     epsg : int, optional
         The EPSG code of the projection of the DEM data. Default is
         EPSG:32643 (UTM 43N) for the Pamir region.
+    collection : str, optional
+        The STAC collection to search for DEM data. Default is "cop-dem-glo-30".
+        Also supports "cop-dem-glo-90" for 90m resolution.
     smoothing_iters : int, optional
         The number of iterations to apply the smoothing filter. Default is 2.
         Set to 0 to disable smoothing.
@@ -83,9 +91,9 @@ def get_dem_copernicus30(
     check_epsg(epsg)
 
     _logger.info(
-        f"Fetching COP DEM Global data from Planetary Computer (cop-dem-glo-30 @ {res:.2g})"
+        f"Fetching COP DEM Global data from Planetary Computer ({collection} @ {res:.2g})"
     )
-    items = search_stac_items_planetary_computer("cop-dem-glo-30", bbox_WSEN)
+    items = search_stac_items_planetary_computer(collection, bbox_WSEN)
     da_dem = _stackstac.stack(
         items=items, bounds_latlon=bbox_WSEN, resolution=res, epsg=epsg
     )
@@ -96,7 +104,7 @@ def get_dem_copernicus30(
         .pipe(drop_coords_without_dim)
         .pipe(smooth_data, n_iters=smoothing_iters, kernel_size=smoothing_size)
         .rio.write_crs(f"EPSG:{epsg}")
-        .rename("cop_dem_glo_30")
+        .rename(collection)
         .assign_attrs(
             source=items[0].links[0].href,  # collection URL
             bbox_request=bbox_WSEN,
