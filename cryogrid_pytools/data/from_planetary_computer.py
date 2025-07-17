@@ -222,12 +222,16 @@ def get_esri_land_cover(bbox_WSEN: tuple, res: int = 30, epsg: int = 32643):
         datetime="2020-01-01/2020-12-31",
     )
 
-    da = _stackstac.stack(
-        items,
-        epsg=epsg,
-        resolution=res,
-        bounds_latlon=bbox_WSEN,
-    ).isel(time=0, band=0)
+    da = (
+        _stackstac.stack(
+            items,
+            epsg=epsg,
+            resolution=res,
+            bounds_latlon=bbox_WSEN,
+        )
+        .mean("time")
+        .isel(band=0)
+    )
 
     da = da.rename("land_use_and_cover").assign_attrs(
         long_name="Land use and land cover (LULC) from ESA Sentinel-2",
