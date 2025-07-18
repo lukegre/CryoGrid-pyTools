@@ -55,8 +55,8 @@ class CryoGridConfigExcel:
             ),
             "era5": partial(
                 self.get_class_filepath,
-                key="ERA5",
-                folder_key="folder",
+                key="read_mat_ERA",
+                folder_key="forcing_path",
                 fname_key="filename",
                 index=1,
             ),
