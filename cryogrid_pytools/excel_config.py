@@ -31,16 +31,43 @@ class CryoGridConfigExcel:
             If True, perform a check that stratigraphy layer parameters are
             physically plausible
         """
+        from functools import partial
+
         self.fname = pathlib.Path(fname_xls).resolve()
         self.root = self._get_root_path()
         self._df = self._load_xls(fname_xls)
         logger.success(f"Loaded CryoGrid Excel configuration file: {self.fname}")
 
+        self.path_funcs = {
+            "dem": partial(
+                self.get_class_filepath,
+                key="DEM",
+                folder_key="folder",
+                fname_key="filename",
+                index=1,
+            ),
+            "coords": partial(
+                self.get_class_filepath,
+                key="COORDINATES_FROM_FILE",
+                folder_key="folder",
+                fname_key="file_name",
+                index=1,
+            ),
+            "era5": partial(
+                self.get_class_filepath,
+                key="ERA5",
+                folder_key="folder",
+                fname_key="filename",
+                index=1,
+            ),
+        }
+
         self.fname = Munch()
-        self.fname.dem = self.get_dem_path()
-        self.fname.coords = self.get_coord_path()
-        self.fname.era5 = self.get_forcing_path()
-        self.fname.datasets = self.get_dataset_paths()
+        for key, func in self.path_funcs.items():
+            try:
+                self.fname[key] = func().resolve()
+            except Exception as e:
+                logger.debug(f"Could not get {key} path: {e}")
 
         self.time = self.get_start_end_times()
 
@@ -96,76 +123,6 @@ class CryoGridConfigExcel:
         times = pd.Series([start, end], index=["time_start", "time_end"])
 
         return times
-
-    def get_coord_path(self):
-        """
-        Get the path to the coordinates file from the Excel configuration.
-
-        Returns
-        -------
-        pathlib.Path
-            The file path for coordinates.
-        """
-        fname = self.get_class_filepath(
-            "COORDINATES_FROM_FILE", fname_key="file_name", index=1
-        )
-        return fname
-
-    def get_dataset_paths(self):
-        """
-        Retrieve paths for each dataset from the Excel configuration.
-
-        Returns
-        -------
-        munch.Munch
-            A dictionary-like object mapping dataset variable names to file paths.
-        """
-        paths = (
-            self.get_class_filepath("READ_DATASET", fname_key="filename")
-            .to_frame(name="filepath")
-            .T
-        )
-
-        datasets = self.get_class("READ_DATASET")
-        variable = datasets.T.variable_name
-        paths.loc["variable"] = variable
-
-        paths = Munch(**paths.T.set_index("variable").filepath.to_dict())
-
-        return paths
-
-    def get_dem_path(self):
-        """
-        Get the path for the DEM file from the Excel configuration.
-
-        Returns
-        -------
-        pathlib.Path
-            The DEM file path.
-        """
-        fname = self.get_class_filepath(
-            "DEM", folder_key="folder", fname_key="filename", index=1
-        )
-        return fname
-
-    def get_forcing_path(self, class_name="read_mat_ERA"):
-        """
-        Obtain the forcing file path from the Excel configuration.
-
-        Parameters
-        ----------
-        class_name : str, optional
-            The class name to search for in the configuration, by default 'read_mat_ERA'.
-
-        Returns
-        -------
-        pathlib.Path
-            The forcing file path.
-        """
-        fname = self.get_class_filepath(
-            class_name, folder_key="path", fname_key="filename", index=1
-        )
-        return fname
 
     def get_output_max_depth(
         self, output_class="OUT_regridded", depth_key="depth_below_ground"
@@ -497,10 +454,7 @@ class CryoGridConfigExcel:
         Check if all the files in the configuration exist.
         """
 
-        flist = set(
-            [self.get_forcing_path(), self.get_dem_path(), self.get_coord_path()]
-            + list(self.get_dataset_paths().values())
-        )
+        flist = set(self.fname.values())
 
         logger.info("Checking file locations...")
         for f in flist:
