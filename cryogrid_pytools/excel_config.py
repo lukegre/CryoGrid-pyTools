@@ -76,7 +76,7 @@ class CryoGridConfigExcel:
         if check_strat_layers:
             self.check_strat_layers()
 
-        logger.info(
+        logger.debug(
             f"Start and end times: {self.time.time_start:%Y-%m-%d} - {self.time.time_end:%Y-%m-%d}"
         )
 
@@ -94,7 +94,7 @@ class CryoGridConfigExcel:
             flist = path.glob("run_cryogrid.m")
             if len(list(flist)) > 0:
                 self.root = path
-                logger.info(f"Found root path: {path}")
+                logger.debug(f"Found root path: {path}")
                 return self.root
             elif str(path) == "/":
                 logger.warning(
@@ -319,7 +319,7 @@ class CryoGridConfigExcel:
         except Exception:
             # only intended for debugging
             df = blocks
-            logger.warning(f"Could not concatenate blocks for class: {class_name}")
+            logger.debug(f"Could not concatenate blocks for class: {class_name}")
 
         return df
 
@@ -441,7 +441,7 @@ class CryoGridConfigExcel:
         Run checks to ensure stratigraphy layers have physically plausible parameter values.
         """
         strat_layers = self.get_class("STRAT_layers")
-        logger.info("Checking stratigraphy layers...")
+        logger.debug("Checking stratigraphy layers...")
         for layer in strat_layers:
             try:
                 check_strat_layer_values(strat_layers[layer].iloc[0])
@@ -456,7 +456,7 @@ class CryoGridConfigExcel:
 
         flist = set(self.fname.values())
 
-        logger.info("Checking file locations...")
+        logger.debug("Checking file locations...")
         for f in flist:
             if not f.exists():
                 logger.warning(f"Cannot find file: {f}")

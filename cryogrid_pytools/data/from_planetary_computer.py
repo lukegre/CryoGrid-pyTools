@@ -90,7 +90,7 @@ def get_dem_copernicus(
 
     check_epsg(epsg)
 
-    _logger.info(
+    _logger.debug(
         f"Fetching COP DEM Global data from Planetary Computer ({collection} @ {res:.2g})"
     )
     items = search_stac_items_planetary_computer(collection, bbox_WSEN)
@@ -170,7 +170,7 @@ def get_esa_land_cover(bbox_WSEN: tuple, res: int = 30, epsg=32643) -> _xr.DataA
     # make sure epsg is supported
     check_epsg(epsg)
 
-    _logger.info(
+    _logger.debug(
         f"Fetching ESA World Cover (v2.0) data from Planetary Computer (esa-worldcover @ {res}m)"
     )
     items = search_stac_items_planetary_computer(
@@ -309,7 +309,7 @@ def get_sentinel2_data(
 
     da_list = []
     for year in years:
-        _logger.info(
+        _logger.debug(
             f"Getting Sentinel-2 SCL granules @{res}m for {year} with max cloud cover = {max_cloud_cover}%"
         )
 
@@ -376,7 +376,7 @@ def get_snow_melt_doy(
         bbox_WSEN, years=years, res=res, epsg=epsg, max_cloud_cover=10
     )
 
-    _logger.info("Calculating snow melt day of year (DOY) from Sentinel-2 SCL data")
+    _logger.debug("Calculating snow melt day of year (DOY) from Sentinel-2 SCL data")
     doy = da.groupby("time.year").apply(_calc_sentinel2_snow_melt_doy)
 
     return doy

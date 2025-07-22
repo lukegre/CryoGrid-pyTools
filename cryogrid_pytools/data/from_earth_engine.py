@@ -48,7 +48,7 @@ def get_modis_albedo_500m(bbox_WSEN, res=500, **kwargs) -> xr.DataArray:
 
     # Load the MODIS image collection
     image_collection = ee.ImageCollection("MODIS/061/MCD43A3")
-    logger.info(
+    logger.debug(
         "Fetching MODIS albedo data from Earth Engine (MODIS/061/MCD43A3 @ 500m)"
     )
 
@@ -121,7 +121,7 @@ def get_aster_ged_100m_v3(bbox_WSEN, res=100, **kwargs):
 
     # Load the ASTER GED image
     image = ee.Image("NASA/ASTER_GED/AG100_003")
-    logger.info(
+    logger.debug(
         "Fetching ASTER-GED emissivity data from Earth Engine (NASA/ASTER_GED/AG100_003 @ 100m)"
     )
 

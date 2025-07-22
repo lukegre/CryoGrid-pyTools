@@ -230,7 +230,7 @@ def read_OUT_regridded_files(
             depth = ds.depth.mean("index").compute()
             ds = ds.assign_coords(depth=depth)
             # now that depths are the same, we can rename the index to depth from the surface
-        logger.info(
+        logger.debug(
             "Depths are the same for all gridcells. Setting depth as the dimension."
         )
         ds = ds.swap_dims(level="depth")
