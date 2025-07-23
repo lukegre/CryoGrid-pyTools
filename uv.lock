@@ -1,5 +1,4 @@
 version = 1
-revision = 1
 requires-python = ">=3.9"
 resolution-markers = [
     "python_full_version >= '3.13'",
@@ -831,7 +830,7 @@ wheels = [
 
 [[package]]
 name = "cryogrid-pytools"
-version = "0.3.18"
+version = "0.3.19"
 source = { editable = "." }
 dependencies = [
     { name = "dask", version = "2024.8.0", source = { registry = "https://pypi.org/simple" }, extra = ["array", "diagnostics"], marker = "python_full_version < '3.10'" },
@@ -947,7 +946,6 @@ requires-dist = [
     { name = "xarray", specifier = ">=2024" },
     { name = "zarr", marker = "extra == 'data'", specifier = "<3" },
 ]
-provides-extras = ["data", "dev", "docs", "viz"]
 
 [[package]]
 name = "cycler"

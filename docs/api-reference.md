@@ -32,7 +32,7 @@ This page contains the detailed API reference for CryoGrid-pyTools.
 
 ## Elevation, land cover, snow melt
 
-::: cryogrid_pytools.data.get_dem_copernicus30
+::: cryogrid_pytools.data.get_dem_copernicus
 ::: cryogrid_pytools.data.get_esa_land_cover
 ::: cryogrid_pytools.data.get_snow_melt_doy
 ::: cryogrid_pytools.data.get_randolph_glacier_inventory
