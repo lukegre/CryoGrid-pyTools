@@ -14,7 +14,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.13">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
     
     
       
@@ -570,24 +570,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#cryogrid_pytools.CryoGridConfigExcel.get_coord_path" class="md-nav__link">
-    <span class="md-ellipsis">
-      get_coord_path
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cryogrid_pytools.CryoGridConfigExcel.get_dem_path" class="md-nav__link">
-    <span class="md-ellipsis">
-      get_dem_path
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#cryogrid_pytools.CryoGridConfigExcel.get_output_max_depth" class="md-nav__link">
     <span class="md-ellipsis">
       get_output_max_depth
@@ -734,9 +716,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#cryogrid_pytools.data.get_dem_copernicus30" class="md-nav__link">
+  <a href="#cryogrid_pytools.data.get_dem_copernicus" class="md-nav__link">
     <span class="md-ellipsis">
-      get_dem_copernicus30
+      get_dem_copernicus
     </span>
   </a>
   
@@ -847,24 +829,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#cryogrid_pytools.CryoGridConfigExcel.get_coord_path" class="md-nav__link">
-    <span class="md-ellipsis">
-      get_coord_path
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cryogrid_pytools.CryoGridConfigExcel.get_dem_path" class="md-nav__link">
-    <span class="md-ellipsis">
-      get_dem_path
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#cryogrid_pytools.CryoGridConfigExcel.get_output_max_depth" class="md-nav__link">
     <span class="md-ellipsis">
       get_output_max_depth
@@ -1011,9 +975,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#cryogrid_pytools.data.get_dem_copernicus30" class="md-nav__link">
+  <a href="#cryogrid_pytools.data.get_dem_copernicus" class="md-nav__link">
     <span class="md-ellipsis">
-      get_dem_copernicus30
+      get_dem_copernicus
     </span>
   </a>
   
@@ -1215,88 +1179,6 @@ from the Excel file. To use as a reference for get_class(<class_name>).</p>
             <td>
               <div class="doc-md-description">
                 <p>A dictionary mapping class names to row indices</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h4 id="cryogrid_pytools.CryoGridConfigExcel.get_coord_path" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">get_coord_path</span></code>
-
-</h4>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Get the path to the coordinates file from the Excel configuration.</p>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="pathlib.Path">Path</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The file path for coordinates.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h4 id="cryogrid_pytools.CryoGridConfigExcel.get_dem_path" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">get_dem_path</span></code>
-
-</h4>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Get the path for the DEM file from the Excel configuration.</p>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="pathlib.Path">Path</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The DEM file path.</p>
               </div>
             </td>
           </tr>
@@ -2234,8 +2116,8 @@ CryoGrid.POST_PROC.read_mat_ERA</p>
 <div class="doc doc-object doc-function">
 
 
-<h3 id="cryogrid_pytools.data.get_dem_copernicus30" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">cryogrid_pytools</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get_dem_copernicus30</span></code>
+<h3 id="cryogrid_pytools.data.get_dem_copernicus" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">cryogrid_pytools</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">get_dem_copernicus</span></code>
 
 </h3>
 
@@ -2303,6 +2185,23 @@ EPSG:32643 (UTM 43N) for the Pamir region.</p>
             </td>
             <td>
                   <code>32643</code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>collection</code>
+            </td>
+            <td>
+                  <code><span title="str">str</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The STAC collection to search for DEM data. Default is "cop-dem-glo-30".
+Also supports "cop-dem-glo-90" for 90m resolution.</p>
+              </div>
+            </td>
+            <td>
+                  <code>&#39;cop-dem-glo-30&#39;</code>
             </td>
           </tr>
           <tr class="doc-section-item">
@@ -2735,7 +2634,7 @@ If target_dem is provided, returns a raster dataset clipped and reprojected to t
       <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      <script src="../assets/javascripts/bundle.56ea9cef.min.js"></script>
       
     
   </body>
