@@ -24,14 +24,14 @@ def plot_profiles(
     """
 
     # doing a bunch of checks before trying to plot
-    assert ds_profile.gridcell.size == 1, (
-        "More than one gridcell found in dataset. Make sure that you're passing only one profile file pattern."
+    assert ds_profile.profile.size == 1, (
+        "More than one profile found in dataset. Make sure that you're passing only one profile file pattern."
     )
     assert "T" in ds_profile, "Temperature profile not found in dataset."
     assert "water" in ds_profile, "Water content profile not found in dataset."
     assert "ice" in ds_profile, "Ice content profile not found in dataset."
 
-    index = ds_profile.gridcell.item()
+    profile = ds_profile.profile.item()
 
     ds_profile = ds_profile.compute()
     # for now, the plot is static in its L x W
@@ -71,7 +71,7 @@ def plot_profiles(
     )
 
     [ax.set_title("") for ax in axs]
-    axs[0].set_title(f"Profiles at gridcell #{index}", loc="left")
+    axs[0].set_title(f"Profiles at profile #{profile}", loc="left")
 
     fig.tight_layout()
 
@@ -100,13 +100,13 @@ def plot_profile(da_profile: xr.DataArray, **kwargs):
     """
 
     dims = da_profile.sizes
-    if "gridcell" in dims:
-        if dims["gridcell"] != 1:
+    if "profile" in dims:
+        if dims["profile"] != 1:
             raise ValueError(
-                "More than one gridcell found in dataset. Make sure that you're passing only one profile file pattern."
+                "More than one profile found in dataset. Make sure that you're passing only one profile file pattern."
             )
         else:
-            da_profile = da_profile.isel(gridcell=0)
+            da_profile = da_profile.isel(profile=0)
 
     if "depth" not in dims:
         if "depth" in da_profile.coords and "level" in dims:
@@ -137,7 +137,7 @@ def plot_profile(da_profile: xr.DataArray, **kwargs):
     img.axes.set_xlabel("")
     img.axes.set_ylabel("Depth [m]")
 
-    title = f"{long_name} profile for gridcell #{da_profile.gridcell.item()}"
+    title = f"{long_name} profile #{da_profile.profile.item()}"
     img.axes.set_title("", loc="center")
     img.axes.set_title(title, loc="left")
 

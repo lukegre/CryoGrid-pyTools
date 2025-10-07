@@ -125,7 +125,7 @@ def plot_map(
         m = df.explore(**props)
     else:
         m = spatial_continuous_to_raster(da, m, **kwargs)
-
+    
     return m
 
 

@@ -164,7 +164,7 @@ def renamer_old_to_new(spatial_dict):
 
 
 def map_gridcells_to_clusters(
-    da: xr.DataArray, cluster_centroid_index_mapped: xr.DataArray, missing_value=np.nan
+    da: xr.DataArray, cluster_labels: xr.DataArray, missing_value=np.nan
 ) -> xr.DataArray:
     """
     Maps the single depth selection of the profiles to the 2D clusters
@@ -174,7 +174,7 @@ def map_gridcells_to_clusters(
     da : xr.DataArray
         Single depth selection of the profiles with `index` dimension only.
         Note that `index` must start at 1 (0 is reserved for masked data).
-    cluster_centroid_index_mapped : xr.DataArray
+    cluster_labels : xr.DataArray
         2D array with the index of the cluster centroid of each cluster
         Must have dtype uint32. Can have 0 to represent masked data.
 
@@ -182,7 +182,7 @@ def map_gridcells_to_clusters(
     -------
     da_2d_mapped : xr.DataArray
         The 2D array of the profiles mapped to the clusters with the same shape as
-        cluster_centroid_index_mapped. The 2D gridcells will also be given as a coordinate
+        cluster_labels. The 2D gridcells will also be given as a coordinate
 
     Raises
     ------
@@ -190,34 +190,36 @@ def map_gridcells_to_clusters(
         If da (variable to be mapped) does not have index dimension only
     """
 
-    # make sure profiles_single_depth has index dimension only
-    if list(da.sizes) != ["index"]:
-        raise ValueError(
-            "da must have `index` dimension only (i.e., single timestep and depth)"
-        )
-    if da.index.isin([0]).any():
-        raise ValueError("`da.index` must start at 1 (0 is reserved for masked data).")
+    if len(da.dims) != 1:
+        raise ValueError("da must have only one dimension that corresponds to cluster_labels")
 
-    missing_clusters = ~cluster_centroid_index_mapped.isin(
-        [0] + da.index.values.tolist()
+    dim = da.dims[0]
+    if da[dim].isin([0]).any():
+        raise ValueError("`da[dim]` must start at 1 (0 is reserved for masked data).")
+
+    # data needs to be loaded to work for this function
+    cluster_labels = cluster_labels.compute()
+
+    missing_clusters = ~cluster_labels.isin(
+        [0] + da[dim].values.tolist()
     )
-    cluster_centroid_index_mapped = (
-        cluster_centroid_index_mapped.where(~missing_clusters)
+    cluster_labels = (
+        cluster_labels.where(~missing_clusters)
         .fillna(0)
         .astype("uint32")
     )
 
-    # if there is masked data in the cluster_centroid_index_mapped, then we need to
+    # if there is masked data in the cluster_labels, then we need to
     # create a dummy index, otherwise an error will be raised when using the
     # .sel() method below
-    if 0 in cluster_centroid_index_mapped:
+    if 0 in cluster_labels:
         # create a single index with 0 value
-        dummy0 = xr.DataArray(data=0, dims=("index",), coords=dict(index=[0]))
-        # concatenate the dummy index to the cluster_centroid_index_mapped
-        da = xr.concat([dummy0, da], dim="index").assign_attrs(**da.attrs)
+        dummy0 = xr.DataArray(data=0, dims=(dim,), coords={dim:[0]})
+        # concatenate the dummy index to the cluster_labels
+        da = xr.concat([dummy0, da], dim=dim).assign_attrs(**da.attrs)
 
-    # use the cluster_centroid_index_mapped to map the index to the spatial clusters
-    da_2d_mapped = da.sel(index=cluster_centroid_index_mapped)
+    # use the cluster_labels to map the index to the spatial clusters
+    da_2d_mapped = da.sel(**{dim: cluster_labels})
     da_2d_mapped = da_2d_mapped.where(lambda x: x != 0).where(
         ~missing_clusters, missing_value
     )
@@ -225,7 +227,7 @@ def map_gridcells_to_clusters(
     da_2d_mapped.attrs = da.attrs
     da_2d_mapped.attrs["history"] = (
         da.attrs.get("history", "")
-        + f"Mapped to 2D clusters using {cluster_centroid_index_mapped.name}"
+        + f"Mapped to 2D clusters using {cluster_labels.name}"
     )
 
     return da_2d_mapped

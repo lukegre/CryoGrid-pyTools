@@ -156,7 +156,7 @@ def _read_OUT_regridded_parallel(
 def read_OUT_regridded_files(
     fname_glob: str,
     deepest_point: Union[float, None] = None,
-    gridcell_func=lambda fname: fname.split("_")[-2],
+    profile_func=lambda fname: fname.split("_")[-2],
     **joblib_kwargs,
 ) -> xr.Dataset:
     """
@@ -192,46 +192,52 @@ def read_OUT_regridded_files(
     from .utils import regex_glob
 
     # get the file list
-    flist = regex_glob(fname_glob)
-    # extract the gridcell from the file name
-    index = [gridcell_func(f) for f in flist]
-    digits = [g.isdigit() for g in index]
+    if isinstance(fname_glob, str):
+        flist = regex_glob(fname_glob)
+    elif isinstance(fname_glob, (list, tuple)):
+        flist = list(fname_glob)
+    else:
+        raise ValueError("fname_glob must be a string or a list/tuple of strings.")
+
+    # extract the profile from the file name
+    profile_num = [profile_func(f) for f in flist]
+    digits = [g.isdigit() for g in profile_num]
 
     if len(flist) == 0:
         raise FileNotFoundError(f"No files found with {fname_glob}")
-    elif len(index) != len(flist):
-        raise ValueError(f"Could not extract index from file names for {fname_glob}")
+    elif len(profile_num) != len(flist):
+        raise ValueError(f"Could not extract profile_num from file names for {fname_glob}")
     elif not all(digits):
         not_digit = np.unique([f for f, d in zip(flist, digits) if not d])
-        bad_func = "".join(inspect.getsource(gridcell_func).split("lambda")[1:]).strip()
+        bad_func = "".join(inspect.getsource(profile_func).split("lambda")[1:]).strip()
         raise ValueError(
-            f"Check your fname_glob ({fname_glob}) \n or gridcell_func ({bad_func}). \nGridcell ID "
-            f"not a number for the following files:\n{not_digit}"
+            f"Check your fname_glob ({fname_glob}) \n or profile_func ({bad_func}). \n"
+            f"Profile number is not a number for the following files:\n{not_digit}"
         )
     else:
-        index = [int(g) for g in index]
+        profile_num = [int(g) for g in profile_num]
 
     list_of_ds = _read_OUT_regridded_parallel(flist, deepest_point, **joblib_kwargs)
 
-    # assign the index dimension so that we can combine the data by coordinates and time
-    list_of_ds = [ds.expand_dims(index=[c]) for ds, c in zip(list_of_ds, index)]
+    # assign the profile dimension so that we can combine the data by coordinates and time
+    list_of_ds = [ds.expand_dims(profile=[c]) for ds, c in zip(list_of_ds, profile_num)]
     ds = xr.combine_by_coords(list_of_ds, combine_attrs="drop_conflicts")
 
     assert isinstance(ds, xr.Dataset), "Something went wrong with the parallel reading."
 
     # transpose data so that plotting is quick and easy
-    ds = ds.transpose("index", "level", "time", ...)
+    ds = ds.transpose("profile", "level", "time", ...)
 
     # fix depths - they should be the same, but could be numerically different
     if "depth" in ds.coords:
         if (
-            "index" in ds.depth.dims and (ds.depth.std("index") < 1e-8).all()
+            "profile" in ds.depth.dims and (ds.depth.std("profile") < 1e-8).all()
         ):  # set a very low threshold for equality
-            depth = ds.depth.mean("index").compute()
+            depth = ds.depth.mean("profile").compute()
             ds = ds.assign_coords(depth=depth)
-            # now that depths are the same, we can rename the index to depth from the surface
+            # now that depths are the same, we can rename the profile to depth from the surface
         logger.debug(
-            "Depths are the same for all gridcells. Setting depth as the dimension."
+            "Depths are the same for all profiles. Setting depth as the dimension."
         )
         ds = ds.swap_dims(level="depth")
         ds = ds.reset_coords("elevation").astype("float32")
