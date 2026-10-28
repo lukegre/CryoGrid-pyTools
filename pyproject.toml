@@ -28,6 +28,7 @@ classifiers = [  # see https://pypi.org/classifiers/
     "Programming Language :: Python :: 3 :: Only",
 ]
 dependencies = [
+    "certifi>=2026.10.19",
     "dask[array,diagnostics]>=2024",
     "joblib",
     "loguru",

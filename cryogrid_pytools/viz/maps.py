@@ -224,7 +224,9 @@ def calc_bounds(da: xr.DataArray) -> list:
 
 def get_bonuds_from_folium_map(m: folium.Map) -> list[list[float]]:
     import folium.features
+    import numpy as np
 
+    all_bounds = []
     for name in m._children:
         child = m._children[name]
         if isinstance(child, folium.features.GeoJson):
@@ -232,7 +234,12 @@ def get_bonuds_from_folium_map(m: folium.Map) -> list[list[float]]:
             w, s, e, n = data["bbox"]
             w, s, e, n = [float(a) for a in [w, s, e, n]]
             bounds = [[s, w], [n, e]]
-            return bounds
+            all_bounds.append(bounds)
+
+    if all_bounds:
+        w, s, e, n = np.array(all_bounds).mean(axis=0).tolist()
+        return [[s, w], [n, e]]
+
 
     return m.get_bounds()
 

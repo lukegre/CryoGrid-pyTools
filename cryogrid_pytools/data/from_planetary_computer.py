@@ -1,6 +1,6 @@
 try:
     import rioxarray as _rxr  # noqa
-    import stackstac as _stackstac  # noqa
+    import stackstac as _stackstac
     import pystac_client as _pystac_client
     import planetary_computer as _planetary_computer
     from .. import xr_raster_vector as _xrv  # noqa
@@ -94,12 +94,11 @@ def get_dem_copernicus(
         f"Fetching COP DEM Global data from Planetary Computer ({collection} @ {res:.2g})"
     )
     items = search_stac_items_planetary_computer(collection, bbox_WSEN)
-    da_dem = _stackstac.stack(
-        items=items, bounds_latlon=bbox_WSEN, resolution=res, epsg=epsg
-    )
+    da_dem = _stackstac.stack(items=items, bounds_latlon=bbox_WSEN, resolution=res, epsg=epsg)
 
     da_dem = (
-        da_dem.mean("time")
+        da_dem
+        .mean("time")
         .squeeze()
         .pipe(drop_coords_without_dim)
         .pipe(smooth_data, n_iters=smoothing_iters, kernel_size=smoothing_size)
@@ -150,7 +149,8 @@ def get_esa_land_cover(bbox_WSEN: tuple, res: int = 30, epsg=32643) -> _xr.DataA
 
         classes = item.assets["map"].extra_fields["classification:classes"]
         df = (
-            pd.DataFrame(classes)
+            pd
+            .DataFrame(classes)
             .set_index("value")
             .rename(
                 columns=lambda s: s.replace("-", "_")
@@ -184,7 +184,8 @@ def get_esa_land_cover(bbox_WSEN: tuple, res: int = 30, epsg=32643) -> _xr.DataA
     )
 
     da = (
-        _stackstac.stack(**stac_props)
+        _stackstac
+        .stack(**stac_props)
         .max(["band", "time"], keep_attrs=True)  # removing the single band dimension
         .rename("esa_world_cover")
         .assign_attrs(
@@ -222,7 +223,8 @@ def get_esri_land_cover(bbox_WSEN: tuple, res: int = 30, epsg: int = 32643):
     )
 
     da = (
-        _stackstac.stack(
+        _stackstac
+        .stack(
             items,
             epsg=epsg,
             resolution=res,
@@ -315,8 +317,8 @@ def get_sentinel2_data(
 
         t0, t1 = (
             f"{year}-01-01",
-            f"{year}-11-15",
-        )  # assuming that snow melt is done by mid-November
+            f"{year}-12-31",
+        )
         items = search_stac_items_planetary_computer(
             collection="sentinel-2-l2a",
             bbox=bbox_WSEN,
@@ -336,7 +338,8 @@ def get_sentinel2_data(
 
     da_granules = _xr.concat(da_list, dim="time")
     da = (
-        da_granules.groupby("time")  # granules are not grouped by time
+        da_granules
+        .groupby("time")  # granules are not grouped by time
         .max()  # take max value to avoid mixing ints
         .squeeze()  # remove the band dimension
         .where(lambda x: x > 0)
@@ -372,14 +375,79 @@ def get_snow_melt_doy(
         DataArray containing the snow melt DOY for each year.
     """
 
-    da = get_sentinel2_data(
-        bbox_WSEN, years=years, res=res, epsg=epsg, max_cloud_cover=10
-    )
+    da = get_sentinel2_data(bbox_WSEN, years=years, res=res, epsg=epsg, max_cloud_cover=10)
 
     _logger.debug("Calculating snow melt day of year (DOY) from Sentinel-2 SCL data")
     doy = da.groupby("time.year").apply(_calc_sentinel2_snow_melt_doy)
 
     return doy
+
+
+@utils._decorator_dataarray_to_bbox
+def get_snow_days_per_year(
+    bbox_WSEN: tuple, years=range(2018, 2025), res: int = 30, epsg=32643
+) -> _xr.DataArray:
+    """
+    Calculate the number of snow days per year from Sentinel-2 SCL data for a given bounding box and years.
+
+    Parameters
+    ----------
+    bbox_WSEN : tuple
+        Bounding box coordinates in the format (West, South, East, North).
+    years : range, optional
+        Range of years to consider. Defaults to range(2018, 2025).
+    res : int, optional
+        Spatial resolution in meters. Defaults to 30.
+    epsg : int, optional
+        EPSG code for the coordinate reference system. Defaults to 32643.
+
+    Returns
+    -------
+    _xr.DataArray
+        DataArray containing the number of snow days per year for each year.
+    """
+
+    da = get_sentinel2_data(bbox_WSEN, years=years, res=res, epsg=epsg, max_cloud_cover=10)
+
+    _logger.debug("Calculating number of snow days per year from Sentinel-2 SCL data")
+    snow_days = da.groupby("time.year").apply(_calc_sentinel2_snow_days_per_year)
+
+    return snow_days
+
+
+def _calc_sentinel2_snow_days_per_year(da_scl) -> _xr.DataArray:
+    """
+    Calculates the number of snow days per year based on Sentinel-2 SCL data.
+
+    Parameters
+    ----------
+    da_scl : xarray.DataArray
+        The Sentinel-2 SCL data as an xarray DataArray.
+
+    Returns
+    -------
+    xarray.DataArray
+        The number of snow days per year as an xarray DataArray.
+    """
+    scl = da_scl.compute()
+    scl_snow_ice = 11
+
+    # only one year allowed
+    assert scl.time.dt.year.to_series().unique().size == 1, "Only one year is allowed"
+
+    # mask snow/ice pixels and set values to 1 instead of 11
+    snow_mask = scl.where(lambda x: x == scl_snow_ice) * 0 + 1
+
+    # count the number of snow days per year
+    snow_days_per_year = (
+        snow_mask
+        .count("time")
+        .astype("float32")
+        .rename("snow_days_per_year")
+        .assign_attrs(description="Number of snow days per year based on Sentinel-2 SCL data")
+    )
+
+    return snow_days_per_year
 
 
 def _calc_sentinel2_snow_melt_doy(da_scl) -> _xr.DataArray:
@@ -410,9 +478,7 @@ def _calc_sentinel2_snow_melt_doy(da_scl) -> _xr.DataArray:
         counts = da.count(["x", "y"]).compute()
         size = da.isel(time=0).size
         frac = counts / size
-        good_cover = (
-            frac.bfill("time").where(lambda x: x > threshold).dropna("time").time.values
-        )
+        good_cover = frac.bfill("time").where(lambda x: x > threshold).dropna("time").time.values
         return da.sel(time=slice(None, good_cover[-1]))
 
     def find_time_of_lowest_snow_cover(snow_mask, window=10):
@@ -460,7 +526,8 @@ def _calc_sentinel2_snow_melt_doy(da_scl) -> _xr.DataArray:
         assert len(years) == 1, "Only one year is supported"
 
         doy_max = (
-            mask.time.dt.dayofyear.where(  # get the day of year
+            mask.time.dt.dayofyear
+            .where(  # get the day of year
                 mask
             )  # broadcast the day of year to the mask shape
             .max("time")  # get the last time step

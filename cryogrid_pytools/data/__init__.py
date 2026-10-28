@@ -1,4 +1,4 @@
-from ..utils import check_packages  # noqa
+from ..utils import check_packages
 
 check_packages(
     (
@@ -35,6 +35,7 @@ from .from_planetary_computer import (
     get_dem_copernicus,
     get_esa_land_cover,
     get_esri_land_cover,
+    get_snow_days_per_year,
     get_snow_melt_doy,
 )
 from .shapefiles import (
@@ -44,14 +45,15 @@ from .shapefiles import (
 )
 
 __all__ = [
-    "make_era5_downloader",
+    "get_TPRoGI_rock_glaciers",
+    "get_aster_ged_emmis_elev",
+    "get_country_polygons",
     "get_dem_copernicus",
     "get_esa_land_cover",
     "get_esri_land_cover",
-    "get_snow_melt_doy",
     "get_modis_albedo_500m",
-    "get_aster_ged_emmis_elev",
-    "get_TPRoGI_rock_glaciers",
-    "get_country_polygons",
     "get_randolph_glacier_inventory",
+    "get_snow_days_per_year",
+    "get_snow_melt_doy",
+    "make_era5_downloader",
 ]
